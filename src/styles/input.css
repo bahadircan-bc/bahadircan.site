@@ -1,3 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=Cairo&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background: #131518;
+}
+
+#root {
+  background: linear-gradient(
+      to top right,
+      rgba(109, 10, 133, 0.1) 0%,
+      rgba(0, 0, 0, 0) 100%
+    )
+    no-repeat;
+}
+
+/* make scrollbar invisible */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* customize scrollbar */
+/* ::-webkit-scrollbar {
+  width: 15px;
+}
+
+::-webkit-scrollbar-track {
+  background: #212121;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #585858;
+  border-radius: 10px;
+  width: 3px;
+  margin: 0 3px;
+  border: solid 4px #212121;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #818181;
+} */
