@@ -35,12 +35,15 @@ function Icon() {
         const duration = Math.random() * 10 + 8;
         controls.stop();
         controls.set({ scale: 15 / duration });
-        controls.set({zIndex: 19-duration})
+        controls.set({ zIndex: 19 - duration });
         controls.set("top");
-        controls.start({top: `${100-duration}%`}, {
-          duration: duration,
-          ease: "linear",
-        });
+        controls.start(
+          { top: `${100 - duration}%` },
+          {
+            duration: duration,
+            ease: "linear",
+          }
+        );
         await controls.start("appear", {
           duration: 2,
           ease: "linear",
@@ -54,10 +57,22 @@ function Icon() {
       unmount = false;
     };
 
+    const handleVisiblityChange = () => {
+      if (document.visibilityState === "visible") {
+        sequence();
+      } else {
+        unmount = true;
+        controls.stop();
+        controls.set("top");
+      }
+    };
+
+    window.addEventListener("visibilitychange", handleVisiblityChange);
     sequence();
 
     return () => {
       unmount = true;
+      window.removeEventListener("visibilitychange", handleVisiblityChange);
     };
   }, []);
 
@@ -78,14 +93,17 @@ function Icon() {
   );
 }
 
-function IconDropdowns({itemCount}: {itemCount: number}) {
+function IconDropdowns({ itemCount }: { itemCount: number }) {
   const icons = Array.from({ length: itemCount }, (_, index) => (
     <Icon key={index} />
   ));
   return (
-    <div className="w-full h-full grid" style={{
-      gridTemplateColumns: `repeat(${itemCount}, minmax(0, 1fr))`
-    }}>
+    <div
+      className="w-full h-full grid"
+      style={{
+        gridTemplateColumns: `repeat(${itemCount}, minmax(0, 1fr))`,
+      }}
+    >
       {icons}
     </div>
   );
