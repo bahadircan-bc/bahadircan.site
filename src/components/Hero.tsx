@@ -48,8 +48,8 @@ function Hero() {
           Proin a accumsan nibh, nec fringilla metus.
         </motion.p>
       </div>
-      <div className="absolute inset-[-15%_5vw_auto_auto] w-[60vw] h-full">
-        <IconDropdowns itemCount={50} />
+      <div className="absolute inset-[60px_5vw_auto_auto] w-full h-[50vh]">
+        <IconDropdowns itemCount={100} />
       </div>
     </div>
   );
