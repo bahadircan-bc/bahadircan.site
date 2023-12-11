@@ -17,7 +17,7 @@ function Icon() {
       opacity: 0,
     },
     top: {
-      top: 0,
+      top: '-60px',
       opacity: 0,
     },
   };

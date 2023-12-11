@@ -10,7 +10,7 @@ const titleVariants = {
 function Projects() {
   const [visible, setVisible] = useState(true);
   return (
-    <div className="w-full h-screen text-white grid grid-rows-3 items-center">
+    <div className="w-full h-screen text-white grid grid-rows-3 items-center border-b border-t">
       <ProjectAccordion visible={visible} />
       <motion.h1
         className="w-fit text-8xl leading-normal row-start-3 self-start ml-[15%]"

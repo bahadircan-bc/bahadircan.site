@@ -590,6 +590,14 @@ video {
   inset: 60px 5vw auto auto;
 }
 
+.inset-\[0_5vw_auto_auto\]{
+  inset: 0 5vw auto auto;
+}
+
+.inset-\[47vh_auto_auto_15vw\]{
+  inset: 47vh auto auto 15vw;
+}
+
 .inset-y-1{
   top: 0.25rem;
   bottom: 0.25rem;
@@ -697,6 +705,10 @@ video {
   margin-top: auto;
 }
 
+.mt-\[47\%\]{
+  margin-top: 47%;
+}
+
 .block{
   display: block;
 }
@@ -774,6 +786,14 @@ video {
   height: 50vh;
 }
 
+.h-\[50px\]{
+  height: 50px;
+}
+
+.h-\[24px\]{
+  height: 24px;
+}
+
 .w-0{
   width: 0px;
 }
@@ -817,6 +837,10 @@ video {
 
 .w-screen{
   width: 100vw;
+}
+
+.w-\[24px\]{
+  width: 24px;
 }
 
 .border-collapse{
@@ -896,6 +920,10 @@ video {
   gap: 1.25rem;
 }
 
+.gap-10{
+  gap: 2.5rem;
+}
+
 .self-start{
   align-self: flex-start;
 }
@@ -962,6 +990,10 @@ video {
 
 .border-t-2{
   border-top-width: 2px;
+}
+
+.border-t{
+  border-top-width: 1px;
 }
 
 .border-primary{
@@ -1106,6 +1138,46 @@ video {
 
 .fill-\[\#F7DF1E\]{
   fill: #F7DF1E;
+}
+
+.fill-white{
+  fill: #fff;
+}
+
+.fill-\[\#F05138\]{
+  fill: #F05138;
+}
+
+.fill-\[\#E93A2B\]{
+  fill: #E93A2B;
+}
+
+.fill-\[\#FA7343\]{
+  fill: #FA7343;
+}
+
+.fill-\[\#363636\]{
+  fill: #363636;
+}
+
+.fill-\[\#0055FF\]{
+  fill: #0055FF;
+}
+
+.fill-\[\#339933\]{
+  fill: #339933;
+}
+
+.fill-\[\#1C5C99\]{
+  fill: #1C5C99;
+}
+
+.fill-\[\#4E5EE4\]{
+  fill: #4E5EE4;
+}
+
+.fill-\[\#F16822\]{
+  fill: #F16822;
 }
 
 .p-1{

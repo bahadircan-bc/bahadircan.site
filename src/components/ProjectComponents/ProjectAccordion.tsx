@@ -16,11 +16,19 @@ const projects = [
     title: "Personal Website",
     description: "This website! Built with React and TailwindCSS.",
     link: "/",
+  },{
+    title: "Personal Website",
+    description: "This website! Built with React and TailwindCSS.",
+    link: "/",
+  },{
+    title: "Personal Website",
+    description: "This website! Built with React and TailwindCSS.",
+    link: "/",
   },
 ];
 
 const accordionVariants = {
-  open: { height: "fit-content", transition: { duration: 0.5, delay: 0.5 } },
+  open: { height: "fit-content", transition: { duration: 0.5, delay: 0.2 } },
   closed: { height: 0 },
 };
 
