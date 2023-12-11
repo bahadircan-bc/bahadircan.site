@@ -24,13 +24,16 @@ function Icon() {
 
   useEffect(() => {
     let unmount = false;
+    let sequenceRunning = false;
 
     const sequence = async () => {
+      sequenceRunning = true;
       //sleep for 5-15 seconds
       await new Promise((resolve) =>
         setTimeout(resolve, Math.random() * 15000)
       );
       while (!unmount) {
+        console.log("repeating");
         setIcon(Math.floor(Math.random() * icons.length));
         const duration = Math.random() * 10 + 8;
         controls.stop();
@@ -48,22 +51,30 @@ function Icon() {
           duration: 2,
           ease: "linear",
         });
+        if (unmount) break;
         await controls.start("disappear", {
           duration: 2,
           delay: duration - 4,
           ease: "linear",
         });
+        if (unmount) break;
       }
+      controls.set("top");
       unmount = false;
+      sequenceRunning = false;
     };
 
-    const handleVisiblityChange = () => {
-      if (document.visibilityState === "visible") {
-        sequence();
-      } else {
+    const handleVisiblityChange = async () => {
+      console.log(document.visibilityState);
+      if (document.visibilityState === "hidden") {
         unmount = true;
-        controls.stop();
-        controls.set("top");
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        if (sequenceRunning) {
+          unmount = false;
+        } else {
+          sequence();
+        }
       }
     };
 

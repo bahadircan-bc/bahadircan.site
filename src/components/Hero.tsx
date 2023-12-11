@@ -49,7 +49,7 @@ function Hero() {
         </motion.p>
       </div>
       <div className="absolute inset-[-15%_5vw_auto_auto] w-[60vw] h-full">
-        <IconDropdowns itemCount={100} />
+        <IconDropdowns itemCount={50} />
       </div>
     </div>
   );
