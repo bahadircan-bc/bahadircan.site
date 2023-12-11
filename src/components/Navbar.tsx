@@ -11,7 +11,6 @@ const variants = {
 function Navbar() {
   const [visible, setVisible] = useState(true);
   useMotionValueEvent(useScroll().scrollY, "change", (latest) => {
-    console.log(latest);
     if (latest > 200) {
       setVisible(false);
     }
