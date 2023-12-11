@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import icons from "./Icons";
 import { motion, useAnimation } from "framer-motion";
+import { Link } from "react-router-dom";
 
 function Icon() {
   const [icon, setIcon] = useState(0);
@@ -21,37 +22,42 @@ function Icon() {
     },
   };
 
-  const sequence = useCallback(async () => {
-    setIcon(Math.floor(Math.random() * icons.length));
-    const duration = Math.random() * 10 + 5;
-    controls.stop();
-    controls.set({ scale: 15 / duration });
-    controls.set("top");
-    controls.start("fall", {
-      duration: duration,
-      ease: "linear",
-    });
-    await controls.start("appear", {
-      duration: 2,
-      ease: "linear",
-    });
-    await controls.start("disappear", {
-      duration: 2,
-      delay: duration - 4,
-      ease: "linear",
-    });
-  }, []);
-
   useEffect(() => {
-    let animationInterval: number;
-    setTimeout(() => {
-      sequence();
-      animationInterval = setInterval(() => {
-        sequence();
-      }, 10000);
-    }, Math.random() * 15000);
+    let unmount = false;
+
+    const sequence = async () => {
+      //sleep for 5-15 seconds
+      await new Promise((resolve) =>
+        setTimeout(resolve, Math.random() * 15000)
+      );
+      while (!unmount) {
+        setIcon(Math.floor(Math.random() * icons.length));
+        const duration = Math.random() * 10 + 8;
+        controls.stop();
+        controls.set({ scale: 15 / duration });
+        controls.set({zIndex: 19-duration})
+        controls.set("top");
+        controls.start({top: `${100-duration}%`}, {
+          duration: duration,
+          ease: "linear",
+        });
+        await controls.start("appear", {
+          duration: 2,
+          ease: "linear",
+        });
+        await controls.start("disappear", {
+          duration: 2,
+          delay: duration - 4,
+          ease: "linear",
+        });
+      }
+      unmount = false;
+    };
+
+    sequence();
+
     return () => {
-      clearInterval(animationInterval);
+      unmount = true;
     };
   }, []);
 
@@ -64,30 +70,23 @@ function Icon() {
         animate={controls}
         variants={animationVariants}
       >
-        {icons[icon].icon}
+        <Link to={icons[icon].link} target="_blank">
+          {icons[icon].icon}
+        </Link>
       </motion.div>
     </div>
   );
 }
 
-function IconDropdowns() {
+function IconDropdowns({itemCount}: {itemCount: number}) {
+  const icons = Array.from({ length: itemCount }, (_, index) => (
+    <Icon key={index} />
+  ));
   return (
-    <div className="w-full h-full grid grid-cols-[repeat(15,_minmax(0,_1fr))]">
-      <Icon />
-      <Icon />
-      <Icon />
-      <Icon />
-      <Icon />
-      <Icon />
-      <Icon />
-      <Icon />
-      <Icon />
-      <Icon />
-      <Icon />
-      <Icon />
-      <Icon />
-      <Icon />
-      <Icon />
+    <div className="w-full h-full grid" style={{
+      gridTemplateColumns: `repeat(${itemCount}, minmax(0, 1fr))`
+    }}>
+      {icons}
     </div>
   );
 }
