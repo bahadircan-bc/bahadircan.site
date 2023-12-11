@@ -16,7 +16,7 @@ function Hero() {
   const [visible, setVisible] = useState(true);
   return (
     <div className="w-full h-screen relative">
-      <div className="w-full h-screen text-white pl-[15vw] pt-[30%]">
+      <div className="w-fit h-fit text-white absolute inset-[50vh_auto_auto_15vw] z-10">
         <motion.h1
           className="w-fit text-8xl leading-normal"
           variants={titleVariants}
@@ -48,7 +48,7 @@ function Hero() {
           Proin a accumsan nibh, nec fringilla metus.
         </motion.p>
       </div>
-      <div className="absolute inset-[15%_10vw_auto_auto] w-[33vw] h-1/2">
+      <div className="absolute inset-[15%_5vw_auto_auto] w-[60vw] h-1/3">
         <IconDropdowns />
       </div>
     </div>

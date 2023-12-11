@@ -1,13 +1,13 @@
-import Hero from "../components/Hero"
-import Projects from "../components/Projects"
+import Hero from "../components/Hero";
+import Projects from "../components/Projects";
 
 function Home() {
   return (
     <>
-      <Hero/>
-      <Projects/>
+      <Hero />
+      <Projects />
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;
