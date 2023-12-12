@@ -1,7 +1,6 @@
-import Footer from "../components/Footer";
-import Hero from "../components/Hero";
-import Projects from "../components/Projects";
-import Timeline from "../components/Timeline";
+import Hero from "../components/Home/Hero";
+import Projects from "../components/Home/Projects";
+import Timeline from "../components/Home/Timeline";
 
 function Home() {
   return (
@@ -9,7 +8,6 @@ function Home() {
       <Hero />
       <Projects />
       <Timeline />
-      <Footer />
     </>
   );
 }

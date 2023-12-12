@@ -7,16 +7,17 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <div className="w-full h-fit text-white text-center gap-5">
+    <div className="w-full h-fit text-white text-center gap-5 pt-32">
       You found a bug? <br /> Please report it to me via Telegram or Twitter.{" "}
       <br />
       <br /> Or you can fix it yourself and send a pull request. <br />
-      <a
-        href="https://github.com/bahadircan-bc/bahadircan.site"
+      <Link
+        to="https://github.com/bahadircan-bc/bahadircan.site"
+        target="_blank"
         className="inline-block"
       >
         <span className="underline">Go to repository.</span>
-      </a>
+      </Link>
       <br />
       <br />
       <div className="w-full h-fit flex items-center justify-center gap-10 bg-accent bg-opacity-50">

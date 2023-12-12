@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import exypnosLogo from "../assets/exypnos.png";
+import exypnosLogo from "../../assets/exypnos.png";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useState } from "react";
 
@@ -35,7 +35,7 @@ function Navbar() {
         />
       </Link>
       <Link to="/">Projects</Link>
-      <Link to="/">Blog</Link>
+      <Link to="/blog">Blog</Link>
       <Link to="/">About me</Link>
       <Link to="/">Contact</Link>
     </motion.nav>
