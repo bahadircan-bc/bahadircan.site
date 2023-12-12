@@ -34,9 +34,10 @@ function Navbar() {
           className="w-[50px] aspect-square"
         />
       </Link>
+      <Link to="/">Home</Link>
       <Link to="/">Projects</Link>
       <Link to="/blog">Blog</Link>
-      <Link to="/">About me</Link>
+      <Link to="/aboutme">About me</Link>
       <Link to="/contact">Contact</Link>
     </motion.nav>
   );

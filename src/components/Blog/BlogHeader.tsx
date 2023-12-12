@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import background from "../../assets/blogHeaderBackground.jpg";
+import background from "../../assets/backgrounds/blogHeaderBackground.jpg";
 
 function BlogHeader() {
   return (
