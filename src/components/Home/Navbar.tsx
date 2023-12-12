@@ -37,7 +37,7 @@ function Navbar() {
       <Link to="/">Projects</Link>
       <Link to="/blog">Blog</Link>
       <Link to="/">About me</Link>
-      <Link to="/">Contact</Link>
+      <Link to="/contact">Contact</Link>
     </motion.nav>
   );
 }

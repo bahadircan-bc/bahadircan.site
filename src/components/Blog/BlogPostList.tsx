@@ -31,7 +31,7 @@ function BlogPostCard(props: BlogPostCardProps) {
 
   return (
     <motion.div
-      className="w-[20vw] h-fit"
+      className="min-w-[300px] w-[20vw] h-fit text-black"
       onViewportEnter={(entry) => {
         const isTopEntry = entry?.intersectionRect?.top ?? 0 > 0;
 
@@ -92,23 +92,38 @@ function BlogPostList() {
       console.log("loaded");
       const adjustContainerHeight = () => {
         if (!containerRef.current) return;
+        if (window.innerWidth < 770) return;
 
-        while (containerRef.current.scrollWidth < (window.innerWidth * 2) / 3) {
+        while (containerRef.current.scrollWidth < window.innerWidth + 10) {
+          console.log(
+            "too small, increasing, current width:",
+            containerRef.current.scrollWidth
+          );
           containerRef.current.style.height = `${
-            containerRef.current.clientHeight - 10
+            containerRef.current.clientHeight - 50
           }px`;
         }
 
-        while (containerRef.current.scrollWidth > (window.innerWidth * 2) / 3) {
+        while (containerRef.current.scrollWidth > window.innerWidth) {
+          console.log(
+            "too big, decreasing, current width:",
+            containerRef.current.scrollWidth
+          );
+
           containerRef.current.style.height = `${
-            containerRef.current.clientHeight + 10
+            containerRef.current.clientHeight + 50
           }px`;
         }
       };
 
       adjustContainerHeight();
 
-      window.addEventListener("resize", adjustContainerHeight);
+      window.addEventListener("resize", () => {
+        console.log("resized");
+        console.log("current width:", containerRef.current?.scrollWidth);
+        console.log("window width:", window.innerWidth);
+        adjustContainerHeight();
+      });
 
       return () => {
         window.removeEventListener("resize", adjustContainerHeight);
@@ -117,10 +132,14 @@ function BlogPostList() {
   }, [loadedImages]);
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center">
+    <div className="w-full min-h-screen md:block hidden text-gray-300">
+      <h1 className="text-9xl text-center pt-[20vh]"><i>Hello World!</i></h1>
+      <h2 className='text-2xl text-center py-[10vh]'>
+        This is a WIP blog page. <br /> It's not finished yet, <br /> but I'm working on it!
+      </h2>
       <div
         ref={containerRef}
-        className="flex flex-col pt-[10vh] w-fit gap-5 flex-wrap"
+        className="flex flex-col items-center content-center justify-start h-0 gap-4 flex-wrap"
       >
         {postCards}
       </div>

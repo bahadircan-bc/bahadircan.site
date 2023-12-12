@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <div className="w-full h-fit text-white text-center gap-5 pt-32">
+    <div className="w-full h-[30vh] text-white text-center absolute bottom-0 flex flex-col justify-end">
       You found a bug? <br /> Please report it to me via Telegram or Twitter.{" "}
       <br />
       <br /> Or you can fix it yourself and send a pull request. <br />
@@ -18,7 +18,6 @@ function Footer() {
       >
         <span className="underline">Go to repository.</span>
       </Link>
-      <br />
       <br />
       <div className="w-full h-fit flex items-center justify-center gap-10 bg-accent bg-opacity-50">
         <Link target="_blank" to="https://t.me/bbahadircan">

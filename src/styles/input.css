@@ -15,6 +15,9 @@ body {
       rgba(0, 0, 0, 0) 100%
     )
     no-repeat;
+    position: relative;
+    /* padding for footer */
+    padding-bottom: 30vh;
 }
 
 /* make scrollbar invisible */
