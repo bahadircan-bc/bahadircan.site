@@ -1,7 +1,15 @@
 import LinesEllipsis from "react-lines-ellipsis";
 import { motion, useAnimation } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
-function BlogPostCard() {
+type BlogPostCardProps = {
+  index: number;
+  handleLoad: () => void;
+};
+
+function BlogPostCard(props: BlogPostCardProps) {
+  const { index, handleLoad } = props;
+
   const loremText =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum et\
   sapien quis sapien aliquam ultricies. Sed tincidunt, nisl eget\
@@ -23,7 +31,7 @@ function BlogPostCard() {
 
   return (
     <motion.div
-      className="w-1/4 h-fit grow"
+      className="w-[20vw] h-fit"
       onViewportEnter={(entry) => {
         const isTopEntry = entry?.intersectionRect?.top ?? 0 > 0;
 
@@ -42,9 +50,14 @@ function BlogPostCard() {
       }}
     >
       <motion.div
-        className="h-full w-full flex flex-col gap-5 p-20 rounded-xl bg-gray-100 opacity-0"
+        className="h-full w-full flex flex-col gap-5 p-10 rounded-xl bg-gray-100 opacity-0"
         animate={controls}
       >
+        <img
+          src={`https://source.unsplash.com/random/?sig=${index}`}
+          alt=""
+          onLoad={handleLoad}
+        />
         <h1 className="text-2xl font-bold">Blog post title</h1>
         <p className="text-base font-medium text-gray-500">2021-08-21</p>
         <LinesEllipsis
@@ -60,16 +73,56 @@ function BlogPostCard() {
 }
 
 function BlogPostList() {
+  const [loadedImages, setLoadedImages] = useState<number>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const postCards = Array.from({ length: 10 }, (_, i) => (
+    <BlogPostCard
+      key={i}
+      index={i}
+      handleLoad={() => {
+        console.log(loadedImages);
+        setLoadedImages((loadedImages) => loadedImages + 1);
+      }}
+    />
+  ));
+
+  useEffect(() => {
+    if (loadedImages === 10) {
+      console.log("loaded");
+      const adjustContainerHeight = () => {
+        if (!containerRef.current) return;
+
+        while (containerRef.current.scrollWidth < (window.innerWidth * 2) / 3) {
+          containerRef.current.style.height = `${
+            containerRef.current.clientHeight - 10
+          }px`;
+        }
+
+        while (containerRef.current.scrollWidth > (window.innerWidth * 2) / 3) {
+          containerRef.current.style.height = `${
+            containerRef.current.clientHeight + 10
+          }px`;
+        }
+      };
+
+      adjustContainerHeight();
+
+      window.addEventListener("resize", adjustContainerHeight);
+
+      return () => {
+        window.removeEventListener("resize", adjustContainerHeight);
+      };
+    }
+  }, [loadedImages]);
+
   return (
-    <div className="w-full min-h-screen">
-      <div className="flex px-[15vw] pt-[10vh] gap-5 flex-wrap">
-        <BlogPostCard />
-        <BlogPostCard />
-        <BlogPostCard />
-        <BlogPostCard />
-        <BlogPostCard />
-        <BlogPostCard />
-        <BlogPostCard />
+    <div className="w-full min-h-screen flex items-center justify-center">
+      <div
+        ref={containerRef}
+        className="flex flex-col pt-[10vh] w-fit gap-5 flex-wrap"
+      >
+        {postCards}
       </div>
     </div>
   );
