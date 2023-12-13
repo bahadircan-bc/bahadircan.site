@@ -15,16 +15,18 @@ function AboutMeHeader() {
           transition={{ duration: 2, delay: 0.1, ease: "easeOut" }}
         ></motion.div>
         <div className="w-full object-contain object-center bg-black">
-        <img
-          src={AboutMeBackground}
-          alt=""
-          onLoad={() => setBgLoaded(true)}
-          style={{
-            WebkitMaskImage: 
-              "linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)",
-          }}
+          <img
+            src={AboutMeBackground}
+            alt=""
+            onLoad={() => setBgLoaded(true)}
+            style={{
+              maskImage:
+                "linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)",
+            }}
           />
-          </div>
+        </div>
         <motion.div
           className="w-full h-1/2 flex-1 bg-black absolute bottom-0 z-10"
           initial={{ y: "0%" }}
