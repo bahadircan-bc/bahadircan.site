@@ -9,10 +9,10 @@ import Mobile from "./WhyMeComponents/Mobile";
 
 function WhyMe() {
   return (
-    <div className="w-full h-screen flex flex-col items-center">
-      <div className="w-full h-fit text-center text-white text-9xl mb-[10vh]">
+    <div className="w-full h-screen flex flex-col items-center py-10">
+      {/* <div className="w-full h-fit text-center text-white text-7xl mb-[10vh]">
         Why me?
-      </div>
+      </div> */}
       {/* min-h-0 is important for the element below, 
       since it was removed from the specification for an alternative */}
       <Tabs className="w-2/3 text-white flex flex-col min-h-0">

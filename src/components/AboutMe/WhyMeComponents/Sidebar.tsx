@@ -1,5 +1,12 @@
 import React from "react";
-function Sidebars({ children }: { children: React.ReactNode }) {
+
+function Sidebars({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const sidebarListElement = React.Children.toArray(children).filter(
@@ -9,6 +16,7 @@ function Sidebars({ children }: { children: React.ReactNode }) {
   )[0] as React.ReactElement;
 
   const updatedSidebarListElement = React.cloneElement(sidebarListElement, {
+    selectedIndex: selectedIndex,
     onClick: (index: number) => {
       setSelectedIndex(index);
     },
@@ -20,11 +28,11 @@ function Sidebars({ children }: { children: React.ReactNode }) {
     }
   );
 
-  console.log(sidebarPanelElements);
+  console.log('sidebarPanelElements');
   return (
-    <div className="flex h-full">
+    <div className={"flex h-full".concat(className ? ` ${className}` : "")}>
       {updatedSidebarListElement}
-      <div className="flex-[4] h-full">
+      <div className="flex-[6] h-full">
         {sidebarPanelElements[selectedIndex]}
       </div>
     </div>
@@ -32,50 +40,66 @@ function Sidebars({ children }: { children: React.ReactNode }) {
 }
 
 function SidebarList({
+  className,
   children,
+  selectedIndex,
   onClick,
 }: {
+  className?: string;
   children: React.ReactNode;
+  selectedIndex?: number;
   onClick?: (index: number) => void;
 }) {
   const updatedSidebarChildren = React.Children.map(
     children,
     (child, index) => {
-      return React.cloneElement(child as React.ReactElement, {
+      const updatedSideBar = React.cloneElement(child as React.ReactElement, {
+        isSelected: selectedIndex === index,
         onClick: () => {
           console.log("clicked: ", index);
           onClick && onClick(index);
         },
       });
+
+      return updatedSideBar;
     }
   );
 
   return (
-    <div className="flex-1 h-full overflow-scroll">
+    <div
+      className={"flex-1 h-full overflow-scroll".concat(
+        className ? ` ${className}` : ""
+      )}
+    >
       {updatedSidebarChildren}
     </div>
   );
 }
 
 function Sidebar({
+  isSelected,
   children,
   onClick,
 }: {
+  isSelected?: boolean;
   children: React.ReactNode;
   onClick?: () => void;
 }) {
   return (
     <div
       onClick={onClick}
-      className="flex-1 cursor-pointer w-full aspect-square"
+      className="flex-1 cursor-pointer w-full aspect-square relative"
     >
       {children}
+      {isSelected && <div className="absolute right-0 top-1/2 -translate-y-1/2 text-5xl">{'>'}</div>}
     </div>
   );
 }
 
-function SidebarPanel({ children }: { children: React.ReactNode }) {
-  return <div className="h-full w-full">{children}</div>;
+function SidebarPanel({ className, children }: { className?: string, children: React.ReactNode }) {
+  return <div className={"h-full w-full border-l ".concat(
+    className ? ` ${className}` : ""
+  )}>{children}</div>;
 }
 
 export { Sidebars, SidebarList, Sidebar, SidebarPanel };
