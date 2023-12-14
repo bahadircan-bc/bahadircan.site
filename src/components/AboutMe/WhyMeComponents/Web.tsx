@@ -8,7 +8,6 @@ import Framer from "../../../assets/dropdownIcons/framer.svg?react";
 import HTML5 from "../../../assets/dropdownIcons/html5.svg?react";
 import GraphQL from "../../../assets/dropdownIcons/graphql.svg?react";
 import JavaScript from "../../../assets/dropdownIcons/javascript.svg?react";
-import JSON from "../../../assets/dropdownIcons/json.svg?react";
 import Next from "../../../assets/dropdownIcons/next.svg?react";
 import Ngrok from "../../../assets/dropdownIcons/ngrok.svg?react";
 import Node from "../../../assets/dropdownIcons/node.svg?react";
@@ -74,12 +73,6 @@ function Web() {
           <div className="h-full w-full flex flex-col items-center justify-center ">
             <JavaScript className="w-1/3 h-1/3 fill-[#F7DF1E]" />
             <p className="text-3xl">JavaScript</p>
-          </div>
-        </Sidebar>
-        <Sidebar>
-          <div className="h-full w-full flex flex-col items-center justify-center ">
-            <JSON className="w-1/3 h-1/3 fill-[#000000]" />
-            <p className="text-3xl">JSON</p>
           </div>
         </Sidebar>
         <Sidebar>
