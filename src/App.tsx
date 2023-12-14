@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "./components/Home/Navbar";
+import Navbar from "./components/Navbar";
 import React, { useState } from "react";
 import Footer from "./components/Footer";
 import CaretDownIcon from "./assets/caret-down.svg?react";

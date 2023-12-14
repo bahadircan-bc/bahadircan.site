@@ -15,9 +15,27 @@ body {
       rgba(0, 0, 0, 0) 100%
     )
     no-repeat;
-    position: relative;
-    /* padding for footer */
-    padding-bottom: 30vh;
+  position: relative;
+  /* padding for footer */
+  padding-bottom: 30vh;
+}
+
+#mobile {
+  display: none;
+}
+
+@media only screen and (max-width: 769px) {
+  #root {
+    display: none;
+  }
+
+  #mobile {
+    display: block;
+    color: white;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+  }
 }
 
 /* make scrollbar invisible */
