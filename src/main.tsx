@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import "./styles/output.css";
 
 import {
+  Navigate,
   Route,
   RouterProvider,
   createBrowserRouter,
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
       <Route path="/contact" element={<Contact />} />
       <Route path="/aboutme" element={<AboutMe />} />
       <Route path="/projects" element={<Projects />} />
+      <Route path="*" element={<Navigate to='/'/>} />
     </Route>,
   ])
 );

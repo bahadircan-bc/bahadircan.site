@@ -7,7 +7,7 @@ function AboutMeHeader() {
 
   return (
     <div className="w-full h-screen">
-      <div className="w-full h-full flex flex-col justify-center overflow-hidden relative">
+      <div className="w-full h-full flex flex-col justify-center overflow-hidden relative bg-black">
         <motion.div
           className="w-full h-1/2 flex-1 bg-black absolute top-0 z-10"
           initial={{ y: "0" }}
