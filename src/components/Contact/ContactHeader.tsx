@@ -20,54 +20,54 @@ function QRCarousel() {
       className="h-[50vh]"
       autoPlay
       infiniteLoop
-      showArrows={false}
+      emulateTouch
       showThumbs={false}
     >
-      <div className="h-[50vh] flex flex-col items-center justify-center gap-5">
-        <p className="text-base">
+      <div className="h-[50vh] p-[10%] relative flex items-center justify-center">
+        <p className="text-base absolute top-0">
           Twitter <br />{" "}
           <span className="text-xs">
             (...or x whatever you want to call it.)
           </span>
         </p>
         <div>
-          <img className="h-[30vh]" src={twitterqr} alt="" />
+          <img className="aspect-square" src={twitterqr} alt="" />
         </div>
       </div>
-      <div className="h-[50vh] flex flex-col items-center justify-center gap-5">
-        <p>Instagram</p>
+      <div className="h-[50vh] p-[10%] relative flex items-center justify-center">
+        <p className="text-base absolute top-0">Instagram</p>
         <div>
-          <img className="h-[30vh]" src={instagramqr} alt="" />
+          <img className="aspect-square" src={instagramqr} alt="" />
         </div>
       </div>
-      <div className="h-[50vh] flex flex-col items-center justify-center gap-5">
-        <p>GitHub</p>
+      <div className="h-[50vh] p-[10%] relative flex items-center justify-center">
+        <p className="text-base absolute top-0">GitHub</p>
         <div>
-          <img className="h-[30vh]" src={githubqr} alt="" />
+          <img className="aspect-square" src={githubqr} alt="" />
         </div>
       </div>
-      <div className="h-[50vh] flex flex-col items-center justify-center gap-5">
-        <p>LinkedIn</p>
+      <div className="h-[50vh] p-[10%] relative flex items-center justify-center">
+        <p className="text-base absolute top-0">LinkedIn</p>
         <div>
-          <img className="h-[30vh]" src={linkedinqr} alt="" />
+          <img className="aspect-square" src={linkedinqr} alt="" />
         </div>
       </div>
-      <div className="h-[50vh] flex flex-col items-center justify-center gap-5">
-        <p>Telegram</p>
+      <div className="h-[50vh] p-[10%] relative flex items-center justify-center">
+        <p className="text-base absolute top-0">Telegram</p>
         <div>
-          <img className="h-[30vh]" src={telegramqr} alt="" />
+          <img className="aspect-square" src={telegramqr} alt="" />
         </div>
       </div>
-      <div className="h-[50vh] flex flex-col items-center justify-center gap-5">
-        <p>WhatsApp</p>
+      <div className="h-[50vh] p-[10%] relative flex items-center justify-center">
+        <p className="text-base absolute top-0">WhatsApp</p>
         <div>
-          <img className="h-[30vh]" src={whatsappqr} alt="" />
+          <img className="aspect-square" src={whatsappqr} alt="" />
         </div>
       </div>
-      <div className="h-[50vh] flex flex-col items-center justify-center gap-5">
-        <p>Discord</p>
+      <div className="h-[50vh] p-[10%] relative flex items-center justify-center">
+        <p className="text-base absolute top-0">Discord</p>
         <div>
-          <img className="h-[30vh]" src={discordqr} alt="" />
+          <img className="w-[30vh] aspect-square" src={discordqr} alt="" />
         </div>
       </div>
     </Carousel>
