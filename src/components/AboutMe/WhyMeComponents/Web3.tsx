@@ -2,26 +2,19 @@ import { Sidebar, SidebarList, SidebarPanel, Sidebars } from "./Sidebar";
 
 function Web3() {
   return (
-    <Sidebars>
-      <SidebarList>
+    <Sidebars className="pt-10">
+      <SidebarList className="bg-white rounded-l-2xl text-black">
         <Sidebar>
-          <div className="h-full w-full grid place-items-center">asdf</div>
-        </Sidebar>
-        <Sidebar>
-          <div className="h-full w-full grid place-items-center">asdf</div>
-        </Sidebar>
-        <Sidebar>
-          <div className="h-full w-full grid place-items-center">asdf</div>
-        </Sidebar>
-        <Sidebar>
-          <div className="h-full w-full grid place-items-center">asdf</div>
+          <div className="h-full w-full flex flex-col items-center justify-center ">
+            
+          </div>
         </Sidebar>
       </SidebarList>
       <SidebarPanel>
-        <div className="bg-yellow-500 h-full">hello world</div>
+        <div className="h-full">hello world</div>
       </SidebarPanel>
       <SidebarPanel>
-        <div className="bg-yellow-500 h-full">hello</div>
+        <div className="h-full">hello</div>
       </SidebarPanel>
     </Sidebars>
   );

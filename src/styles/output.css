@@ -1701,6 +1701,10 @@ video {
   fill: #fff;
 }
 
+.fill-\[\#ffffff\]{
+  fill: #ffffff;
+}
+
 .stroke-black{
   stroke: #000;
 }

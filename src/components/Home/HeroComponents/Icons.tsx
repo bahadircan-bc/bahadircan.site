@@ -7,6 +7,7 @@ import CSS3 from "../../../assets/dropdownIcons/css3.svg?react";
 import Django from "../../../assets/dropdownIcons/django.svg?react";
 import Docker from "../../../assets/dropdownIcons/docker.svg?react";
 import Expo from "../../../assets/dropdownIcons/expo.svg?react";
+import EthersJS from "../../../assets/dropdownIcons/ethersjs.svg?react";
 import Express from "../../../assets/dropdownIcons/express.svg?react";
 import Framer from "../../../assets/dropdownIcons/framer.svg?react";
 import Git from "../../../assets/dropdownIcons/git.svg?react";
@@ -31,6 +32,7 @@ import TailwindCSS from "../../../assets/dropdownIcons/tailwindcss.svg?react";
 import TypeScript from "../../../assets/dropdownIcons/typescript.svg?react";
 import Ubuntu from "../../../assets/dropdownIcons/ubuntu.svg?react";
 import Unity from "../../../assets/dropdownIcons/unity.svg?react";
+import Wagmi from "../../../assets/dropdownIcons/wagmi.svg?react";
 import Web3 from "../../../assets/dropdownIcons/web3.svg?react";
 import YOLO from "../../../assets/dropdownIcons/yolo.svg?react";
 
@@ -74,6 +76,11 @@ const icons = [
     icon: <Expo className="w-full h-full fill-[#000020]" />,
     background: "light",
     link: 'https://expo.dev'
+  },
+  {
+    icon: <EthersJS className="w-full h-full fill-[#000000]" />,
+    background: "light",
+    link: 'https://docs.ethers.io'
   },
   {
     icon: <Express className="w-full h-full fill-[#000000]" />,
@@ -194,6 +201,11 @@ const icons = [
     icon: <Unity className="w-full h-full fill-[#000000]" />,
     background: "light",
     link: 'https://unity.com'
+  },
+  {
+    icon: <Wagmi className="w-full h-full fill-[#ffffff]" />,
+    background: "dark",
+    link: 'https://wagmi.sh'
   },
   {
     icon: <Web3 className="w-full h-full fill-[#F16822]" />,
