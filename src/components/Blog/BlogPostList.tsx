@@ -77,7 +77,14 @@ function BlogPostList() {
   ));
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center flex-col text-white">
+      <h1 className="text-5xl text-center pt-[20vh]">
+        <i>Hello!</i>
+      </h1>
+      <h2 className="text-lg text-center py-[10vh]">
+        This is a WIP blog page. <br /> Meaning it's not finished yet, <br /> but I'm
+        working on it!
+      </h2>
       <div className="w-fit h-fit grid grid-cols-3 gap-5">
         <div className="w-fit h-full flex flex-col gap-5">
           {blogPostList.filter((_, i) => i % 3 === 0)}
