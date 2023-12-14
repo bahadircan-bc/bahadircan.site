@@ -10,14 +10,25 @@ const variants = {
 
 function Navbar() {
   const [visible, setVisible] = useState(true);
+
   useMotionValueEvent(useScroll().scrollY, "change", (latest) => {
-    if (latest > 200) {
-      setVisible(false);
-    }
     if (latest < 100) {
       setVisible(true);
     }
   });
+  
+  useMotionValueEvent(
+    useScroll().scrollY,
+    "velocityChange",
+    (latestVelocity) => {
+      if (latestVelocity > 100) {
+        setVisible(false);
+      }
+      if (latestVelocity < -500) {
+        setVisible(true);
+      }
+    }
+  );
 
   return (
     <motion.nav
@@ -25,7 +36,7 @@ function Navbar() {
       initial="visible"
       animate={visible ? "visible" : "hidden"}
       transition={{ duration: 0.2, ease: "linear" }}
-      className="fixed top-0 w-full h-[60px] bg-accent bg-opacity-50 text-white text-base px-[30%] flex items-center justify-between overflow-hidden z-50 backdrop-blur-[2px]"
+      className="fixed top-0 w-full h-[60px] bg-accent bg-opacity-50 text-white text-base px-[30%] flex items-center justify-between overflow-hidden z-[100] backdrop-blur-[2px]"
     >
       <Link to="/">
         <img
