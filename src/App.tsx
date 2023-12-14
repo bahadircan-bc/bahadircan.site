@@ -20,7 +20,10 @@ function App() {
       <Footer />
       {
         <motion.div
-          className="w-10 h-10 absolute top-[90vh] left-1/2 -translate-x-1/2"
+          className="w-10 h-10 absolute top-[90vh] left-1/2"
+          style={{
+            x: "-50%"
+          }}
           initial={{ opacity: 1 }}
           animate={
             caretVisible ? { opacity: 1, y: "1vh" } : { opacity: 0, y: "1vh" }
