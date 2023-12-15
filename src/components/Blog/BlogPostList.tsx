@@ -1,5 +1,6 @@
 import { motion, useAnimation } from "framer-motion";
 import LinesEllipsis from "react-lines-ellipsis";
+import { Link } from "react-router-dom";
 
 type BlogPostCardProps = {
   index: number;
@@ -29,45 +30,47 @@ function BlogPostCard(props: BlogPostCardProps) {
   const controls = useAnimation();
 
   return (
-    <motion.div
-      className="min-w-[300px] w-[20vw] h-fit text-black"
-      onViewportEnter={(entry) => {
-        const isTopEntry = entry?.intersectionRect?.top ?? 0 > 0;
-
-        if (isTopEntry) {
-          controls.set({ y: 50 });
-        } else {
-          controls.set({ y: -50 });
-        }
-        controls.start(
-          { y: 0, opacity: 1 },
-          { duration: 0.5, ease: "easeOut" }
-        );
-      }}
-      onViewportLeave={() => {
-        controls.set({ opacity: 0 });
-      }}
-    >
+    <Link to={`/blog/${index}`}>
       <motion.div
-        className="h-full w-full flex flex-col gap-5 p-10 rounded-xl bg-gray-100 opacity-0"
-        animate={controls}
+        className="min-w-[300px] w-[20vw] h-fit text-black"
+        onViewportEnter={(entry) => {
+          const isTopEntry = entry?.intersectionRect?.top ?? 0 > 0;
+
+          if (isTopEntry) {
+            controls.set({ y: 50 });
+          } else {
+            controls.set({ y: -50 });
+          }
+          controls.start(
+            { y: 0, opacity: 1 },
+            { duration: 0.5, ease: "easeOut" }
+          );
+        }}
+        onViewportLeave={() => {
+          controls.set({ opacity: 0 });
+        }}
       >
-        <img
-          src={`https://source.unsplash.com/random/?sig=${index}`}
-          alt=""
-          onLoad={handleLoad}
-        />
-        <h1 className="text-2xl font-bold">Blog post title</h1>
-        <p className="text-base font-medium text-gray-500">2021-08-21</p>
-        <LinesEllipsis
-          text={loremText}
-          maxLine="6"
-          ellipsis="..."
-          basedOn="letters"
-        />
-        <p className="text-base font-medium text-gray-500 text-ellipsis"></p>
+        <motion.div
+          className="h-full w-full flex flex-col gap-5 p-10 rounded-xl bg-gray-100 opacity-0"
+          animate={controls}
+        >
+          <img
+            src={`https://source.unsplash.com/random/?sig=${index}`}
+            alt=""
+            onLoad={handleLoad}
+          />
+          <h1 className="text-2xl font-bold">Blog post title</h1>
+          <p className="text-base font-medium text-gray-500">2021-08-21</p>
+          <LinesEllipsis
+            text={loremText}
+            maxLine="6"
+            ellipsis="..."
+            basedOn="letters"
+          />
+          <p className="text-base font-medium text-gray-500 text-ellipsis"></p>
+        </motion.div>
       </motion.div>
-    </motion.div>
+    </Link>
   );
 }
 
@@ -82,8 +85,8 @@ function BlogPostList() {
         <i>Hello!</i>
       </h1>
       <h2 className="text-lg text-center py-[10vh]">
-        This is a WIP blog page. <br /> Meaning it's not finished yet, <br /> but I'm
-        working on it!
+        This is a WIP blog page. <br /> Meaning it's not finished yet, <br />{" "}
+        but I'm working on it!
       </h2>
       <div className="w-fit h-fit grid grid-cols-3 gap-5">
         <div className="w-fit h-full flex flex-col gap-5">
