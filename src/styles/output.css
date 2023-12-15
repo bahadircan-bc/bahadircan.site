@@ -906,6 +906,10 @@ video {
   aspect-ratio: 16 / 9;
 }
 
+.aspect-\[2\/1\]{
+  aspect-ratio: 2/1;
+}
+
 .h-0{
   height: 0px;
 }
@@ -1050,6 +1054,11 @@ video {
 
 .min-h-full{
   min-height: 100%;
+}
+
+.min-h-fit{
+  min-height: -moz-fit-content;
+  min-height: fit-content;
 }
 
 .w-0{
@@ -1340,6 +1349,10 @@ video {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.grid-cols-2{
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .grid-rows-3{
   grid-template-rows: repeat(3, minmax(0, 1fr));
 }
@@ -1454,6 +1467,10 @@ video {
 
 .gap-5{
   gap: 1.25rem;
+}
+
+.gap-\[10vh\]{
+  gap: 10vh;
 }
 
 .self-start{
@@ -1957,6 +1974,10 @@ video {
   stroke: #000;
 }
 
+.stroke-red-500{
+  stroke: #ef4444;
+}
+
 .object-contain{
   -o-object-fit: contain;
      object-fit: contain;
@@ -2083,6 +2104,21 @@ video {
 .px-\[10vw\]{
   padding-left: 10vw;
   padding-right: 10vw;
+}
+
+.px-\[10vh\]{
+  padding-left: 10vh;
+  padding-right: 10vh;
+}
+
+.px-\[5vw\]{
+  padding-left: 5vw;
+  padding-right: 5vw;
+}
+
+.px-\[20vw\]{
+  padding-left: 20vw;
+  padding-right: 20vw;
 }
 
 .pb-10{
@@ -2333,6 +2369,10 @@ video {
   text-decoration-line: underline;
 }
 
+.decoration-red-500{
+  text-decoration-color: #ef4444;
+}
+
 .opacity-0{
   opacity: 0;
 }
@@ -2403,6 +2443,10 @@ video {
 
 .outline-white{
   outline-color: #fff;
+}
+
+.outline-red-500{
+  outline-color: #ef4444;
 }
 
 .blur{
