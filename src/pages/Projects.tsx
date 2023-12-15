@@ -131,10 +131,43 @@ function ProjectsHeader() {
   );
 }
 
+function ProjectsBody() {
+  return (
+    <>
+      <div className="text-5xl text-white text-center py-[10vh]">
+        Take a look...
+      </div>
+      <div className="w-full h-screen grid grid-cols-4 grid-rows-4 gap-5 px-[10vw]">
+        {ProjectList.slice(0,16).map((project, index) => (
+          <div
+            key={index}
+            className="h-full w-full even:bg-red-500 odd:bg-blue-500 rounded-md hover:scale-150 transition-all hover:duration-500 hover:z-10 z-0 duration-100 overflow-hidden"
+          >
+            <div
+              className="w-full h-full flex items-center justify-center"
+              style={{
+                backgroundImage: `linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1)), url(${project.src})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
+              <div className="text-5xl text-white text-center">
+                {project.title}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
 function Projects() {
   return (
     <>
       <ProjectsHeader />
+      <ProjectsBody />
     </>
   );
 }
