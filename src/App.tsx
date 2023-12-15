@@ -6,7 +6,10 @@ import CaretDownIcon from "./assets/caret-down.svg?react";
 
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 
+import useScrollToTop from "./components/ScrollToTop";
+
 function App() {
+  useScrollToTop();
   const [caretVisible, setCaretVisible] = useState(true);
   useMotionValueEvent(useScroll().scrollY, "change", (latest) => {
     if (latest > 100) {

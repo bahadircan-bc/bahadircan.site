@@ -1012,6 +1012,14 @@ video {
   height: 10vh;
 }
 
+.h-4\/5{
+  height: 80%;
+}
+
+.h-4{
+  height: 1rem;
+}
+
 .max-h-0{
   max-height: 0px;
 }
@@ -1193,6 +1201,14 @@ video {
 
 .w-\[calc\(10\%-2\.5rem\)\]{
   width: calc(10% - 2.5rem);
+}
+
+.w-4\/5{
+  width: 80%;
+}
+
+.w-4{
+  width: 1rem;
 }
 
 .min-w-0{
@@ -2139,6 +2155,10 @@ video {
 
 .pl-\[21\%\]{
   padding-left: 21%;
+}
+
+.pt-\[10vh\]{
+  padding-top: 10vh;
 }
 
 .text-center{

@@ -17,6 +17,7 @@ import Contact from "./pages/Contact.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import AboutMe from "./pages/AboutMe.tsx";
 import Projects from "./pages/Projects.tsx";
+import ProjectPage from "./pages/ProjectPage.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
       <Route path="/contact" element={<Contact />} />
       <Route path="/aboutme" element={<AboutMe />} />
       <Route path="/projects" element={<Projects />} />
+      <Route path='/projects/:id' element={<ProjectPage />} />
     </Route>,
   ])
 );
