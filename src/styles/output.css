@@ -1513,6 +1513,10 @@ video {
   overflow-x: scroll;
 }
 
+.overflow-y-scroll{
+  overflow-y: scroll;
+}
+
 .text-ellipsis{
   text-overflow: ellipsis;
 }

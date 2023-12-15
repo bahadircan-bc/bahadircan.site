@@ -67,9 +67,12 @@ function SidebarList({
 
   return (
     <div
-      className={"flex-1 h-full overflow-scroll".concat(
+      className={"flex-1 h-full overflow-y-scroll".concat(
         className ? ` ${className}` : ""
       )}
+      style={{
+        scrollbarWidth: "none",
+      }}
     >
       {updatedSidebarChildren}
     </div>

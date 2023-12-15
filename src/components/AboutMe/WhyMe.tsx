@@ -33,19 +33,19 @@ function WhyMe() {
             Mobile
           </Tab>
         </TabList>
-        <TabPanel selectedClassName="flex-1" className="overflow-clip">
+        <TabPanel selectedClassName="flex-1 min-h-0" className="overflow-clip">
           <Web />
         </TabPanel>
-        <TabPanel selectedClassName="flex-1" className="overflow-clip">
+        <TabPanel selectedClassName="flex-1 min-h-0" className="overflow-clip">
           <Web3 />
         </TabPanel>
-        <TabPanel selectedClassName="flex-1" className="overflow-clip">
+        <TabPanel selectedClassName="flex-1 min-h-0" className="overflow-clip">
           <Engineering />
         </TabPanel>
-        <TabPanel selectedClassName="flex-1" className="overflow-clip">
+        <TabPanel selectedClassName="flex-1 min-h-0" className="overflow-clip">
           <Desktop />
         </TabPanel>
-        <TabPanel selectedClassName="flex-1" className="overflow-clip">
+        <TabPanel selectedClassName="flex-1 min-h-0" className="overflow-clip">
           <Mobile />
         </TabPanel>
       </Tabs>
