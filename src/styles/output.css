@@ -709,6 +709,66 @@ video {
   top: auto;
 }
 
+.top-\[20vh\]{
+  top: 20vh;
+}
+
+.top-\[25vh\]{
+  top: 25vh;
+}
+
+.left-\[24vw\]{
+  left: 24vw;
+}
+
+.top-\[105vh\]{
+  top: 105vh;
+}
+
+.top-\[45vh\]{
+  top: 45vh;
+}
+
+.top-\[65vh\]{
+  top: 65vh;
+}
+
+.top-\[85vh\]{
+  top: 85vh;
+}
+
+.left-\[48vw\]{
+  left: 48vw;
+}
+
+.left-\[72vw\]{
+  left: 72vw;
+}
+
+.left-\[47vw\]{
+  left: 47vw;
+}
+
+.left-\[70vw\]{
+  left: 70vw;
+}
+
+.top-\[47vh\]{
+  top: 47vh;
+}
+
+.top-\[calc\(25vh\+22vw\)\]{
+  top: calc(25vh + 22vw);
+}
+
+.top-\[calc\(45vh\+2vw\)\]{
+  top: calc(45vh + 2vw);
+}
+
+.top-\[calc\(65vh\+4vw\)\]{
+  top: calc(65vh + 4vw);
+}
+
 .z-0{
   z-index: 0;
 }
@@ -1192,6 +1252,11 @@ video {
 
 .translate-y-1{
   --tw-translate-y: 0.25rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.-translate-x-1\/2{
+  --tw-translate-x: -50%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -1882,6 +1947,10 @@ video {
 
 .stroke-red-500{
   stroke: #ef4444;
+}
+
+.stroke-white{
+  stroke: #fff;
 }
 
 .object-contain{

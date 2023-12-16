@@ -8,15 +8,57 @@ const titleVariants = {
 
 function Timeline() {
   const [visible, setVisible] = useState(false);
+  const [nodeVisibilities, setNodeVisibilities] = useState({
+    node1: false,
+    node2: false,
+    node3: false,
+    node4: false,
+    node5: false,
+  });
   // const containerRef = useRef(null);
   const targetRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ["start start", "end end"],
   });
-  useMotionValueEvent(scrollYProgress, "change", (latest) =>
-    console.log(latest)
-  );
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    // start end
+    // 108 121 node1
+    // 218 231 node2
+    // 328 341 node3
+    // 591 604 node4
+    // 853 866 node5
+    const newVisibilities = {
+      node1: false,
+      node2: false,
+      node3: false,
+      node4: false,
+      node5: false,
+    };
+    switch (true) {
+      case latest >= 0.853:
+        newVisibilities.node5 = true;
+      case latest >= 0.591:
+        newVisibilities.node4 = true;
+      case latest >= 0.328:
+        newVisibilities.node3 = true;
+      case latest >= 0.218:
+        newVisibilities.node2 = true;
+      case latest >= 0.108:
+        newVisibilities.node1 = true;
+        break;
+      default:
+        newVisibilities.node1 = false;
+        newVisibilities.node2 = false;
+        newVisibilities.node3 = false;
+        newVisibilities.node4 = false;
+        newVisibilities.node5 = false;
+        break;
+    }
+
+    setNodeVisibilities(newVisibilities);
+    console.log(latest);
+  });
 
   const vh = window.innerHeight / 100;
   const vw = window.innerWidth / 100;
@@ -43,10 +85,6 @@ function Timeline() {
           viewBox={`0 0 ${100 * vw} ${100 * vh}`}
           className="w-full h-full"
         >
-          {/* <motion.line x1='50' y1='0' x2='50' y2='100' stroke='white' style={{
-              pathLength: scrollYProgress,
-            }}/> */}
-
           <motion.path
             d={`
             M 0 ${vh * 20}
@@ -81,23 +119,23 @@ function Timeline() {
             d={`
             M 0 ${vh * 20}
             h ${23 * vw}
-            a ${vw} ${vw} 0 0 1 ${2 * vw} 0
+            a ${vw} ${vw} 0 0 1 ${2 * vw} 0 
             h ${21 * vw}
-            a ${vw} ${vw} 0 0 1 ${2 * vw} 0
+            a ${vw} ${vw} 0 0 1 ${2 * vw} 0 
             h ${21 * vw}
-            a ${vw} ${vw} 0 0 1 ${2 * vw} 0
+            a ${vw} ${vw} 0 0 1 ${2 * vw} 0 
             h ${18 * vw}
             a ${vw} ${vw} 0 0 1 ${vw} ${vw} 
             v ${20 * vh} 
-            a ${vw} ${vw} 0 0 1 ${-vw} ${vw} 
+            a ${vw} ${vw} 0 0 1 ${-vw} ${vw}
             h ${-18 * vw} 
-            a ${vw} ${vw} 0 0 1 ${-2 * vw} 0
+            a ${vw} ${vw} 0 0 1 ${-2 * vw} 0  
             h ${-18 * vw} 
             a ${vw} ${vw} 0 0 0 ${-vw} ${vw} 
             v ${20 * vh}
             a ${vw} ${vw} 0 0 0 ${vw} ${vw} 
             h ${18 * vw}
-            a ${vw} ${vw} 0 0 1 ${2 * vw} 0
+            a ${vw} ${vw} 0 0 1 ${2 * vw} 0 
             h ${29 * vw}
             `}
             fill="none"
@@ -108,6 +146,41 @@ function Timeline() {
             }}
           />
         </motion.svg>
+        <motion.p
+          className="text-xl text-white absolute top-[25vh] left-[24vw] -translate-x-1/2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: nodeVisibilities.node1 ? 1 : 0 }}
+        >
+          Yıldız Technical University
+        </motion.p>
+        <motion.p
+          className="text-xl text-white absolute top-[25vh] left-[47vw] -translate-x-1/2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: nodeVisibilities.node2 ? 1 : 0 }}
+        >
+          Argetürk
+        </motion.p>
+        <motion.p
+          className="text-xl text-white absolute top-[25vh] left-[70vw] -translate-x-1/2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: nodeVisibilities.node3 ? 1 : 0 }}
+        >
+          Broad
+        </motion.p>
+        <motion.p
+          className="text-xl text-white absolute top-[calc(45vh+2vw)] left-[70vw] -translate-x-1/2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: nodeVisibilities.node4 ? 1 : 0 }}
+        >
+          Freelance (Fiverr)
+        </motion.p>
+        <motion.p
+          className="text-xl text-white absolute top-[calc(65vh+4vw)] left-[70vw] -translate-x-1/2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: nodeVisibilities.node5 ? 1 : 0 }}
+        >
+          More to come...
+        </motion.p>
       </div>
     </div>
   );
