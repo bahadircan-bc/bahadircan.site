@@ -33,7 +33,7 @@ function Icon() {
         setTimeout(resolve, Math.random() * 15000)
       );
       while (!unmount) {
-        console.log("repeating");
+        // console.log("repeating");
         setIcon(Math.floor(Math.random() * icons.length));
         const duration = Math.random() * 10 + 8;
         controls.stop();
@@ -65,7 +65,7 @@ function Icon() {
     };
 
     const handleVisiblityChange = async () => {
-      console.log(document.visibilityState);
+      // console.log(document.visibilityState);
       if (document.visibilityState === "hidden") {
         unmount = true;
       } else {
