@@ -1,7 +1,9 @@
+import Image from "next/image";
+
 function ProjectHeader() {
   return (
     <div id="project-header" className="w-full h-fit relative rounded-lg">
-      <img
+      <Image
         className="w-full aspect-video object-cover rounded-lg"
         src="https://source.unsplash.com/random/?sig={1}"
         alt=""

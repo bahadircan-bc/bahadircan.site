@@ -88,7 +88,7 @@ function Icon() {
       unmount = true;
       window.removeEventListener("visibilitychange", handleVisiblityChange);
     };
-  }, []);
+  }, [controls]);
 
   return (
     <div className="w-full h-full relative">

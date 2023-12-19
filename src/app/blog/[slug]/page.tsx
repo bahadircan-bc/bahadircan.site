@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Markdown from "react-markdown";
 import remarkGfm from 'remark-gfm'
@@ -49,7 +50,7 @@ function BlogPostHeader(props: BlogPostHeaderProps) {
     <>
       <div className="w-full text-center text-7xl pb-[10vh]">{title}</div>
       <div>
-        <img
+        <Image
           className="w-1/2 aspect-video object-cover rounded-lg float-right mb-5 ml-5"
           src="https://source.unsplash.com/random/?sig=1"
           alt="The forger family picture"

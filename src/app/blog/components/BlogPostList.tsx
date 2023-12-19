@@ -2,6 +2,7 @@
 import { motion, useAnimation } from "framer-motion";
 import LinesEllipsis from "react-lines-ellipsis";
 import Link from "next/link";
+import Image from "next/image";
 
 type BlogPostCardProps = {
   postId?: string;
@@ -44,7 +45,7 @@ function BlogPostCard(props: BlogPostCardProps) {
           className="h-full w-full flex flex-col gap-5 p-10 rounded-xl bg-gray-100 opacity-0"
           animate={controls}
         >
-          <img
+          <Image
             src={`https://source.unsplash.com/random/?sig=${index}`}
             alt=""
             onLoad={handleLoad}
@@ -90,8 +91,8 @@ function BlogPostList({ blogPosts }: BlogPostListProps) {
         <i>Hello!</i>
       </h1>
       <h2 className="text-lg text-center py-[10vh]">
-        This is a WIP blog page. <br /> Meaning it's not finished yet, <br />{" "}
-        but I'm working on it!
+        This is a WIP blog page. <br /> Meaning it&apos;s not finished yet, <br />{" "}
+        but I&apos;m working on it!
       </h2>
       <div className="w-fit h-fit grid grid-cols-3 gap-5">
         <div className="w-fit h-full flex flex-col gap-5">

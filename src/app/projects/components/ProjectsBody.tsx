@@ -65,9 +65,8 @@ function ProjectsBody() {
       </div>
       <div className="w-full h-screen grid grid-cols-4 grid-rows-4 gap-5 px-[10vw]">
         {ProjectList.slice(0, 16).map((project, index) => (
-          <Link href='projects/1'>
+          <Link key={index} href='projects/1'>
             <div
-              key={index}
               className="h-full w-full even:bg-red-500 odd:bg-blue-500 rounded-md hover:scale-125 transition-all hover:duration-500 hover:z-10 z-0 duration-100 overflow-hidden"
             >
               <div
