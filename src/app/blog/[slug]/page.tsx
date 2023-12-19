@@ -52,6 +52,8 @@ function BlogPostHeader(props: BlogPostHeaderProps) {
       <div>
         <Image
           className="w-1/2 aspect-video object-cover rounded-lg float-right mb-5 ml-5"
+          width={1920}
+          height={1080}
           src="https://source.unsplash.com/random/?sig=1"
           alt="The forger family picture"
         />

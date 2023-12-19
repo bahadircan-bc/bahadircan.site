@@ -175,7 +175,7 @@ function Timeline() {
           initial={{ opacity: 0 }}
           animate={{ opacity: nodeVisibilities.node4 ? 1 : 0 }}
         >
-          Freelance (Fiverr)
+          Freelance
         </motion.p>
         <motion.p
           className="text-xl text-white absolute top-[calc(65vh+4vw)] left-[70vw] -translate-x-1/2"

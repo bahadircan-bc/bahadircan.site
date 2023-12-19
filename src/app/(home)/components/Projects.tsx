@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import ProjectAccordion from "./ProjectComponents/ProjectAccordion";
@@ -7,11 +9,16 @@ const titleVariants = {
   hidden: { x: "-20%", opacity: 0 },
 };
 
-function Projects() {
+type ProjectsProps = {
+  projects: []
+}
+
+function Projects(props: ProjectsProps) {
+  const { projects } = props;
   const [visible, setVisible] = useState(true);
   return (
     <div className="w-full h-screen text-white grid grid-rows-3 items-center">
-      <ProjectAccordion visible={visible} />
+      <ProjectAccordion visible={visible} projects={projects} />
       <motion.h1
         className="w-fit text-8xl leading-normal row-start-3 self-start ml-[15%]"
         variants={titleVariants}

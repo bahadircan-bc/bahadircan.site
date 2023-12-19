@@ -712,10 +712,6 @@ video {
   display: none;
 }
 
-.aspect-\[2\/1\] {
-  aspect-ratio: 2/1;
-}
-
 .aspect-square {
   aspect-ratio: 1 / 1;
 }
@@ -1244,6 +1240,11 @@ video {
   padding-right: 2.5rem;
 }
 
+.px-\[10\%\] {
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
 .px-\[10vw\] {
   padding-left: 10vw;
   padding-right: 10vw;
@@ -1548,16 +1549,6 @@ body {
 
 .first\:border-t:first-child {
   border-top-width: 1px;
-}
-
-.odd\:bg-blue-500:nth-child(odd) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
-}
-
-.even\:bg-red-500:nth-child(even) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
 }
 
 .hover\:z-10:hover {

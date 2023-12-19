@@ -1,6 +1,7 @@
 import { useState } from "react";
 // import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 type AccordionItemProps = {
   index: number;
@@ -27,7 +28,7 @@ function AccordionItem(props: AccordionItemProps) {
         setIsOpen(false);
       }}
     >
-      {/* <Link to={link}> */}
+      <Link href={link}>
       <div>
         <p className="text-secondary">
           {(index + 1).toString().padStart(2, "0")} /
@@ -42,7 +43,7 @@ function AccordionItem(props: AccordionItemProps) {
       >
         <p className="pt-5">{description}</p>
       </motion.div>
-      {/* </Link> */}
+      </Link>
     </div>
   );
 }

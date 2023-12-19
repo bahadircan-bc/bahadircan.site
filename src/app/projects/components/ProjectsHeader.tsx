@@ -1,31 +1,16 @@
-'use client'
+"use client";
 
 import Image from "next/image";
 import ProjectsCarousel from "./ProjectCarousel";
 import ProjectBackground from "@/assets/blueprint-bg.jpg";
+import { ProjectItem } from "../page";
 
-const ShowcaseProjectList = [
-  {
-    src: "https://source.unsplash.com/random?sig=1",
-    title: "Project 1",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque officiis eveniet aut vel saepe dolor, maxime ipsam, inventore perferendis porro odio cupiditate vitae veritatis qui, voluptatibus quasi quae eos? Nostrum.",
-  },
-  {
-    src: "https://source.unsplash.com/random?sig=2",
-    title: "Project 2",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque officiis eveniet aut vel saepe dolor, maxime ipsam, inventore perferendis porro odio cupiditate vitae veritatis qui, voluptatibus quasi quae eos? Nostrum.",
-  },
-  {
-    src: "https://source.unsplash.com/random?sig=3",
-    title: "Project 3",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque officiis eveniet aut vel saepe dolor, maxime ipsam, inventore perferendis porro odio cupiditate vitae veritatis qui, voluptatibus quasi quae eos? Nostrum.",
-  },
-];
+type ProjectsHeaderProps = {
+  projects: ProjectItem[];
+};
 
-function ProjectsHeader() {
+function ProjectsHeader(props: ProjectsHeaderProps) {
+  const { projects } = props;
   return (
     <div className="w-full h-screen relative">
       <Image
@@ -39,7 +24,7 @@ function ProjectsHeader() {
         }}
       />
       <div className="w-full h-[50vh] bottom-[20vh] text-white absolute">
-        <ProjectsCarousel projectList={ShowcaseProjectList} />
+        <ProjectsCarousel projectList={projects} />
       </div>
     </div>
   );

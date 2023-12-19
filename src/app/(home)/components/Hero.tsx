@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import IconDropdowns from "./HeroComponents/IconDropdowns";
@@ -39,13 +41,7 @@ function Hero() {
           animate={visible ? "visible" : "hidden"}
           transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
         >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nulla
-          orci, condimentum vel finibus nec, tincidunt quis neque. Donec
-          ullamcorper, odio quis sollicitudin iaculis, enim urna fringilla
-          dolor, a faucibus felis ante et felis. Sed elementum lectus sed neque
-          finibus porta. Aliquam ut lobortis lorem. Nunc lobortis massa ligula,
-          vel cursus ligula varius vitae. Phasellus viverra feugiat sagittis.
-          Proin a accumsan nibh, nec fringilla metus.
+          Hello there! 👋 I&apos;m Bahadır, a passionate and creative software developer with a knack for turning ideas into reality through elegant and efficient code. My journey in the world of technology has been a thrilling adventure, marked by continuous learning and a commitment to crafting solutions that make a difference.
         </motion.p>
       </div>
       <div className="absolute inset-[60px_5vw_auto_auto] w-full h-[60vh]">

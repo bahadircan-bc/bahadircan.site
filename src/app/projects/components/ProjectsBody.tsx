@@ -1,84 +1,33 @@
 import Link from "next/link";
+import { ProjectItem } from "../page";
 
-const ProjectList = [
-  {
-    src: "https://source.unsplash.com/random?sig=1",
-    title: "Project 1",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque officiis eveniet aut vel saepe dolor, maxime ipsam, inventore perferendis porro odio cupiditate vitae veritatis qui, voluptatibus quasi quae eos? Nostrum.",
-  },
-  {
-    src: "https://source.unsplash.com/random?sig=2",
-    title: "Project 2",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque officiis eveniet aut vel saepe dolor, maxime ipsam, inventore perferendis porro odio cupiditate vitae veritatis qui, voluptatibus quasi quae eos? Nostrum.",
-  },
-  {
-    src: "https://source.unsplash.com/random?sig=4",
-    title: "Project 3",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque officiis eveniet aut vel saepe dolor, maxime ipsam, inventore perferendis porro odio cupiditate vitae veritatis qui, voluptatibus quasi quae eos? Nostrum.",
-  },
-  {
-    src: "https://source.unsplash.com/random?sig=5",
-    title: "Project 3",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque officiis eveniet aut vel saepe dolor, maxime ipsam, inventore perferendis porro odio cupiditate vitae veritatis qui, voluptatibus quasi quae eos? Nostrum.",
-  },
-  {
-    src: "https://source.unsplash.com/random?sig=6",
-    title: "Project 3",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque officiis eveniet aut vel saepe dolor, maxime ipsam, inventore perferendis porro odio cupiditate vitae veritatis qui, voluptatibus quasi quae eos? Nostrum.",
-  },
-  {
-    src: "https://source.unsplash.com/random?sig=7",
-    title: "Project 3",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque officiis eveniet aut vel saepe dolor, maxime ipsam, inventore perferendis porro odio cupiditate vitae veritatis qui, voluptatibus quasi quae eos? Nostrum.",
-  },
-  {
-    src: "https://source.unsplash.com/random?sig=8",
-    title: "Project 3",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque officiis eveniet aut vel saepe dolor, maxime ipsam, inventore perferendis porro odio cupiditate vitae veritatis qui, voluptatibus quasi quae eos? Nostrum.",
-  },
-  {
-    src: "https://source.unsplash.com/random?sig=9",
-    title: "Project 3",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque officiis eveniet aut vel saepe dolor, maxime ipsam, inventore perferendis porro odio cupiditate vitae veritatis qui, voluptatibus quasi quae eos? Nostrum.",
-  },
-  {
-    src: "https://source.unsplash.com/random?sig=10",
-    title: "Project 3",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque officiis eveniet aut vel saepe dolor, maxime ipsam, inventore perferendis porro odio cupiditate vitae veritatis qui, voluptatibus quasi quae eos? Nostrum.",
-  },
-];
+type ProjectBodyProps = {
+  projects: ProjectItem[];
+};
 
-function ProjectsBody() {
+function ProjectsBody(props: ProjectBodyProps) {
+  const { projects } = props;
   return (
     <>
       <div className="text-5xl text-white text-center py-[10vh]">
         Take a look...
       </div>
       <div className="w-full h-screen grid grid-cols-4 grid-rows-4 gap-5 px-[10vw]">
-        {ProjectList.slice(0, 16).map((project, index) => (
-          <Link key={index} href='projects/1'>
+        {projects.map((project, index) => (
+          <Link key={index} href={`projects/${project._id}`}>
             <div
-              className="h-full w-full even:bg-red-500 odd:bg-blue-500 rounded-md hover:scale-125 transition-all hover:duration-500 hover:z-10 z-0 duration-100 overflow-hidden"
+              className="h-full w-full rounded-md hover:scale-125 transition-all hover:duration-500 hover:z-10 z-0 duration-100 overflow-hidden"
             >
               <div
                 className="w-full h-full flex items-center justify-center"
                 style={{
-                  backgroundImage: `linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1)), url(${project.src})`,
+                  backgroundImage: `linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1)), url(${project.src ?? `https://source.unsplash.com/random?sig=${index}`})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
                 }}
               >
-                <div className="text-5xl text-white text-center">
+                <div className="text-3xl text-white text-center px-[10%]">
                   {project.title}
                 </div>
               </div>

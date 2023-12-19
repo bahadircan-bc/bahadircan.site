@@ -1,11 +1,56 @@
 import Image from "next/image";
+import { ProjectItem } from "../page";
 
-function ProjectHeader() {
+async function getProjectData(id: string) {
+  const apiUrl =
+    "https://eu-central-1.aws.data.mongodb-api.com/app/data-vvcdg/endpoint/data/v1/action/findOne";
+
+  const requestData = {
+    dataSource: "exypnos",
+    database: "bahadircan-blog-posts",
+    collection: "project-list",
+    filter: {
+      _id: { $oid: id },
+    },
+  };
+
+  const apiKey =
+    "WVR6exPJ0816GYZuXZkhbsxzOrxr5jgVQHSKaVvaJ4jlKWHGUukbCx2CkuiRiFBN";
+
+  let postsData = await fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/ejson",
+      Accept: "application/json",
+      apiKey: apiKey,
+    },
+    body: JSON.stringify(requestData),
+    next: {
+      revalidate: 30,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      return data.document;
+    })
+    .catch((error) => console.error("Error:", error));
+
+  return postsData;
+}
+
+type ProjectHeaderProps = {
+  title?: string;
+};
+
+function ProjectHeader(props: ProjectHeaderProps) {
+  const { title } = props;
   return (
     <div id="project-header" className="w-full h-fit relative rounded-lg">
       <Image
         className="w-full aspect-video object-cover rounded-lg"
-        src="https://source.unsplash.com/random/?sig={1}"
+        width={1920}
+        height={1080}
+        src={`https://source.unsplash.com/random/?sig=${Math.floor(Math.random()*10)}`}
         alt=""
       />
       <h1
@@ -15,7 +60,7 @@ function ProjectHeader() {
           WebkitTextStroke: "1px #131313",
         }}
       >
-        Project 1
+        {title ?? "Project Title"}
       </h1>
     </div>
   );
@@ -36,35 +81,50 @@ function ProjectBody(props: ProjectBodyProps) {
   );
 }
 
-function ProjectDescription() {
+type ProjectDescriptionProps = {
+  description?: string;
+};
+
+function ProjectDescription(props: ProjectDescriptionProps) {
+  const { description } = props;
   return (
     <div className="w-full">
       <h2>Description</h2>
       <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptates
-        possimus dignissimos cupiditate debitis voluptas, officiis et
-        exercitationem qui maxime consectetur magni dolores nam minima vero eius
-        quo voluptate assumenda quis?
+        {description ??
+          "This is the description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, quas."}
       </p>
     </div>
   );
 }
 
-function ProjectTechnologies() {
+type ProjectTechnologiesProps = {
+  technologies?: string;
+};
+
+function ProjectTechnologies(props: ProjectTechnologiesProps) {
+  const { technologies } = props;
   return (
     <div className="w-full">
       <h2>Technologies</h2>
       <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, quas.
+        {technologies ??
+          "This is the technologies. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, quas."}
       </p>
     </div>
   );
 }
 
-function ProjectText() {
+type ProjectTextProps = {
+  text?: string;
+};
+
+function ProjectText(props: ProjectTextProps) {
+  const { text } = props;
   return (
     <p className="w-full flex items-center justify-center">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus ipsa
+      {text ??
+        `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus ipsa
       deserunt iste, enim voluptatibus dolor culpa et, exercitationem qui vel
       aliquid. Assumenda, itaque hic rerum reiciendis placeat iusto debitis cum!
       Incidunt quia necessitatibus officiis totam odit facilis culpa? Dolorum
@@ -110,31 +170,22 @@ function ProjectText() {
       ab, repellat laborum. Commodi porro et ipsa minus architecto aspernatur
       rem similique, amet sapiente eligendi quis dicta quas ab quaerat magni
       voluptates vel, sit aut explicabo sequi dolore! Consequuntur voluptates
-      inventore ex sequi.
+      inventore ex sequi.`}
     </p>
   );
 }
 
-function ProjectPage() {
+async function ProjectPage({ params }: { params: { slug: string } }) {
+  const project: ProjectItem = await getProjectData(params.slug);
+
   return (
     <div className="w-full h-fit flex items-center justify-center pt-[10vh]">
       <div className="w-4/5 min-h-screen bg-white rounded-lg">
-        <ProjectHeader />
+        <ProjectHeader title={project.title} />
         <ProjectBody>
-          <ProjectDescription />
-          <ProjectTechnologies />
-          {/* <div className="w-full grid grid-cols-3 px-[10vw] gap-10">
-            <div className="w-full aspect-[2/1] flex items-center justify-center border border-primary">
-              asdf
-            </div>
-            <div className="w-full aspect-[2/1] flex items-center justify-center border border-primary">
-              asdf
-            </div>
-            <div className="w-full aspect-[2/1] flex items-center justify-center border border-primary">
-              asdf
-            </div>
-          </div> */}
-          <ProjectText />
+          <ProjectDescription description={project.description} />
+          <ProjectTechnologies technologies={project.technologies} />
+          <ProjectText text={project.body} />
         </ProjectBody>
       </div>
     </div>

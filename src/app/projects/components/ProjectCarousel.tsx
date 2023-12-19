@@ -4,14 +4,17 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 
 import { motion } from "framer-motion";
+import { ProjectItem } from "../page";
 
 type ProjectCarouselItemProps = {
+  index: number;
   src: string;
   title: string;
   description: string;
 };
 
 function ProjectCarouselItem({
+  index,
   src,
   title,
   description,
@@ -30,7 +33,7 @@ function ProjectCarouselItem({
       <div
         className="w-full min-h-full relative flex items-end justify-center rounded-3xl overflow-clip"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1)), url(${src})`,
+          backgroundImage: `linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1)), url(${src ?? `https://source.unsplash.com/random?sig=${index}`})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -52,7 +55,7 @@ function ProjectCarouselItem({
 }
 
 type ProjectCarouselProps = {
-  projectList: ProjectCarouselItemProps[];
+  projectList: ProjectItem[];
 };
 
 function ProjectsCarousel(props: ProjectCarouselProps) {
@@ -86,6 +89,7 @@ function ProjectsCarousel(props: ProjectCarouselProps) {
         {projectList.map((project, index) => (
           <ProjectCarouselItem
             key={index}
+            index={index}
             src={project.src}
             title={project.title}
             description={project.description}
