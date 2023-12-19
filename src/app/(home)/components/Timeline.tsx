@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 
@@ -59,6 +61,7 @@ function Timeline() {
     setNodeVisibilities(newVisibilities);
     console.log(latest);
   });
+
 
   const vh = window.innerHeight / 100;
   const vw = window.innerWidth / 100;
@@ -165,7 +168,7 @@ function Timeline() {
           initial={{ opacity: 0 }}
           animate={{ opacity: nodeVisibilities.node3 ? 1 : 0 }}
         >
-          Broadage Sports
+          Broad
         </motion.p>
         <motion.p
           className="text-xl text-white absolute top-[calc(45vh+2vw)] left-[70vw] -translate-x-1/2"
