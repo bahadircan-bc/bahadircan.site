@@ -1,5 +1,5 @@
 /*
-! tailwindcss v3.3.6 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.0 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -32,9 +32,11 @@
 4. Use the user's configured `sans` font-family by default.
 5. Use the user's configured `sans` font-feature-settings by default.
 6. Use the user's configured `sans` font-variation-settings by default.
+7. Disable tap highlights on iOS
 */
 
-html {
+html,
+:host {
   line-height: 1.5;
   /* 1 */
   -webkit-text-size-adjust: 100%;
@@ -44,12 +46,14 @@ html {
   -o-tab-size: 4;
      tab-size: 4;
   /* 3 */
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   /* 4 */
   font-feature-settings: normal;
   /* 5 */
   font-variation-settings: normal;
   /* 6 */
+  -webkit-tap-highlight-color: transparent;
+  /* 7 */
 }
 
 /*
@@ -652,6 +656,10 @@ video {
   grid-row-start: 3;
 }
 
+.float-right {
+  float: right;
+}
+
 .m-10 {
   margin: 2.5rem;
 }
@@ -670,6 +678,10 @@ video {
 
 .ml-10 {
   margin-left: 2.5rem;
+}
+
+.ml-5 {
+  margin-left: 1.25rem;
 }
 
 .ml-\[15\%\] {
@@ -700,12 +712,16 @@ video {
   display: none;
 }
 
+.aspect-\[2\/1\] {
+  aspect-ratio: 2/1;
+}
+
 .aspect-square {
   aspect-ratio: 1 / 1;
 }
 
-.h-0 {
-  height: 0px;
+.aspect-video {
+  aspect-ratio: 16 / 9;
 }
 
 .h-1\/2 {
@@ -797,6 +813,10 @@ video {
   width: 66.666667%;
 }
 
+.w-4\/5 {
+  width: 80%;
+}
+
 .w-\[20vw\] {
   width: 20vw;
 }
@@ -827,6 +847,10 @@ video {
 
 .w-\[calc\(10\%-2\.5rem\)\] {
   width: calc(10% - 2.5rem);
+}
+
+.w-\[calc\(18\.75vw_-40px\)\] {
+  width: calc(18.75vw - 40px);
 }
 
 .w-fit {
@@ -864,10 +888,6 @@ video {
   cursor: pointer;
 }
 
-.resize {
-  resize: both;
-}
-
 .grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -888,16 +908,8 @@ video {
   flex-direction: column;
 }
 
-.flex-wrap {
-  flex-wrap: wrap;
-}
-
 .place-items-center {
   place-items: center;
-}
-
-.content-center {
-  align-content: center;
 }
 
 .items-end {
@@ -906,10 +918,6 @@ video {
 
 .items-center {
   align-items: center;
-}
-
-.justify-start {
-  justify-content: flex-start;
 }
 
 .justify-end {
@@ -932,12 +940,12 @@ video {
   gap: 2.5rem;
 }
 
-.gap-4 {
-  gap: 1rem;
-}
-
 .gap-5 {
   gap: 1.25rem;
+}
+
+.gap-\[10vh\] {
+  gap: 10vh;
 }
 
 .self-start {
@@ -1004,6 +1012,16 @@ video {
 .border-neutral-200 {
   --tw-border-opacity: 1;
   border-color: rgb(229 229 229 / var(--tw-border-opacity));
+}
+
+.border-primary {
+  --tw-border-opacity: 1;
+  border-color: rgb(47 54 133 / var(--tw-border-opacity));
+}
+
+.bg-accent {
+  --tw-bg-opacity: 1;
+  background-color: rgb(19 21 24 / var(--tw-bg-opacity));
 }
 
 .bg-black {
@@ -1217,6 +1235,10 @@ video {
   padding: 10%;
 }
 
+.p-\[5vw\] {
+  padding: 5vw;
+}
+
 .px-10 {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
@@ -1235,6 +1257,11 @@ video {
 .px-\[30\%\] {
   padding-left: 30%;
   padding-right: 30%;
+}
+
+.px-\[5vw\] {
+  padding-left: 5vw;
+  padding-right: 5vw;
 }
 
 .py-10 {
@@ -1256,6 +1283,10 @@ video {
   padding-bottom: 1.25rem;
 }
 
+.pb-\[10vh\] {
+  padding-bottom: 10vh;
+}
+
 .pr-5 {
   padding-right: 1.25rem;
 }
@@ -1266,6 +1297,10 @@ video {
 
 .pt-5 {
   padding-top: 1.25rem;
+}
+
+.pt-\[10vh\] {
+  padding-top: 10vh;
 }
 
 .pt-\[20vh\] {
@@ -1367,6 +1402,11 @@ video {
   color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 
+.text-secondary {
+  --tw-text-opacity: 1;
+  color: rgb(81 81 178 / var(--tw-text-opacity));
+}
+
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
@@ -1404,6 +1444,10 @@ video {
 
 .outline {
   outline-style: solid;
+}
+
+.outline-primary {
+  outline-color: #2f3685;
 }
 
 .drop-shadow-2xl {
@@ -1533,10 +1577,4 @@ body {
 .focus\:outline-none:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
-}
-
-@media (min-width: 768px) {
-  .md\:block {
-    display: block;
-  }
 }
