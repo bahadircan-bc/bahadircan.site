@@ -47,6 +47,8 @@ function BlogPostCard(props: BlogPostCardProps) {
         >
           <Image
             src={`https://source.unsplash.com/random/?sig=${index}`}
+            width={1000}
+            height={1000}
             alt=""
             onLoad={handleLoad}
           />
