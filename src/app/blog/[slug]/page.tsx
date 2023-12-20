@@ -14,14 +14,22 @@ function BlogPostHeader(props: BlogPostHeaderProps) {
   return (
     <>
       <div className="w-full text-center text-7xl pb-[10vh]">{title}</div>
-      <div>
-        <Image
+      <div
+        className="w-1/2 aspect-video object-cover rounded-lg float-right mb-5 ml-5"
+        style={{
+          backgroundImage: `url(https://source.unsplash.com/random/?sig=1)`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        {/* <Image
           className="w-1/2 aspect-video object-cover rounded-lg float-right mb-5 ml-5"
           width={1920}
           height={1080}
           src="https://source.unsplash.com/random/?sig=1"
           alt="The forger family picture"
-        />
+        /> */}
       </div>
     </>
   );

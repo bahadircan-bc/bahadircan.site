@@ -11,13 +11,22 @@ function ProjectHeader(props: ProjectHeaderProps) {
   const { title } = props;
   return (
     <div id="project-header" className="w-full h-fit relative rounded-lg">
-      <Image
+      <div
+        className="w-full aspect-video object-cover rounded-lg"
+        style={{
+          backgroundImage: `url(https://source.unsplash.com/random/?sig=1)`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      ></div>
+      {/* <Image
         className="w-full aspect-video object-cover rounded-lg"
         width={1920}
         height={1080}
         src={`https://source.unsplash.com/random/?sig=1`}
         alt=""
-      />
+      /> */}
       <h1
         id="project-title"
         className="absolute bottom-0 left-0 text-9xl text-white px-10"
@@ -152,12 +161,12 @@ async function ProjectPageComponent({ params }: { params: { slug: string } }) {
   return (
     <div className="w-full h-fit flex items-center justify-center pt-[10vh]">
       <div className="w-4/5 min-h-screen bg-white rounded-lg">
-          <ProjectHeader title={project.title} />
-          <ProjectBody>
-            <ProjectDescription description={project.description} />
-            <ProjectTechnologies technologies={project.technologies} />
-            <ProjectText text={project.body} />
-          </ProjectBody>
+        <ProjectHeader title={project.title} />
+        <ProjectBody>
+          <ProjectDescription description={project.description} />
+          <ProjectTechnologies technologies={project.technologies} />
+          <ProjectText text={project.body} />
+        </ProjectBody>
       </div>
     </div>
   );
