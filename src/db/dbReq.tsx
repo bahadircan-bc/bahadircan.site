@@ -2,7 +2,6 @@ import { cache } from "react";
 import 'server-only';
 
 const getProjectData = cache(async () => {
-  'use server'
   const apiUrl =
     "https://eu-central-1.aws.data.mongodb-api.com/app/data-vvcdg/endpoint/data/v1/action/find";
 
@@ -38,7 +37,6 @@ const getProjectData = cache(async () => {
 });
 
 const getBlogData = cache(async () => {
-  'use server'
   const apiUrl =
     "https://eu-central-1.aws.data.mongodb-api.com/app/data-vvcdg/endpoint/data/v1/action/find";
 

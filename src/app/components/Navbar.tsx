@@ -1,11 +1,9 @@
 'use client'
 
-// import { Link } from "react-router-dom";
 import Link from "next/link";
-import exypnosLogo from "@/assets/exypnos.png";
+import ExypnosLogo from "@/assets/exypnos.svg";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useState } from "react";
-import Image from "next/image";
 
 const variants = {
   visible: { height: "fit-content" },
@@ -43,10 +41,8 @@ function Navbar() {
       className="fixed top-0 w-full h-[60px] bg-accent bg-opacity-50 text-white text-base px-[30%] flex items-center justify-between overflow-hidden z-[100] backdrop-blur-[2px]"
     >
       <Link href="/">
-        <Image
-          src={exypnosLogo}
-          alt="exypnos logo"
-          className="w-[50px] aspect-square"
+        <ExypnosLogo
+          className="w-[50px] aspect-square p-3"
         />
       </Link>
       <Link href="/">Home</Link>

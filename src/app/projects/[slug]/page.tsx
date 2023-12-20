@@ -15,9 +15,7 @@ function ProjectHeader(props: ProjectHeaderProps) {
         className="w-full aspect-video object-cover rounded-lg"
         width={1920}
         height={1080}
-        src={`https://source.unsplash.com/random/?sig=${Math.floor(
-          Math.random() * 10
-        )}`}
+        src={`https://source.unsplash.com/random/?sig=1`}
         alt=""
       />
       <h1

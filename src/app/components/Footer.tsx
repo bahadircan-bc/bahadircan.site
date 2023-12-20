@@ -1,4 +1,4 @@
-import exypnosLogo from "@/assets/exypnos.png";
+import ExypnosLogo from "@/assets/exypnos.svg";
 import TelegramIcon from "@/assets/footerIcons/telegramIcon.svg";
 import XIcon from "@/assets/footerIcons/xIcon.svg";
 import GithubIcon from "@/assets/footerIcons/githubIcon.svg";
@@ -27,7 +27,7 @@ function Footer() {
         <a target="_blank" href="https://twitter.com/BahadirCaan">
           <XIcon className="h-[24px] w-[24px] fill-white" />
         </a>
-        <Image src={exypnosLogo} alt="" className="w-[70px] h-[70px]" />
+        <ExypnosLogo className="w-[70px] h-[70px] p-[10px]" />
         <a target="_blank" href="https://github.com/bahadircan-bc">
           <GithubIcon className="h-[24px] w-[24px] fill-white" />
         </a>
