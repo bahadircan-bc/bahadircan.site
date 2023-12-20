@@ -1,7 +1,4 @@
-import { cache } from "react";
-import 'server-only';
-
-const getProjectData = cache(async () => {
+const getProjectData = async () => {
   const apiUrl =
     "https://eu-central-1.aws.data.mongodb-api.com/app/data-vvcdg/endpoint/data/v1/action/find";
 
@@ -34,9 +31,9 @@ const getProjectData = cache(async () => {
     .catch((error) => console.error("Error:", error));
 
   return projectsData;
-});
+};
 
-const getBlogData = cache(async () => {
+const getBlogData = async () => {
   const apiUrl =
     "https://eu-central-1.aws.data.mongodb-api.com/app/data-vvcdg/endpoint/data/v1/action/find";
 
@@ -69,6 +66,6 @@ const getBlogData = cache(async () => {
     .catch((error) => console.error("Error:", error));
 
   return postsData;
-});
+};
 
 export { getProjectData, getBlogData };
