@@ -28,7 +28,7 @@ function AccordionItem(props: AccordionItemProps) {
         setIsOpen(false);
       }}
     >
-      <Link href={`project/${link}`}>
+      <Link href={`projects/${link}`}>
       <div>
         <p className="text-secondary">
           {(index + 1).toString().padStart(2, "0")} /

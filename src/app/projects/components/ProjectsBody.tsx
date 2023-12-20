@@ -14,7 +14,7 @@ function ProjectsBody(props: ProjectBodyProps) {
       </div>
       <div className="w-full h-screen grid grid-cols-4 grid-rows-4 gap-5 px-[10vw]">
         {projects.map((project, index) => (
-          <Link key={index} href={`project/${project._id}`}>
+          <Link key={index} href={`projects/${project._id}`}>
             <div
               className="h-full w-full rounded-md hover:scale-125 transition-all hover:duration-500 hover:z-10 z-0 duration-100 overflow-hidden"
             >
