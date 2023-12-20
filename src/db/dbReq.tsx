@@ -1,4 +1,6 @@
-async function getProjectData() {
+import { cache } from "react";
+
+const getProjectData = cache(async () => {
   const apiUrl =
     "https://eu-central-1.aws.data.mongodb-api.com/app/data-vvcdg/endpoint/data/v1/action/find";
 
@@ -6,9 +8,6 @@ async function getProjectData() {
     dataSource: "exypnos",
     database: "bahadircan-blog-posts",
     collection: "project-list",
-    filter: {
-      showcase: true
-    }
   };
 
   const apiKey =
@@ -24,7 +23,7 @@ async function getProjectData() {
     body: JSON.stringify(requestData),
     next: {
       revalidate: 43200, // 12 hours in seconds
-    }
+    },
   })
     .then((response) => response.json())
     .then((data) => {
@@ -34,9 +33,9 @@ async function getProjectData() {
     .catch((error) => console.error("Error:", error));
 
   return projectsData;
-}
+});
 
-async function getBlogData() {
+const getBlogData = cache(async () => {
   const apiUrl =
     "https://eu-central-1.aws.data.mongodb-api.com/app/data-vvcdg/endpoint/data/v1/action/find";
 
@@ -59,7 +58,7 @@ async function getBlogData() {
     body: JSON.stringify(requestData),
     next: {
       revalidate: 43200, // 12 hours in seconds
-    }
+    },
   })
     .then((response) => response.json())
     .then((data) => {
@@ -69,6 +68,6 @@ async function getBlogData() {
     .catch((error) => console.error("Error:", error));
 
   return postsData;
-}
+});
 
 export { getProjectData, getBlogData };
