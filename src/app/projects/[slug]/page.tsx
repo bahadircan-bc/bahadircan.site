@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ProjectItem } from "../page";
 import { getProjectData } from "@/db/dbReq";
+import { Suspense } from "react";
 
 type ProjectHeaderProps = {
   title?: string;
@@ -149,12 +150,14 @@ async function ProjectPage({ params }: { params: { slug: string } }) {
   return (
     <div className="w-full h-fit flex items-center justify-center pt-[10vh]">
       <div className="w-4/5 min-h-screen bg-white rounded-lg">
-        <ProjectHeader title={project.title} />
-        <ProjectBody>
-          <ProjectDescription description={project.description} />
-          <ProjectTechnologies technologies={project.technologies} />
-          <ProjectText text={project.body} />
-        </ProjectBody>
+        <Suspense fallback={<p>Loading Project...</p>}>
+          <ProjectHeader title={project.title} />
+          <ProjectBody>
+            <ProjectDescription description={project.description} />
+            <ProjectTechnologies technologies={project.technologies} />
+            <ProjectText text={project.body} />
+          </ProjectBody>
+        </Suspense>
       </div>
     </div>
   );
