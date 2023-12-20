@@ -23,7 +23,7 @@ async function getBlogData() {
     },
     body: JSON.stringify(requestData),
     next: {
-      revalidate: 30,
+      revalidate: 43200, // 12 hours in seconds
     }
   })
     .then((response) => response.json())

@@ -28,7 +28,7 @@ async function getBlogData(id: string) {
     },
     body: JSON.stringify(requestData),
     next: {
-      revalidate: 30,
+      revalidate: 0, // no revalidation
     }
   })
     .then((response) => response.json())

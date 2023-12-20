@@ -30,7 +30,7 @@ const nextConfig = {
   },
 
   images: {
-    domains: ["source.unsplash.com"],
+    remotePatterns: ["source.unsplash.com"],
   },
 };
 
