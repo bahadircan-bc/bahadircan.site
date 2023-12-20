@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Markdown from "react-markdown";
-import remarkGfm from 'remark-gfm'
+import remarkGfm from "remark-gfm";
 import { getBlogData } from "@/db/dbReq";
 import { Suspense } from "react";
 
@@ -34,7 +34,11 @@ type BlogPostTextProps = {
 function BlogPostText(props: BlogPostTextProps) {
   const { body } = props;
   // console.log(body)
-  return <div><Markdown remarkPlugins={[remarkGfm]}>{body}</Markdown></div>;
+  return (
+    <div>
+      <Markdown remarkPlugins={[remarkGfm]}>{body}</Markdown>
+    </div>
+  );
 }
 
 function BlogPostFooter() {
@@ -57,15 +61,17 @@ type BlogPost = {
 async function BlogPage({ params }: { params: { slug: string } }) {
   const blogPost: BlogPost = (await getBlogData()).filter(
     (post: BlogPost) => post._id === params.slug
-  )[0]
+  )[0];
 
   return (
     <div className="w-full h-fit flex items-center justify-center pt-[10vh]">
       <div className="w-4/5 min-h-screen bg-white rounded-lg p-[5vw] flex flex-col justify-between">
-        <Suspense fallback={<p>Loading Blog...</p>}>
-          <BlogPostHeader title={blogPost.title} />
-          <BlogPostText body={blogPost.body} />
-        </Suspense>
+        <div>
+          <Suspense fallback={<p>Loading Blog...</p>}>
+            <BlogPostHeader title={blogPost.title} />
+            <BlogPostText body={blogPost.body} />
+          </Suspense>
+        </div>
         {/* <BlogPostFooter /> */}
       </div>
     </div>
