@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import ProjectAccordion from "./ProjectComponents/ProjectAccordion";
+import { ProjectItem } from "@/app/projects/page";
 
 const titleVariants = {
   visible: { x: 0, opacity: 1 },
@@ -10,7 +11,7 @@ const titleVariants = {
 };
 
 type ProjectsProps = {
-  projects: []
+  projects: ProjectItem[];
 }
 
 function Projects(props: ProjectsProps) {

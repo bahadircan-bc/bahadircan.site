@@ -1,6 +1,8 @@
+import { getProjectData } from "@/db/dbReq";
 import Hero from "./components/Hero";
 import Projects from "./components/Projects";
 import dynamic from "next/dynamic";
+import { ProjectItem } from "../projects/page";
 // import "../styles/output.css";
 
 const Timeline = dynamic(
@@ -8,50 +10,14 @@ const Timeline = dynamic(
   { ssr: false }
 )
 
-async function getProjectsData() {
-  const apiUrl =
-    "https://eu-central-1.aws.data.mongodb-api.com/app/data-vvcdg/endpoint/data/v1/action/find";
-
-  const requestData = {
-    dataSource: "exypnos",
-    database: "bahadircan-blog-posts",
-    collection: "project-list",
-    filter: {
-      showcase: true
-    }
-  };
-
-  const apiKey =
-    "WVR6exPJ0816GYZuXZkhbsxzOrxr5jgVQHSKaVvaJ4jlKWHGUukbCx2CkuiRiFBN";
-
-  let projectsData = await fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/ejson",
-      Accept: "application/json",
-      apiKey: apiKey,
-    },
-    body: JSON.stringify(requestData),
-    next: {
-      revalidate: 43200, // 12 hours in seconds
-    }
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // console.log(data);
-      return data.documents;
-    })
-    .catch((error) => console.error("Error:", error));
-
-  return projectsData;
-}
-
 async function Home() {
-  const projects = await getProjectsData(); 
+  const projects: ProjectItem[] = await getProjectData(); 
   return (
     <>
       <Hero />
-      <Projects projects={projects}/>
+      <Projects projects={projects.filter(
+        (project)=>project.showcase
+      )}/>
       <Timeline />
     </>
   );
