@@ -48,7 +48,6 @@ async function getProjectsData() {
 
 async function Home() {
   const projects = await getProjectsData(); 
-  console.log(projects)
   return (
     <>
       <Hero />

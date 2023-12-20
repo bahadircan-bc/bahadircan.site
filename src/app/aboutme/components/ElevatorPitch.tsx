@@ -4,23 +4,22 @@ import Image from "next/image";
 function ElevatorPitch() {
   return (
     <div className="w-full h-screen bg-gradient-to-b from-black to-transparent text-white flex flex-col items-center justify-center gap-10">
-      <div className="rounded-xl w-2/3 h-fit p-10 flex items-center bg-gradient-to-br from-[#0f5c6d7a] to-[#ad4d4276] shadow-2xl shadow-black drop-shadow-2xl">
+      <div className="rounded-xl w-[90%] h-fit p-10 flex items-center bg-gradient-to-br from-[#0f5c6d7a] to-[#ad4d4276] shadow-2xl shadow-black drop-shadow-2xl">
         <Image
           className="w-[calc(18.75vw_-40px)] aspect-square object-cover rounded-full shadow-2xl shadow-black drop-shadow-2xl border border-neutral-200"
           src={profileImage}
           alt=""
         />
-        <div className="w-full m-10 p-10 text-black bg-gray-300 rounded-lg shadow-2xl shadow-black drop-shadow-2xl">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates id
-          natus incidunt porro aliquam cupiditate adipisci iure officiis esse
-          numquam ullam illo odio dolor architecto veniam, magnam rerum. Porro,
-          accusantium. Possimus non dolor modi omnis provident amet vitae nam
-          atque perferendis totam, illo tempore maiores minima esse at maxime
-          eligendi. Exercitationem doloribus labore eos iure nemo corrupti nihil
-          amet possimus. Voluptatibus suscipit ipsum id modi earum! Ad hic aut
-          libero excepturi? Atque veniam nulla dicta sapiente quas nemo,
-          inventore minima voluptatum veritatis totam aut aspernatur et. Iure
-          sit quo repellendus!
+        <div className="w-full m-10 p-10 text-black bg-gray-300 rounded-lg shadow-2xl shadow-black drop-shadow-2xl whitespace-pre-line">
+          {`👋 Hello! I'm Bahadır, a passionate and versatile developer with a keen eye for creating innovative solutions. My expertise lies in Web development, and I thrive on turning complex ideas into functional and user-friendly applications.
+
+🚀 Whether it's building robust web applications, crafting elegant mobile solutions, or diving into the world of cryptocurrencies, I bring a creative and analytical approach to every project. My commitment to staying on the cutting edge of technology ensures that my solutions are not just current but ahead of the curve.
+
+💡 With a solid foundation in React, I've successfully deployed many static and dynamic websites. My passion for clean code and effective problem-solving drives me to deliver high-quality results that exceed expectations.
+
+🌐 Explore my portfolio to see how I've tackled challenges and brought ideas to life. Whether you're looking for a reliable team player or an independent developer who takes ownership of projects, I'm excited to bring my skills and enthusiasm to your next venture.
+
+Let's collaborate and transform ideas into reality! Feel free to reach out or connect with me on my socials to start a conversation.`}
         </div>
       </div>
     </div>

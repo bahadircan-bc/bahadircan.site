@@ -71,7 +71,7 @@ function SidebarList({
         className ? ` ${className}` : ""
       )}
       style={{
-        scrollbarWidth: "none",
+        scrollbarWidth: 'none',
       }}
     >
       {updatedSidebarChildren}
@@ -91,10 +91,9 @@ function Sidebar({
   return (
     <div
       onClick={onClick}
-      className="flex-1 cursor-pointer w-full aspect-square relative"
+      className={`shrink-0 cursor-pointer w-full aspect-square relative ${isSelected ? 'bg-[#d9d9d9]' : ''}`}
     >
       {children}
-      {isSelected && <div className="absolute right-0 top-1/2 -translate-y-1/2 text-5xl">{'>'}</div>}
     </div>
   );
 }
