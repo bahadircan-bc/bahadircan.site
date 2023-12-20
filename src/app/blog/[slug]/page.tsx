@@ -63,6 +63,10 @@ async function BlogPage({ params }: { params: { slug: string } }) {
     (post: BlogPost) => post._id === params.slug
   )[0];
 
+  if (!blogPost) {
+    return <p>Blog post not found.</p>;
+  }
+
   return (
     <div className="w-full h-fit flex items-center justify-center pt-[10vh]">
       <div className="w-4/5 min-h-screen bg-white rounded-lg p-[5vw] flex flex-col justify-between">

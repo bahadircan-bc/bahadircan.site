@@ -145,6 +145,10 @@ async function ProjectPage({ params }: { params: { slug: string } }) {
     (project: ProjectItem) => project._id === params.slug
   )[0];
 
+  if (!project) {
+    return <p>Project not found.</p>;
+  }
+
   return (
     <div className="w-full h-fit flex items-center justify-center pt-[10vh]">
       <div className="w-4/5 min-h-screen bg-white rounded-lg">
