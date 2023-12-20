@@ -3,8 +3,14 @@ import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import { getBlogData, getProjectData } from '@/db/dbReq';
 
 const cairo = Cairo({ subsets: ["latin"] });
+
+export const preload = () => {
+  void getProjectData();
+  void getBlogData();
+}
 
 export const metadata: Metadata = {
   title: "bahadir",

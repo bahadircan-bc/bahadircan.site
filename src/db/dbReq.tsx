@@ -1,4 +1,5 @@
 import { cache } from "react";
+import 'server-only';
 
 const getProjectData = cache(async () => {
   const apiUrl =
