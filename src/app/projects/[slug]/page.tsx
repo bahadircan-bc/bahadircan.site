@@ -140,7 +140,7 @@ function ProjectText(props: ProjectTextProps) {
   );
 }
 
-async function ProjectPage({ params }: { params: { slug: string } }) {
+async function ProjectPageComponent({ params }: { params: { slug: string } }) {
   const project: ProjectItem = (await getProjectData()).filter(
     (project: ProjectItem) => project._id === params.slug
   )[0];
@@ -152,16 +152,22 @@ async function ProjectPage({ params }: { params: { slug: string } }) {
   return (
     <div className="w-full h-fit flex items-center justify-center pt-[10vh]">
       <div className="w-4/5 min-h-screen bg-white rounded-lg">
-        <Suspense fallback={<p>Loading Project...</p>}>
           <ProjectHeader title={project.title} />
           <ProjectBody>
             <ProjectDescription description={project.description} />
             <ProjectTechnologies technologies={project.technologies} />
             <ProjectText text={project.body} />
           </ProjectBody>
-        </Suspense>
       </div>
     </div>
+  );
+}
+
+function ProjectPage(props: any) {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <ProjectPageComponent {...props} />
+    </Suspense>
   );
 }
 
