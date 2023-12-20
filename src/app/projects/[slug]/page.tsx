@@ -1,42 +1,6 @@
 import Image from "next/image";
 import { ProjectItem } from "../page";
-
-async function getProjectData(id: string) {
-  const apiUrl =
-    "https://eu-central-1.aws.data.mongodb-api.com/app/data-vvcdg/endpoint/data/v1/action/findOne";
-
-  const requestData = {
-    dataSource: "exypnos",
-    database: "bahadircan-blog-posts",
-    collection: "project-list",
-    filter: {
-      _id: { $oid: id },
-    },
-  };
-
-  const apiKey =
-    "WVR6exPJ0816GYZuXZkhbsxzOrxr5jgVQHSKaVvaJ4jlKWHGUukbCx2CkuiRiFBN";
-
-  let postsData = await fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/ejson",
-      Accept: "application/json",
-      apiKey: apiKey,
-    },
-    body: JSON.stringify(requestData),
-    next: {
-      revalidate: 0, // no revalidation
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      return data.document;
-    })
-    .catch((error) => console.error("Error:", error));
-
-  return postsData;
-}
+import { getProjectData } from "@/db/dbReq";
 
 type ProjectHeaderProps = {
   title?: string;
@@ -50,7 +14,9 @@ function ProjectHeader(props: ProjectHeaderProps) {
         className="w-full aspect-video object-cover rounded-lg"
         width={1920}
         height={1080}
-        src={`https://source.unsplash.com/random/?sig=${Math.floor(Math.random()*10)}`}
+        src={`https://source.unsplash.com/random/?sig=${Math.floor(
+          Math.random() * 10
+        )}`}
         alt=""
       />
       <h1
@@ -176,7 +142,9 @@ function ProjectText(props: ProjectTextProps) {
 }
 
 async function ProjectPage({ params }: { params: { slug: string } }) {
-  const project: ProjectItem = await getProjectData(params.slug);
+  const project: ProjectItem = (await getProjectData()).filter(
+    (project: ProjectItem) => project._id === params.slug
+  )[0];
 
   return (
     <div className="w-full h-fit flex items-center justify-center pt-[10vh]">

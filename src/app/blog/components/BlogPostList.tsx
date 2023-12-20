@@ -3,6 +3,7 @@ import { motion, useAnimation } from "framer-motion";
 import LinesEllipsis from "react-lines-ellipsis";
 import Link from "next/link";
 import Image from "next/image";
+import { BlogPost } from "../[slug]/page";
 
 type BlogPostCardProps = {
   postId?: string;
@@ -70,13 +71,13 @@ function BlogPostCard(props: BlogPostCardProps) {
 }
 
 type BlogPostListProps = {
-  blogPosts: any;
+  blogPosts: BlogPost[];
 };
 
-function BlogPostList({ blogPosts }: BlogPostListProps) {
-  // console.log("in blog post list", blogPosts);
+function BlogPostList(props: BlogPostListProps) {
+  const { blogPosts } = props;
 
-  const blogPostList: [] = blogPosts.map((post: any, index: number) => (
+  const blogPostList = blogPosts.map((post: any, index: number) => (
     <BlogPostCard
       key={index}
       postId={post._id}

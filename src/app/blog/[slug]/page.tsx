@@ -2,43 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Markdown from "react-markdown";
 import remarkGfm from 'remark-gfm'
-
-async function getBlogData(id: string) {
-  const apiUrl =
-    "https://eu-central-1.aws.data.mongodb-api.com/app/data-vvcdg/endpoint/data/v1/action/findOne";
-
-  const requestData = {
-    dataSource: "exypnos",
-    database: "bahadircan-blog-posts",
-    collection: "blog-posts",
-    filter: {
-      _id: { $oid: id },
-    },
-  };
-
-  const apiKey =
-    "WVR6exPJ0816GYZuXZkhbsxzOrxr5jgVQHSKaVvaJ4jlKWHGUukbCx2CkuiRiFBN";
-
-  let postsData = await fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/ejson",
-      Accept: "application/json",
-      apiKey: apiKey,
-    },
-    body: JSON.stringify(requestData),
-    next: {
-      revalidate: 0, // no revalidation
-    }
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      return data.document;
-    })
-    .catch((error) => console.error("Error:", error));
-
-  return postsData;
-}
+import { getBlogData } from "@/db/dbReq";
 
 type BlogPostHeaderProps = {
   title?: string;
@@ -81,8 +45,18 @@ function BlogPostFooter() {
   );
 }
 
+type BlogPost = {
+  _id: string;
+  title: string;
+  description: string;
+  date: string;
+  body: string;
+};
+
 async function BlogPage({ params }: { params: { slug: string } }) {
-  const blogPost = await getBlogData(params.slug);
+  const blogPost: BlogPost = (await getBlogData()).filter(
+    (post: BlogPost) => post._id === params.slug
+  )[0]
 
   return (
     <div className="w-full h-fit flex items-center justify-center pt-[10vh]">
@@ -97,4 +71,5 @@ async function BlogPage({ params }: { params: { slug: string } }) {
   );
 }
 
+export type { BlogPost };
 export default BlogPage;
