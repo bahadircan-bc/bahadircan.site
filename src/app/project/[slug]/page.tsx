@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ProjectItem } from "../page";
+import { ProjectItem } from "@/app/projects/page";
 import { getProjectData } from "@/db/dbReq";
 import { Suspense } from "react";
 

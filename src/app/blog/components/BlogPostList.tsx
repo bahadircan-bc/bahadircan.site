@@ -3,7 +3,7 @@ import { motion, useAnimation } from "framer-motion";
 import LinesEllipsis from "react-lines-ellipsis";
 import Link from "next/link";
 import Image from "next/image";
-import { BlogPost } from "../[slug]/page";
+import { BlogPost } from "@/app/blogpost/[slug]/page";
 
 type BlogPostCardProps = {
   postId?: string;
@@ -20,7 +20,7 @@ function BlogPostCard(props: BlogPostCardProps) {
   const controls = useAnimation();
 
   return (
-    <Link href={`/blog/${postId}`}>
+    <Link href={`/blogpost/${postId}`}>
       <motion.div
         className="min-w-[300px] w-[20vw] h-fit text-black"
         onViewportEnter={(entry) => {

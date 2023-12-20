@@ -1,4 +1,4 @@
-import { BlogPost } from "./[slug]/page";
+import { BlogPost } from "@/app/blogpost/[slug]/page";
 import BlogHeader from "./components/BlogHeader";
 import BlogPostList from "./components/BlogPostList";
 import { getBlogData } from "@/db/dbReq";
