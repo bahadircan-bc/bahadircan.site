@@ -30,7 +30,14 @@ const nextConfig = {
   },
 
   images: {
-    remotePatterns: ["source.unsplash.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "source.unsplash.com",
+        port: "",
+        pathname: "/**",
+      }
+    ],
   },
 };
 
