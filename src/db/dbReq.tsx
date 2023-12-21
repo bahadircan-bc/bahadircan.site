@@ -19,9 +19,9 @@ const getProjectData = async () => {
       apiKey: apiKey,
     },
     body: JSON.stringify(requestData),
-    // next: {
-    //   revalidate: 43200, // 12 hours in seconds
-    // },
+    next: {
+      revalidate: 43200, // 12 hours in seconds
+    },
   })
     .then((response) => response.json())
     .then((data) => {
@@ -54,9 +54,9 @@ const getBlogData = async () => {
       apiKey: apiKey,
     },
     body: JSON.stringify(requestData),
-    // next: {
-    //   revalidate: 43200, // 12 hours in seconds
-    // },
+    next: {
+      revalidate: 43200, // 12 hours in seconds
+    },
   })
     .then((response) => response.json())
     .then((data) => {
