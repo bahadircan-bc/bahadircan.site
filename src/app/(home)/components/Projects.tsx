@@ -29,7 +29,6 @@ function Projects(props: ProjectsProps) {
         animate={visible ? "visible" : "hidden"}
         transition={{ duration: 1, ease: "easeOut" }}
         onViewportEnter={() => {
-          console.log(windowSize.width)
           if (windowSize.width < 769) return;
           setVisible(true);
         }}

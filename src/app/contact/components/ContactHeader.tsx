@@ -81,10 +81,10 @@ function QRCarousel() {
 
 function TelephoneContacts() {
   return (
-    <div className="w-full h-1/2 rounded-lg outline outline-primary bg-accent bg-opacity-25 flex flex-col items-center justify-evenly">
-      <p>You can call me...</p>
-      <p className="text-3xl">+90 542 214 05 97</p>
-      <div className="w-1/2 flex justify-evenly">
+    <div className="flex-1 min-w-0 w-full h-full rounded-lg outline outline-primary bg-accent bg-opacity-25 flex flex-col items-center justify-evenly py-10 lg:py-0 gap-2 lg:gap-0">
+      <p className="text-xs lg:text-base">You can call me...</p>
+      <p className="text-sm lg:text-3xl">+90 542 214 05 97</p>
+      <div className="w-full lg:w-1/2 flex justify-evenly">
         <Link target="_blank" href="tel:905422140597">
           <CallIcon className="h-[25px] w-[25px] text-gray-300" />
         </Link>
@@ -104,10 +104,10 @@ function TelephoneContacts() {
 
 function EmailContacts() {
   return (
-    <div className="w-full h-1/2 rounded-lg outline outline-primary bg-accent bg-opacity-25 flex flex-col items-center justify-center gap-5">
-      <p>Or e-mail me...</p>
+    <div className="flex-1 min-w-0 w-full h-full rounded-lg outline outline-primary bg-accent bg-opacity-25 flex flex-col items-center justify-center gap-5 py-10 lg:py-0">
+      <p className="text-xs lg:text-base">Or e-mail me...</p>
       <Link target="_blank" href="mailto:bahadircan.bc@gmail.com">
-        <p className="text-xl">bahadircan.bc@gmail.com</p>
+        <p className="text-xs lg:text-xl">bahadircan.bc@gmail.com</p>
       </Link>
     </div>
   );
@@ -115,12 +115,12 @@ function EmailContacts() {
 
 function ContactHeader() {
   return (
-    <div className="w-full h-screen text-white flex items-center justify-center gap-5">
-      <div className="w-1/4 h-1/2 gap-5 flex flex-col text-base">
+    <div className="w-full h-screen text-white flex flex-col lg:flex-row items-center justify-center gap-5 px-4 lg:px-0">
+      <div className="w-full lg:w-1/4 lg:h-1/2 gap-5 flex lg:flex-col items-center justify-center text-base">
         <TelephoneContacts />
         <EmailContacts />
       </div>
-      <div className="w-1/4 h-1/2 rounded-lg outline outline-primary bg-accent bg-opacity-25">
+      <div className="lg:w-1/4 lg:h-1/2 rounded-lg outline outline-primary bg-accent bg-opacity-25">
         <QRCarousel />
       </div>
     </div>
