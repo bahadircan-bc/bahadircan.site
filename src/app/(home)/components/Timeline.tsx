@@ -70,7 +70,7 @@ function Timeline() {
     <div ref={targetRef} className="w-full h-[400vh]">
       <div className="w-full h-screen text-white flex sticky top-0">
         <motion.h1
-          className="w-fit text-8xl leading-normal absolute inset-[47vh_auto_auto_15vw]"
+          className="w-fit text-3xl lg:text-8xl leading-normal absolute inset-[47vh_auto_auto_15vw]"
           variants={titleVariants}
           initial="hidden"
           animate={visible ? "visible" : "hidden"}
@@ -150,35 +150,35 @@ function Timeline() {
           />
         </motion.svg>
         <motion.p
-          className="text-xl text-white absolute top-[25vh] left-[24vw] -translate-x-1/2"
+          className="w-min text-center text-xs lg:text-xl text-white absolute top-[25vh] left-[24vw] -translate-x-1/2"
           initial={{ opacity: 0 }}
           animate={{ opacity: nodeVisibilities.node1 ? 1 : 0 }}
         >
           Yıldız Technical University
         </motion.p>
         <motion.p
-          className="text-xl text-white absolute top-[25vh] left-[47vw] -translate-x-1/2"
+          className="w-min text-center text-xs lg:text-xl text-white absolute top-[25vh] left-[47vw] -translate-x-1/2"
           initial={{ opacity: 0 }}
           animate={{ opacity: nodeVisibilities.node2 ? 1 : 0 }}
         >
           Argetürk
         </motion.p>
         <motion.p
-          className="text-xl text-white absolute top-[25vh] left-[70vw] -translate-x-1/2"
+          className="w-min text-center text-xs lg:text-xl text-white absolute top-[25vh] left-[70vw] -translate-x-1/2"
           initial={{ opacity: 0 }}
           animate={{ opacity: nodeVisibilities.node3 ? 1 : 0 }}
         >
           Broad
         </motion.p>
         <motion.p
-          className="text-xl text-white absolute top-[calc(45vh+2vw)] left-[70vw] -translate-x-1/2"
+          className="w-min text-center text-xs lg:text-xl text-white absolute top-[calc(45vh+2vw)] left-[70vw] -translate-x-1/2"
           initial={{ opacity: 0 }}
           animate={{ opacity: nodeVisibilities.node4 ? 1 : 0 }}
         >
           Freelance
         </motion.p>
         <motion.p
-          className="text-xl text-white absolute top-[calc(65vh+4vw)] left-[70vw] -translate-x-1/2"
+          className="w-max text-center text-xs lg:text-xl text-white absolute top-[calc(65vh+4vw)] left-[70vw] -translate-x-1/2"
           initial={{ opacity: 0 }}
           animate={{ opacity: nodeVisibilities.node5 ? 1 : 0 }}
         >

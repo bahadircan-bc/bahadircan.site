@@ -55,13 +55,13 @@ function Icon(props: IconProps) {
       setIcon(Math.floor(Math.random() * icons.length));
     });
     setAnimation(animation);
-  }, [icon]);
+  }, [icon, animate, scope]);
 
   return (
     <div className="w-full h-full relative">
       <motion.div
         ref={scope}
-        className={`w-[25px] h-[25px] absolute rounded-lg opacity-0 grid place-items-center p-1 shadow-inner ${
+        className={`w-[25px] h-[25px] absolute rounded-lg opacity-0 grid place-items-center p-1 shadow-inner top-0 ${
           icons[icon].background === "light" ? "bg-white" : "bg-black"
         }`}
         onMouseEnter={() => {

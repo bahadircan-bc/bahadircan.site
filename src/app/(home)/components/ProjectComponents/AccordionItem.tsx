@@ -20,7 +20,7 @@ function AccordionItem(props: AccordionItemProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div
-      className="py-5 first:border-t border-b border-primary"
+      className="pl-2 lg:pl-0 py-5 first:border-t border-b border-primary"
       onMouseEnter={() => {
         setIsOpen(true);
       }}
@@ -32,7 +32,7 @@ function AccordionItem(props: AccordionItemProps) {
       <div>
         <p className="text-secondary">
           {(index + 1).toString().padStart(2, "0")} /
-          <span className="text-5xl ml-10 text-white">{title}</span>
+          <span className="text-3xl lg:text-5xl ml-10 text-white">{title}</span>
         </p>
       </div>
       <motion.div
