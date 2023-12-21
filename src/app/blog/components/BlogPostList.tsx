@@ -22,7 +22,7 @@ function BlogPostCard(props: BlogPostCardProps) {
   return (
     <Link href={`/blog/${postId}`}>
       <motion.div
-        className="min-w-[300px] w-[20vw] h-fit text-black"
+        className="lg:min-w-[300px] w-full lg:w-[20vw] h-fit text-black"
         onViewportEnter={(entry) => {
           const isTopEntry = entry?.intersectionRect?.top ?? 0 > 0;
 
@@ -43,7 +43,7 @@ function BlogPostCard(props: BlogPostCardProps) {
         }}
       >
         <motion.div
-          className="h-full w-full flex flex-col gap-5 p-10 rounded-xl bg-gray-100 opacity-0"
+          className="h-full w-full flex flex-col gap-5 overflow-clip lg:p-10 rounded-xl bg-gray-100 opacity-0 "
           animate={controls}
         >
           <Image
@@ -53,11 +53,14 @@ function BlogPostCard(props: BlogPostCardProps) {
             alt=""
             onLoad={handleLoad}
           />
-          <h1 className="text-2xl font-bold">{title ?? "Blog post title"}</h1>
-          <p className="text-base font-medium text-gray-500">
+          <h1 className="text-sm lg:text-2xl px-2 lg:px-0 font-bold">
+            {title ?? "Blog post title"}
+          </h1>
+          <p className="text-xs lg:text-base px-2 lg:px-0 font-medium text-gray-500">
             {date ?? "2021-08-21"}
           </p>
           <LinesEllipsis
+            className="hidden lg:block"
             text={description ?? "Blog post description"}
             maxLine="6"
             ellipsis="..."
@@ -88,16 +91,27 @@ function BlogPostList(props: BlogPostListProps) {
     />
   ));
 
+  // const debugList = Array.from({ length: 10 }, (_, index) => (
+  //   <BlogPostCard
+  //     key={index}
+  //     index={index}
+  //     postId="1234"
+  //     title="Post Title"
+  //     description="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat asperiores voluptatem id quasi eaque aspernatur animi reiciendis? Possimus nisi recusandae nam sequi quibusdam tenetur doloremque eligendi, saepe id iure nostrum?"
+  //     date="12-11-2023"
+  //   />
+  // ));
+
   return (
     <div className="flex items-center justify-center flex-col text-white">
-      <h1 className="text-5xl text-center pt-[20vh]">
+      <h1 className="text-3xl lg:text-5xl text-center lg:pt-[20vh]">
         <i>Hello!</i>
       </h1>
-      <h2 className="text-lg text-center py-[10vh]">
-        This is a WIP blog page. <br /> Meaning it&apos;s not finished yet, <br />{" "}
-        but I&apos;m working on it!
+      <h2 className="text-sm lg:text-lg text-center py-[2vh] lg:py-[10vh]">
+        This is a WIP blog page. <br /> Meaning it&apos;s not finished yet,{" "}
+        <br /> but I&apos;m working on it!
       </h2>
-      <div className="w-fit h-fit grid grid-cols-3 gap-5">
+      <div className="hidden lg:grid w-fit h-fit grid-cols-3 gap-5">
         <div className="w-fit h-full flex flex-col gap-5">
           {blogPostList.filter((_, i) => i % 3 === 0)}
         </div>
@@ -106,6 +120,16 @@ function BlogPostList(props: BlogPostListProps) {
         </div>
         <div className="w-fit h-full min-h-[300px] flex flex-col gap-5">
           {blogPostList.filter((_, i) => i % 3 === 2)}
+        </div>
+      </div>
+      <div>
+        <div className="grid lg:hidden w-full h-fit grid-cols-2 gap-5 px-2">
+          <div className="w-fit h-full flex flex-col gap-5">
+            {blogPostList.filter((_, i) => i % 2 === 0)}
+          </div>
+          <div className="w-fit h-full min-h-[300px] flex flex-col gap-5">
+            {blogPostList.filter((_, i) => i % 2 === 1)}
+          </div>
         </div>
       </div>
     </div>

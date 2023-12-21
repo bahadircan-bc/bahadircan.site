@@ -5,7 +5,7 @@ import Image from "next/image";
 
 function BlogHeader() {
   return (
-    <div className="w-full h-screen text-white text-9xl relative">
+    <div className="w-full h-screen text-white text-5xl lg:text-9xl relative">
       <div className="absolute inset-[50%_auto_auto_20vw] overflow-hidden z-10">
         <motion.p
           className="h-fit w-fit pb-5 pr-5"
