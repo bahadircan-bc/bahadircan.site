@@ -9,10 +9,10 @@ function ProjectsBody(props: ProjectBodyProps) {
   const { projects } = props;
   return (
     <>
-      <div className="text-5xl text-white text-center py-[10vh]">
+      <div className="text-3xl lg:text-5xl text-white text-center py-[3vh] lg:py-[10vh]">
         Take a look...
       </div>
-      <div className="w-full h-screen grid grid-cols-4 grid-rows-4 gap-5 px-[10vw]">
+      <div className="w-full h-screen grid grid-cols-2 lg:grid-cols-4 gap-5 px-[10vw]">
         {projects.map((project, index) => (
           <Link key={index} href={`projects/${project._id}`}>
             <div
@@ -27,7 +27,7 @@ function ProjectsBody(props: ProjectBodyProps) {
                   backgroundRepeat: "no-repeat",
                 }}
               >
-                <div className="text-3xl text-white text-center px-[10%]">
+                <div className="text-sm lg:text-3xl text-white text-center px-[10%]">
                   {project.title}
                 </div>
               </div>
