@@ -29,7 +29,7 @@ function ProjectHeader(props: ProjectHeaderProps) {
       /> */}
       <h1
         id="project-title"
-        className="absolute bottom-0 left-0 text-9xl text-white px-10"
+        className="absolute bottom-0 left-0 text-4xl lg:text-9xl text-white px-10"
         style={{
           WebkitTextStroke: "1px #131313",
         }}
@@ -48,7 +48,7 @@ function ProjectBody(props: ProjectBodyProps) {
   return (
     <div
       id="project-body"
-      className="flex flex-col items-center px-[5vw] py-[10vh] gap-[10vh]"
+      className="flex flex-col items-center px-[2vw] lg:px-[5vw] py-[5vh] lg:py-[10vh] gap-[2vh] lg:gap-[10vh]"
     >
       {props.children}
     </div>
@@ -63,8 +63,8 @@ function ProjectDescription(props: ProjectDescriptionProps) {
   const { description } = props;
   return (
     <div className="w-full">
-      <h2>Description</h2>
-      <p>
+      <h2 className="text-sm lg:text-base">Description</h2>
+      <p className="text-xs lg:text-base">
         {description ??
           "This is the description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, quas."}
       </p>
@@ -80,8 +80,8 @@ function ProjectTechnologies(props: ProjectTechnologiesProps) {
   const { technologies } = props;
   return (
     <div className="w-full">
-      <h2>Technologies</h2>
-      <p>
+      <h2 className="text-sm lg:text-base">Technologies</h2>
+      <p className="text-xs lg:text-base">
         {technologies ??
           "This is the technologies. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, quas."}
       </p>
@@ -96,7 +96,7 @@ type ProjectTextProps = {
 function ProjectText(props: ProjectTextProps) {
   const { text } = props;
   return (
-    <p className="w-full flex items-center justify-center">
+    <p className="w-full flex items-center justify-center text-sm lg:text-base">
       {text ??
         `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus ipsa
       deserunt iste, enim voluptatibus dolor culpa et, exercitationem qui vel
@@ -160,7 +160,7 @@ async function ProjectPageComponent({ params }: { params: { slug: string } }) {
 
   return (
     <div className="w-full h-fit flex items-center justify-center pt-[10vh]">
-      <div className="w-4/5 min-h-screen bg-white rounded-lg">
+      <div className="w-11/12 lg:w-4/5 min-h-screen bg-white rounded-lg">
         <ProjectHeader title={project.title} />
         <ProjectBody>
           <ProjectDescription description={project.description} />
