@@ -18,8 +18,8 @@ function Icon(props: IconProps) {
   const [animation, setAnimation] = useState<AnimationPlaybackControls>();
 
   useEffect(() => {
-    const duration = Math.random() * 13 + 7; // 7-20 seconds
-    const appearDuration = duration / 5;
+    const duration = Math.floor(Math.random() * 13 + 7); // 7-20 seconds
+    const appearDuration = Math.floor(duration / 5);
     const disappearDuration = appearDuration;
     const sequence: AnimationSequence = [
       [
@@ -35,7 +35,7 @@ function Icon(props: IconProps) {
       [
         scope.current,
         { top: "100%" },
-        { duration: duration, at: `-${appearDuration}`, ease: "linear" },
+        { duration: duration, at: `${-appearDuration}`, ease: "linear" },
       ],
       [
         scope.current,
@@ -46,7 +46,7 @@ function Icon(props: IconProps) {
           ease: "linear",
         },
       ],
-      [scope.current, { top: "-60px", opacity: 0 }, { duration: 1 }],
+      [scope.current, { top: "0%", opacity: 0 }, { duration: 1 }],
     ];
 
     const animation = animate(sequence);
