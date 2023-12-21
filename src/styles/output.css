@@ -1488,6 +1488,16 @@ video {
   padding-bottom: 5vh;
 }
 
+.px-\[4vh\] {
+  padding-left: 4vh;
+  padding-right: 4vh;
+}
+
+.py-\[4vh\] {
+  padding-top: 4vh;
+  padding-bottom: 4vh;
+}
+
 .pb-5 {
   padding-bottom: 1.25rem;
 }
@@ -1808,6 +1818,10 @@ body {
     z-index: 0;
   }
 
+  .lg\:float-right {
+    float: right;
+  }
+
   .lg\:m-10 {
     margin: 2.5rem;
   }
@@ -1831,6 +1845,10 @@ body {
 
   .lg\:mb-\[10\%\] {
     margin-bottom: 10%;
+  }
+
+  .lg\:ml-5 {
+    margin-left: 1.25rem;
   }
 
   .lg\:block {
@@ -1984,6 +2002,14 @@ body {
 
   .lg\:pb-0 {
     padding-bottom: 0px;
+  }
+
+  .lg\:pb-\[10vh\] {
+    padding-bottom: 10vh;
+  }
+
+  .lg\:pt-0 {
+    padding-top: 0px;
   }
 
   .lg\:text-5xl {

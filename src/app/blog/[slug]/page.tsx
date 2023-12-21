@@ -13,9 +13,11 @@ function BlogPostHeader(props: BlogPostHeaderProps) {
   const { title } = props;
   return (
     <>
-      <div className="w-full text-center text-7xl pb-[10vh]">{title}</div>
+      <div className="w-full text-center text-3xl lg:text-7xl py-[4vh] lg:pt-0 lg:pb-[10vh]">
+        {title}
+      </div>
       <div
-        className="w-1/2 aspect-video object-cover rounded-lg float-right mb-5 ml-5"
+        className="w-full lg:w-1/2 aspect-video object-cover rounded-lg lg:float-right mb-5 lg:ml-5"
         style={{
           backgroundImage: `url(https://source.unsplash.com/random/?sig=1)`,
           backgroundSize: "cover",
