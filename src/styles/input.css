@@ -16,6 +16,7 @@ body {
   position: relative;
   /* padding for footer */
   padding-bottom: 30vh;
+  overflow-x: clip;
 }
 
 /* @media only screen and (max-width: 769px) {
