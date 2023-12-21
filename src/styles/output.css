@@ -668,6 +668,10 @@ video {
   margin: 0.5rem;
 }
 
+.m-5 {
+  margin: 1.25rem;
+}
+
 .mx-4 {
   margin-left: 1rem;
   margin-right: 1rem;
@@ -799,6 +803,14 @@ video {
   height: 100vh;
 }
 
+.h-4\/5 {
+  height: 80%;
+}
+
+.h-\[80vh\] {
+  height: 80vh;
+}
+
 .min-h-0 {
   min-height: 0px;
 }
@@ -894,6 +906,14 @@ video {
   width: min-content;
 }
 
+.w-5\/6 {
+  width: 83.333333%;
+}
+
+.w-11\/12 {
+  width: 91.666667%;
+}
+
 .min-w-\[300px\] {
   min-width: 300px;
 }
@@ -906,12 +926,28 @@ video {
   max-width: 100vw;
 }
 
+.max-w-\[90\%\] {
+  max-width: 90%;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
 
 .flex-\[6\] {
   flex: 6;
+}
+
+.flex-\[1\] {
+  flex: 1;
+}
+
+.flex-\[3\] {
+  flex: 3;
+}
+
+.flex-\[2\] {
+  flex: 2;
 }
 
 .shrink-0 {
@@ -961,6 +997,10 @@ video {
 
 .place-items-center {
   place-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
 }
 
 .items-end {
@@ -1021,6 +1061,10 @@ video {
 
 .overflow-visible {
   overflow: visible;
+}
+
+.overflow-x-scroll {
+  overflow-x: scroll;
 }
 
 .overflow-y-scroll {
@@ -1341,6 +1385,10 @@ video {
   padding: 1.25rem;
 }
 
+.p-4 {
+  padding: 1rem;
+}
+
 .px-10 {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
@@ -1451,6 +1499,14 @@ video {
 
 .pt-\[20vh\] {
   padding-top: 20vh;
+}
+
+.pb-\[33\%\] {
+  padding-bottom: 33%;
+}
+
+.pb-\[50\%\] {
+  padding-bottom: 50%;
 }
 
 .text-center {
@@ -1723,6 +1779,10 @@ body {
     z-index: 0;
   }
 
+  .lg\:m-10 {
+    margin: 2.5rem;
+  }
+
   .lg\:mx-0 {
     margin-left: 0px;
     margin-right: 0px;
@@ -1748,6 +1808,10 @@ body {
     display: block;
   }
 
+  .lg\:flex {
+    display: flex;
+  }
+
   .lg\:grid {
     display: grid;
   }
@@ -1758,6 +1822,14 @@ body {
 
   .lg\:h-1\/2 {
     height: 50%;
+  }
+
+  .lg\:h-1\/3 {
+    height: 33.333333%;
+  }
+
+  .lg\:h-screen {
+    height: 100vh;
   }
 
   .lg\:w-1\/2 {
@@ -1780,8 +1852,24 @@ body {
     width: 100%;
   }
 
+  .lg\:w-\[calc\(18\.75vw_-40px\)\] {
+    width: calc(18.75vw - 40px);
+  }
+
+  .lg\:w-2\/3 {
+    width: 66.666667%;
+  }
+
+  .lg\:w-1\/3 {
+    width: 33.333333%;
+  }
+
   .lg\:min-w-\[300px\] {
     min-width: 300px;
+  }
+
+  .lg\:flex-\[1\] {
+    flex: 1;
   }
 
   .lg\:grid-cols-4 {
@@ -1850,6 +1938,10 @@ body {
 
   .lg\:pt-\[20vh\] {
     padding-top: 20vh;
+  }
+
+  .lg\:pb-0 {
+    padding-bottom: 0px;
   }
 
   .lg\:text-5xl {

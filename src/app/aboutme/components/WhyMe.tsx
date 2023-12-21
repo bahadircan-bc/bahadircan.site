@@ -9,27 +9,27 @@ import Mobile from "./WhyMeComponents/Mobile";
 
 function WhyMe() {
   return (
-    <div className="w-full h-screen flex flex-col items-center py-10">
+    <div className="w-full h-[80vh] lg:h-screen flex flex-col items-center py-10 mt-[10vh] lg:mt-0">
       {/* <div className="w-full h-fit text-center text-white text-7xl mb-[10vh]">
         Why me?
       </div> */}
       {/* min-h-0 is important for the element below, 
       since it was removed from the specification for an alternative */}
-      <Tabs className="w-2/3 text-white flex flex-col min-h-0">
+      <Tabs className="w-11/12 lg:w-2/3 text-white flex flex-col min-h-0">
         <TabList className="border-0 flex justify-evenly border-b">
-          <Tab className="cursor-pointer flex-1 text-2xl focus:outline-none text-center">
+          <Tab className="cursor-pointer flex-1 text-sm lg:text-2xl focus:outline-none text-center">
             Web
           </Tab>
-          <Tab className="cursor-pointer flex-1 text-2xl focus:outline-none text-center">
+          <Tab className="cursor-pointer flex-1 text-sm lg:text-2xl focus:outline-none text-center">
             Web3
           </Tab>
-          <Tab className="cursor-pointer flex-1 text-2xl focus:outline-none text-center">
+          <Tab className="cursor-pointer flex-1 text-sm lg:text-2xl focus:outline-none text-center">
             Engineering
           </Tab>
-          <Tab className="cursor-pointer flex-1 text-2xl focus:outline-none text-center">
+          <Tab className="cursor-pointer flex-1 text-sm lg:text-2xl focus:outline-none text-center">
             Desktop
           </Tab>
-          <Tab className="cursor-pointer flex-1 text-2xl focus:outline-none text-center">
+          <Tab className="cursor-pointer flex-1 text-sm lg:text-2xl focus:outline-none text-center">
             Mobile
           </Tab>
         </TabList>

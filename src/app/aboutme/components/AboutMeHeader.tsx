@@ -35,7 +35,7 @@ function AboutMeHeader() {
           transition={{ duration: 1.5, delay: 0.1, ease: "easeOut" }}
         ></motion.div>
         <motion.div
-          className="absolute inset-0 flex items-center justify-center text-white text-9xl"
+          className="absolute inset-0 flex items-center justify-center text-white text-3xl lg:text-9xl pb-[50%] lg:pb-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5, ease: "easeIn" }}

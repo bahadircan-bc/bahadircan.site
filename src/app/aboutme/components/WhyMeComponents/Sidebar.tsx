@@ -67,7 +67,7 @@ function SidebarList({
 
   return (
     <div
-      className={"flex-1 h-full overflow-y-scroll".concat(
+      className={"flex-[2] lg:flex-[1] h-full overflow-y-scroll".concat(
         className ? ` ${className}` : ""
       )}
       style={{
@@ -99,7 +99,7 @@ function Sidebar({
 }
 
 function SidebarPanel({ className, children }: { className?: string, children: React.ReactNode }) {
-  return <div className={"h-full w-full border-l ".concat(
+  return <div className={"h-full w-full border-l text-xs lg:text-base ".concat(
     className ? ` ${className}` : ""
   )}>{children}</div>;
 }
