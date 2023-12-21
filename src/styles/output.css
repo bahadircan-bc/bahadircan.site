@@ -584,8 +584,8 @@ video {
   inset: 50vh auto auto 15vw;
 }
 
-.inset-\[60px_5vw_auto_auto\] {
-  inset: 60px 5vw auto auto;
+.inset-\[60px_auto_auto_auto\] {
+  inset: 60px auto auto auto;
 }
 
 .bottom-0 {

@@ -1,103 +1,75 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import icons from "./Icons";
-import { motion, useAnimation } from "framer-motion";
+import {
+  AnimationPlaybackControls,
+  AnimationSequence,
+  motion,
+  useAnimate,
+} from "framer-motion";
 import Link from "next/link";
 
-function Icon() {
-  const [icon, setIcon] = useState(0);
-  const controls = useAnimation();
-  const animationVariants = {
-    appear: {
-      opacity: 1,
-    },
-    fall: {
-      top: "100%",
-    },
-    disappear: {
-      opacity: 0,
-    },
-    top: {
-      top: "-60px",
-      opacity: 0,
-    },
-  };
+type IconProps = {
+  index: number;
+};
+
+function Icon(props: IconProps) {
+  const [icon, setIcon] = useState(props.index % icons.length);
+  const [scope, animate] = useAnimate();
+  const [animation, setAnimation] = useState<AnimationPlaybackControls>();
 
   useEffect(() => {
-    let unmount = false;
-    let sequenceRunning = false;
+    const duration = Math.random() * 13 + 7; // 7-20 seconds
+    const appearDuration = duration / 5;
+    const disappearDuration = appearDuration;
+    const sequence: AnimationSequence = [
+      [
+        scope.current,
+        { opacity: 0, zIndex: 21 - duration, scale: 12 / duration },
+        { duration: Math.floor(Math.random() * 13), ease: "linear" },
+      ],
+      [
+        scope.current,
+        { opacity: 1 },
+        { duration: appearDuration, ease: "linear" },
+      ],
+      [
+        scope.current,
+        { top: "100%" },
+        { duration: duration, at: `-${appearDuration}`, ease: "linear" },
+      ],
+      [
+        scope.current,
+        { opacity: 0 },
+        {
+          duration: disappearDuration,
+          at: `${-disappearDuration}`,
+          ease: "linear",
+        },
+      ],
+      [scope.current, { top: "-60px", opacity: 0 }, { duration: 1 }],
+    ];
 
-    const sequence = async () => {
-      sequenceRunning = true;
-      //sleep for 5-15 seconds
-      await new Promise((resolve) =>
-        setTimeout(resolve, Math.random() * 15000)
-      );
-
-      try {
-        while (!unmount) {
-          // console.log("repeating");
-          setIcon(Math.floor(Math.random() * icons.length));
-          const duration = Math.random() * 10 + 8;
-          controls.stop();
-          controls.set({ scale: 15 / duration });
-          controls.set({ zIndex: 19 - duration });
-          controls.set("top");
-          controls.start(
-            { top: `${100 - duration}%` },
-            {
-              duration: duration,
-              ease: "linear",
-            }
-          );
-          await controls.start("appear", {
-            duration: 2,
-            ease: "linear",
-          });
-          if (unmount) break;
-          await controls.start("disappear", {
-            duration: 2,
-            delay: duration - 4,
-            ease: "linear",
-          });
-          if (unmount) break;
-        }
-        controls.set("top");
-        unmount = false;
-        sequenceRunning = false;
-      } catch (error) {}
-    };
-
-    const handleVisiblityChange = async () => {
-      // console.log(document.visibilityState);
-      if (document.visibilityState === "hidden") {
-        unmount = true;
-      } else {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        if (sequenceRunning) {
-          unmount = false;
-        } else {
-          sequence();
-        }
-      }
-    };
-
-    window.addEventListener("visibilitychange", handleVisiblityChange);
-    sequence();
-
-    return () => {
-      unmount = true;
-      window.removeEventListener("visibilitychange", handleVisiblityChange);
-    };
-  }, [controls]);
+    const animation = animate(sequence);
+    animation.then(() => {
+      animation.complete();
+      setIcon(Math.floor(Math.random() * icons.length));
+    });
+    setAnimation(animation);
+  }, [icon]);
 
   return (
     <div className="w-full h-full relative">
       <motion.div
-        className={`w-[25px] h-[25px] absolute opacity-0 rounded-lg grid place-items-center p-1 shadow-inner ${
+        ref={scope}
+        className={`w-[25px] h-[25px] absolute rounded-lg opacity-0 grid place-items-center p-1 shadow-inner ${
           icons[icon].background === "light" ? "bg-white" : "bg-black"
         }`}
-        animate={controls}
-        variants={animationVariants}
+        onMouseEnter={() => {
+          animation?.pause();
+        }}
+        onMouseLeave={() => {
+          animation?.play();
+        }}
       >
         <Link href={icons[icon].link} target="_blank">
           {icons[icon].icon}
@@ -109,7 +81,7 @@ function Icon() {
 
 function IconDropdowns({ itemCount }: { itemCount: number }) {
   const icons = Array.from({ length: itemCount }, (_, index) => (
-    <Icon key={index} />
+    <Icon key={index} index={index} />
   ));
   return (
     <div

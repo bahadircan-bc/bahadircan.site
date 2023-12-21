@@ -59,7 +59,7 @@ function Timeline() {
     }
 
     setNodeVisibilities(newVisibilities);
-    console.log(latest);
+    // console.log(latest);
   });
 
 

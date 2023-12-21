@@ -44,9 +44,9 @@ function Hero() {
           Hello there! 👋 I&apos;m Bahadır, a passionate and creative software developer with a knack for turning ideas into reality through elegant and efficient code. My journey in the world of technology has been a thrilling adventure, marked by continuous learning and a commitment to crafting solutions that make a difference.
         </motion.p>
       </div>
-      {/* <div className="absolute inset-[60px_5vw_auto_auto] w-full h-[60vh]">
+      <div className="absolute inset-[60px_auto_auto_auto] w-full h-[60vh]">
         <IconDropdowns itemCount={50} />
-      </div> */}
+      </div>
     </div>
   );
 }

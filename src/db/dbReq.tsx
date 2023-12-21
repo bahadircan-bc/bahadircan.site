@@ -22,7 +22,6 @@ const getProjectData = async () => {
     // next: {
     //   revalidate: 43200, // 12 hours in seconds
     // },
-    cache: "no-cache",
   })
     .then((response) => response.json())
     .then((data) => {
@@ -58,7 +57,6 @@ const getBlogData = async () => {
     // next: {
     //   revalidate: 43200, // 12 hours in seconds
     // },
-    cache: "no-cache",
   })
     .then((response) => response.json())
     .then((data) => {
