@@ -16,7 +16,7 @@ function ProjectsBody(props: ProjectBodyProps) {
         {projects.map((project, index) => (
           <Link key={index} href={`projects/${project._id}`}>
             <div
-              className="h-full w-full rounded-md hover:scale-125 transition-all hover:duration-500 hover:z-10 z-0 duration-100 overflow-hidden"
+              className="h-full w-full rounded-md lg:hover:scale-125 lg:transition-all lg:hover:duration-500 lg:hover:z-10 lg:z-0 lg:duration-100 overflow-hidden"
             >
               <div
                 className="w-full h-full flex items-center justify-center"
