@@ -682,6 +682,16 @@ video {
   margin-right: 100px;
 }
 
+.mx-10 {
+  margin-left: 2.5rem;
+  margin-right: 2.5rem;
+}
+
+.my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .mb-5 {
   margin-bottom: 1.25rem;
 }
@@ -716,6 +726,10 @@ video {
 
 .mb-\[20\%\] {
   margin-bottom: 20%;
+}
+
+.ml-auto {
+  margin-left: auto;
 }
 
 .block {

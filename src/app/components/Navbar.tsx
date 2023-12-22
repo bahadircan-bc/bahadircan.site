@@ -145,6 +145,9 @@ function Navbar() {
         <Link href="/aboutme">About me</Link>
         <Link href="/contact">Contact</Link>
       </Dropdown>
+      <a href="/cv_bahadircan.pdf" className="absolute right-0 hidden lg:block p-2 my-2 mx-10 rounded-lg bg-secondary" download>
+        Download CV
+      </a>
     </motion.nav>
   );
 }
