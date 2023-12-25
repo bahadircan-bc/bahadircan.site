@@ -47,7 +47,7 @@ function BlogPostCard(props: BlogPostCardProps) {
           animate={controls}
         >
           <Image
-            src={`https://source.unsplash.com/random/?sig=${index}`}
+            src={`https://source.unsplash.com/random/`}
             width={1920}
             height={1080}
             alt=""
