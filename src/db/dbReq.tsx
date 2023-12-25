@@ -1,3 +1,5 @@
+import { BlogPost } from "@/app/blog/[slug]/components/BlogPage";
+
 const getProjectData = async () => {
   const apiUrl =
     "https://eu-central-1.aws.data.mongodb-api.com/app/data-vvcdg/endpoint/data/v1/action/find";
@@ -33,6 +35,22 @@ const getProjectData = async () => {
   return projectsData;
 };
 
+const compareDates = (a: BlogPost, b: BlogPost) => {
+  const dateA = new Date(
+    parseInt(a.date.substring(6, 10)),
+    parseInt(a.date.substring(3, 5)) - 1,
+    parseInt(a.date.substring(0, 2))
+  );
+
+  const dateB = new Date(
+    parseInt(b.date.substring(6, 10)),
+    parseInt(b.date.substring(3, 5)) - 1,
+    parseInt(b.date.substring(0, 2))
+  );
+
+  return dateB.getTime() - dateA.getTime();
+};
+
 const getBlogData = async () => {
   const apiUrl =
     "https://eu-central-1.aws.data.mongodb-api.com/app/data-vvcdg/endpoint/data/v1/action/find";
@@ -65,7 +83,7 @@ const getBlogData = async () => {
     })
     .catch((error) => console.error("Error:", error));
 
-  return postsData;
+  return postsData.sort(compareDates);
 };
 
 export { getProjectData, getBlogData };
