@@ -4,6 +4,7 @@ import LinesEllipsis from "react-lines-ellipsis";
 import Link from "next/link";
 import Image from "next/image";
 import { BlogPost } from "../[slug]/components/BlogPage";
+import { unsplashImageLoader } from "@/utils/utils";
 
 type BlogPostCardProps = {
   postId?: string;
@@ -47,7 +48,8 @@ function BlogPostCard(props: BlogPostCardProps) {
           animate={controls}
         >
           <Image
-            src={`https://source.unsplash.com/random/?sig=${index}`}
+            loader={unsplashImageLoader}
+            src={`${index}`}
             width={1920}
             height={1080}
             alt=""
