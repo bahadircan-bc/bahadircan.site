@@ -14,7 +14,7 @@ function ProjectHeader(props: ProjectHeaderProps) {
       <div
         className="w-full aspect-video object-cover rounded-lg"
         style={{
-          backgroundImage: `url(https://source.unsplash.com/random/?sig=1)`,
+          backgroundImage: `url(https://source.unsplash.com/random/?program,code,sig=1)`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",

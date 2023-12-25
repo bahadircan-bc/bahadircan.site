@@ -21,7 +21,7 @@ function ProjectsBody(props: ProjectBodyProps) {
               <div
                 className="w-full h-full flex items-center justify-center"
                 style={{
-                  backgroundImage: `linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1)), url(${project.src ?? `https://source.unsplash.com/random?sig=${index}`})`,
+                  backgroundImage: `linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1)), url(${project.src ?? `https://source.unsplash.com/random?program,code,sig=${index}`})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",

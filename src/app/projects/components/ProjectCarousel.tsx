@@ -36,7 +36,7 @@ function ProjectCarouselItem({
         className="w-full min-h-full relative flex items-end justify-center rounded-3xl overflow-clip"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1)), url(${
-            src ?? `https://source.unsplash.com/random?sig=${index}`
+            src ?? `https://source.unsplash.com/random?program,code,sig=${index}`
           })`,
           backgroundSize: "cover",
           backgroundPosition: "center",

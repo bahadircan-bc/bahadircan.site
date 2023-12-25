@@ -17,7 +17,7 @@ function BlogPostHeader(props: BlogPostHeaderProps) {
       <div
         className="w-full lg:w-1/2 aspect-video object-cover rounded-lg lg:float-right mb-5 lg:ml-5"
         style={{
-          backgroundImage: `url(https://source.unsplash.com/random/?sig=${(
+          backgroundImage: `url(https://source.unsplash.com/random/?program,code,sig=${(
             Math.random() * 10
           ).toFixed(0)})`,
           backgroundSize: "cover",

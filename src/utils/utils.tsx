@@ -1,5 +1,5 @@
 function unsplashImageLoader({ src }: { src: string }) {
-  return `https://source.unsplash.com/random/?sig=${src}`;
+  return `https://source.unsplash.com/random/?programmer,code,sig=${src}`;
 }
 
 export { unsplashImageLoader };
