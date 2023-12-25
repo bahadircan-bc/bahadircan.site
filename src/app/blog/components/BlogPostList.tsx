@@ -3,7 +3,7 @@ import { motion, useAnimation } from "framer-motion";
 import LinesEllipsis from "react-lines-ellipsis";
 import Link from "next/link";
 import Image from "next/image";
-import { BlogPost } from "../[slug]/page";
+import { BlogPost } from "../[slug]/components/BlogPage";
 
 type BlogPostCardProps = {
   postId?: string;

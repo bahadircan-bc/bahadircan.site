@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { Remark } from "react-remark";
-import { getBlogData } from "@/db/dbReq";
 
 type BlogPostHeaderProps = {
   title?: string;
@@ -70,7 +69,7 @@ type BlogPageProps = {
   post: BlogPost;
 };
 
-async function BlogPage(props: BlogPageProps) {
+function BlogPage(props: BlogPageProps) {
   const { post } = props;
 
   if (!post) {
