@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Remark } from "react-remark";
+import rehypeHighlight from "rehype-highlight";
 
 type BlogPostHeaderProps = {
   title?: string;
@@ -43,7 +44,7 @@ function BlogPostText(props: BlogPostTextProps) {
   // console.log(body)
   return (
     <div className="prose min-w-full">
-      <Remark>{`${body}`}</Remark>
+      <Remark rehypePlugins={[rehypeHighlight as any]}>{`${body}`}</Remark>
     </div>
   );
 }

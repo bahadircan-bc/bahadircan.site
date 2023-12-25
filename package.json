@@ -19,6 +19,7 @@
     "react-remark": "^2.1.0",
     "react-responsive-carousel": "^3.2.23",
     "react-tabs": "^6.0.2",
+    "rehype-highlight": "^7.0.0",
     "remark-gfm": "^4.0.0",
     "server-only": "^0.0.1"
   },
