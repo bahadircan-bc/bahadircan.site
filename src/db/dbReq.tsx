@@ -30,7 +30,10 @@ const getProjectData = async () => {
       // console.log(data);
       return data.documents;
     })
-    .catch((error) => console.error("Error:", error));
+    .catch((error) => {
+      console.error("Error:", error)
+      return [];
+    });
 
   return projectsData;
 };
@@ -81,8 +84,14 @@ const getBlogData = async () => {
       // console.log(data);
       return data.documents;
     })
-    .catch((error) => console.error("Error:", error));
+    .catch((error) => {
+      console.error("Error:", error)
+      return [];
+    });
 
+  if (!postsData || postsData.length === 0) {
+    return [];
+  }
   return postsData.sort(compareDates);
 };
 
