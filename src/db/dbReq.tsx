@@ -21,8 +21,8 @@ const getProjectData = async () => {
 
   const raw = await projectsCollection.find().toArray();
   const projects: ProjectItem[] = raw.map(
-    ({ _id, title, description, technologies, body, src, showcase }) => ({
-      _id: _id.toString(),
+    ({ _id, title, description, technologies, body, src, showcase }, index) => ({
+      _id: index.toString(),
       title,
       description,
       technologies,
@@ -63,8 +63,8 @@ const getBlogData = async () => {
 
   const raw = await postsCollection.find().toArray(); // WithId<Document>[]
   const posts: BlogPost[] = raw.map(
-    ({ _id, title, description, date, body }) => ({
-      _id: _id.toString(),
+    ({ _id, title, description, date, body }, index) => ({
+      _id: index.toString(),
       title,
       description,
       date,
