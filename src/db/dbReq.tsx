@@ -28,6 +28,9 @@ const getProjectData = async () => {
     .then((response) => response.json())
     .then((data) => {
       // console.log(data);
+      if (!data || !data.documents) {
+        return [];
+      }
       return data.documents;
     })
     .catch((error) => {
@@ -82,6 +85,9 @@ const getBlogData = async () => {
     .then((response) => response.json())
     .then((data) => {
       // console.log(data);
+      if (!data || !data.documents) {
+        return [];
+      }
       return data.documents;
     })
     .catch((error) => {
