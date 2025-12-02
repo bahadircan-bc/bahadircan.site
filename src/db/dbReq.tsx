@@ -1,44 +1,41 @@
 import { BlogPost } from "@/app/blog/[slug]/components/BlogPage";
+import { ProjectItem } from "@/app/projects/page";
+import { MongoClient, ServerApiVersion, Collection } from "mongodb";
+
+const uri = process.env.MONGODB_URI || "";
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+});
 
 const getProjectData = async () => {
-  const apiUrl =
-    "https://eu-central-1.aws.data.mongodb-api.com/app/data-vvcdg/endpoint/data/v1/action/find";
+  await client.connect();
 
-  const requestData = {
-    dataSource: "exypnos",
-    database: "bahadircan-blog-posts",
-    collection: "project-list",
-  };
+  let projectsCollection: Collection<ProjectItem> = await client
+    .db("bahadircan-blog-posts")
+    .collection<ProjectItem>("project-list");
 
-  const apiKey =
-    "WVR6exPJ0816GYZuXZkhbsxzOrxr5jgVQHSKaVvaJ4jlKWHGUukbCx2CkuiRiFBN";
-
-  let projectsData = await fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/ejson",
-      Accept: "application/json",
-      apiKey: apiKey,
-    },
-    body: JSON.stringify(requestData),
-    next: {
-      revalidate: 60, // 12 hours in seconds
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // console.log(data);
-      if (!data || !data.documents) {
-        return [];
-      }
-      return data.documents;
+  const raw = await projectsCollection.find().toArray();
+  const projects: ProjectItem[] = raw.map(
+    ({ _id, title, description, technologies, body, src, showcase }) => ({
+      _id: _id.toString(),
+      title,
+      description,
+      technologies,
+      body,
+      src,
+      showcase,
     })
-    .catch((error) => {
-      console.error("Error:", error)
-      return [];
-    });
+  );
 
-  return projectsData;
+  if (!projects || projects.length === 0) {
+    return [];
+  }
+  return projects;
 };
 
 const compareDates = (a: BlogPost, b: BlogPost) => {
@@ -58,47 +55,27 @@ const compareDates = (a: BlogPost, b: BlogPost) => {
 };
 
 const getBlogData = async () => {
-  const apiUrl =
-    "https://eu-central-1.aws.data.mongodb-api.com/app/data-vvcdg/endpoint/data/v1/action/find";
+  await client.connect();
 
-  const requestData = {
-    dataSource: "exypnos",
-    database: "bahadircan-blog-posts",
-    collection: "blog-posts",
-  };
+  const postsCollection: Collection<BlogPost> = await client
+    .db("bahadircan-blog-posts")
+    .collection<BlogPost>("blog-posts");
 
-  const apiKey =
-    "WVR6exPJ0816GYZuXZkhbsxzOrxr5jgVQHSKaVvaJ4jlKWHGUukbCx2CkuiRiFBN";
-
-  let postsData = await fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/ejson",
-      Accept: "application/json",
-      apiKey: apiKey,
-    },
-    body: JSON.stringify(requestData),
-    next: {
-      revalidate: 60, // 12 hours in seconds
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // console.log(data);
-      if (!data || !data.documents) {
-        return [];
-      }
-      return data.documents;
+  const raw = await postsCollection.find().toArray(); // WithId<Document>[]
+  const posts: BlogPost[] = raw.map(
+    ({ _id, title, description, date, body }) => ({
+      _id: _id.toString(),
+      title,
+      description,
+      date,
+      body,
     })
-    .catch((error) => {
-      console.error("Error:", error)
-      return [];
-    });
+  ); // now plain objects
 
-  if (!postsData || postsData.length === 0) {
+  if (!posts || posts.length === 0) {
     return [];
   }
-  return postsData.sort(compareDates);
+  return posts.sort(compareDates);
 };
 
 export { getProjectData, getBlogData };
