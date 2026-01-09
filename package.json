@@ -13,7 +13,7 @@
     "@svgr/webpack": "^8.1.0",
     "framer-motion": "^10.16.16",
     "mongodb": "^7.0.0",
-    "next": "14.0.4",
+    "next": "14.2.35",
     "react": "^18",
     "react-dom": "^18",
     "react-lines-ellipsis": "^0.15.4",
