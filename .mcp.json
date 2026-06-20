@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "codegraph": {
+      "type": "stdio",
+      "command": "/Users/bahadircan/.nvm/versions/node/v24.13.0/bin/node",
+      "args": [
+        "/Users/bahadircan/.nvm/versions/node/v24.13.0/lib/node_modules/@colbymchenry/codegraph/npm-shim.js",
+        "serve",
+        "--mcp"
+      ]
+    }
+  }
+}

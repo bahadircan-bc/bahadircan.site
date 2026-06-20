@@ -37,3 +37,6 @@ next-env.d.ts
 
 # env files
 .env
+
+# codegraph index (machine-local, rebuilt with `codegraph init`)
+/.codegraph/

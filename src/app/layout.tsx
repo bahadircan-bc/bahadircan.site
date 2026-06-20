@@ -1,15 +1,25 @@
-import '../styles/output.css'
+import "./globals.css";
 import type { Metadata } from "next";
-import { Cairo } from "next/font/google";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 
-const cairo = Cairo({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "bahadir",
-  description: "bahadir's personal website",
+  metadataBase: new URL("https://www.bahadircan.site"),
+  title: "Bahadır Can — R&D Engineer",
+  description:
+    "Bahadır Can — R&D engineer. From electrons to interface: robotics, AI cameras & computer vision, web & web3.",
 };
 
 export default function RootLayout({
@@ -18,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         <Script
           src="https://analytics.ahrefs.com/analytics.js"
@@ -26,13 +36,7 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
       </head>
-      <body className={cairo.className}>
-        <div id="root">
-          <Navbar />
-          {children}
-          <Footer />
-        </div>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

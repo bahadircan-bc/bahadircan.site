@@ -4,10 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "tailwind -i ./src/styles/input.css -o ./src/styles/output.css && next build",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "tailwind": "tailwind -i ./src/styles/input.css -o ./src/styles/output.css -w"
+    "lint": "next lint"
   },
   "dependencies": {
     "@svgr/webpack": "^8.1.0",

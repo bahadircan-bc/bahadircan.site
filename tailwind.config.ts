@@ -1,30 +1,29 @@
 import type { Config } from "tailwindcss";
 
+// "The Spatial Stack" design tokens — see docs/design.md.
+// Palette names avoid collisions with Tailwind defaults:
+//   obsidian = background, alabaster = primary text, ash = secondary text,
+//   muted    = the Focal Plane line / hairlines / accent (never neon).
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/content/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
       colors: {
-        primary: "#2f3685",
-        secondary: "#5151b2",
-        accent: "#131518",
-        highlight: "#E1E8ED",
-        error: "#FF0000",
-        success: "#00FF00",
-        warning: "#FFFF00",
-        info: "#0000FF",
+        obsidian: "#1C1C1A",
+        alabaster: "#EAE6DF",
+        ash: "#8A8882",
+        muted: "#6E7275",
+      },
+      fontFamily: {
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
     },
   },
-  plugins: [require("@tailwindcss/typography")],
+  plugins: [],
 };
 export default config;
