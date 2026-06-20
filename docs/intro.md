@@ -73,6 +73,12 @@ The repo is indexed by **CodeGraph** (`.codegraph/` at the repo root, git-ignore
 
 ## Status Log (newest first)
 
+### 2026-06-20 — Hero tagline typewriter effect
+- "From electrons to interface." now types out on load via a custom hook
+  `src/hooks/useTypewriter.ts` (no dependency) + a caret that blinks then fades
+  (`.caret-blink` keyframe in `globals.css`). Full sentence kept in an `sr-only` node for
+  SEO/AT; reduced-motion shows it instantly. Committed locally; push on go-ahead.
+
 ### 2026-06-20 — SHIPPED to production + theming/polish
 - Tuned the Focal Plane: line tracks scroll 1:1 (removed the chasing transition → no latency);
   focus snaps to the nearest of 3 strata, line aligned to the focused row (fixed the phantom

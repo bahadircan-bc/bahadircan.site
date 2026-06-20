@@ -1,6 +1,36 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import FocalPlane from "./hero/FocalPlane";
+import useTypewriter from "@/hooks/useTypewriter";
+
+const STATEMENT = "From electrons to interface.";
+
+function Tagline() {
+  const { typed, done } = useTypewriter(STATEMENT);
+  const [caretGone, setCaretGone] = useState(false);
+
+  useEffect(() => {
+    if (!done) return;
+    const t = setTimeout(() => setCaretGone(true), 1200);
+    return () => clearTimeout(t);
+  }, [done]);
+
+  return (
+    <p className="mt-8 max-w-xl font-sans text-xl font-light leading-snug tracking-tight text-ash sm:text-2xl lg:text-3xl">
+      {/* Full sentence for SEO / screen readers; the animated copy is hidden from AT. */}
+      <span className="sr-only">{STATEMENT}</span>
+      <span aria-hidden="true">
+        {typed}
+        <span
+          className={`ml-0.5 inline-block h-[0.85em] w-[0.07em] translate-y-[0.08em] bg-current align-baseline transition-opacity duration-700 ${
+            caretGone ? "opacity-0" : "caret-blink opacity-100"
+          }`}
+        />
+      </span>
+    </p>
+  );
+}
 
 /**
  * The Spatial Stack — hero.
@@ -28,9 +58,7 @@ export default function Hero() {
             Bahadır Can
           </h1>
 
-          <p className="mt-8 max-w-xl font-sans text-xl font-light leading-snug tracking-tight text-ash sm:text-2xl lg:text-3xl">
-            From electrons to interface.
-          </p>
+          <Tagline />
 
           <p
             aria-hidden="true"

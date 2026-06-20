@@ -59,3 +59,25 @@
     }
   }
 }
+
+/* Typewriter caret blink (Hero tagline). Uses currentColor, so it adapts to theme. */
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.caret-blink {
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret-blink {
+    animation: none;
+  }
+}
