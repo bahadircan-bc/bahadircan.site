@@ -73,6 +73,22 @@ The repo is indexed by **CodeGraph** (`.codegraph/` at the repo root, git-ignore
 
 ## Status Log (newest first)
 
+### 2026-06-20 — Rebuild BUILT & verified locally (not yet pushed)
+- Migrated old multi-page MongoDB site → new single-page "Spatial Stack" via multi-agent
+  orchestration (3 subagents in git worktrees: Hero/Focal-Plane, Project Index, Header/Footer).
+  Plan: `~/.claude/plans/luminous-conjuring-pebble.md`.
+- New structure: `src/app/page.tsx` composes `SiteHeader` + `Hero` (+ `hero/FocalPlane`,
+  `hero/StratumRow`) + `ProjectIndex` + `SiteFooter`. Content: `src/content/strata.ts`,
+  `src/content/projects.ts` (authored from CV — review/edit anytime). Types: `src/lib/types.ts`.
+- Dropped MongoDB, blog, and unused deps (framer-motion, svgr, react-remark/tabs/carousel, …);
+  switched to standard Tailwind pipeline; removed old routes/assets + netlify.toml.
+- **Verified:** `npm run build` clean; Focal Plane focus-on-scroll, project index, footer all
+  render correctly desktop + mobile (no horizontal overflow, CDP-checked); reduced-motion +
+  no-JS fall back to a static all-strata layout.
+- **Committed locally on `main` (3 commits), NOT pushed.** Pushing = Vercel production deploy.
+- **Where we left off / next up:** get Bahadır's go-ahead to push to production; possible
+  content tweaks to `src/content/projects.ts` and hero copy first.
+
 ### 2026-06-20 — Design LOCKED: "The Spatial Stack"
 - After several rounds (incl. concepts from web Claude), locked the design direction. Full
   spec in `docs/design.md`.
