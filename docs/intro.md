@@ -73,6 +73,20 @@ The repo is indexed by **CodeGraph** (`.codegraph/` at the repo root, git-ignore
 
 ## Status Log (newest first)
 
+### 2026-06-20 — SHIPPED to production + theming/polish
+- Tuned the Focal Plane: line tracks scroll 1:1 (removed the chasing transition → no latency);
+  focus snaps to the nearest of 3 strata, line aligned to the focused row (fixed the phantom
+  4th stop); shorter scroll distance per stratum.
+- Added a **dark/light theme system**: CSS-variable tokens in `globals.css`
+  (`--bg/--fg/--fg-muted/--fg-faint/--line`), Tailwind colors map to them
+  (`obsidian/alabaster/ash/muted/line`), toggle in `SiteHeader` (persists in localStorage,
+  respects system, no-flash inline script in `layout.tsx`). **Raised contrast** in both themes.
+  Refactored all components off hard-coded hex onto tokens; `SiteFooter` rewritten with classes.
+- Bahadır approved; **pushed `main` to origin → Vercel production deploy** (bahadircan.site).
+- **Where we left off / next up:** live. Possible follow-ups: copy tweaks
+  (`src/content/projects.ts`, hero line), tune light-bg warmth / faint-label contrast, or
+  default-theme choice (currently follows system).
+
 ### 2026-06-20 — Rebuild BUILT & verified locally (not yet pushed)
 - Migrated old multi-page MongoDB site → new single-page "Spatial Stack" via multi-agent
   orchestration (3 subagents in git worktrees: Hero/Focal-Plane, Project Index, Header/Footer).

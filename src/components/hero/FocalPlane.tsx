@@ -38,8 +38,14 @@ export default function FocalPlane() {
   const [mounted, setMounted] = useState(false);
 
   const total = STRATA.length;
-  // Active stratum index derived from progress (split the track into N bands).
-  const activeIndex = Math.min(total - 1, Math.floor(progress * total));
+  // The focused stratum is whichever row the focal line is nearest to. Strata are
+  // distributed at 0 / 50 / 100% of the track (justify-between), so map progress onto
+  // those positions and round — focus flips exactly at the midpoint between two rows.
+  // This keeps it to N states (not N+1) and keeps the line aligned with the focused row.
+  const activeIndex = Math.max(
+    0,
+    Math.min(total - 1, Math.round(progress * (total - 1)))
+  );
 
   // --- reduced motion ---------------------------------------------------------
   useEffect(() => {
@@ -174,7 +180,7 @@ export default function FocalPlane() {
       aria-label="Areas of work, focused one layer at a time"
       // Tall section gives scroll room; sticky inner keeps the canvas in view.
       className="relative w-full"
-      style={{ height: staticMode ? "auto" : `${100 + total * 70}vh` }}
+      style={{ height: staticMode ? "auto" : `${100 + (total - 1) * 60}vh` }}
     >
       <div
         className={[
@@ -183,7 +189,7 @@ export default function FocalPlane() {
         ].join(" ")}
       >
         <div className="mx-auto w-full max-w-5xl px-6 lg:px-10">
-          <p className="mb-10 font-mono text-xs uppercase tracking-[0.2em] text-[#6E7275]">
+          <p className="mb-10 font-mono text-xs uppercase tracking-[0.2em] text-muted">
             {staticMode ? "the stack" : "scroll to focus"}
           </p>
 
@@ -219,17 +225,18 @@ export default function FocalPlane() {
                 onPointerMove={onPointerMove}
                 onPointerUp={onPointerUp}
                 onPointerCancel={onPointerUp}
-                className="relative h-[60vh] w-8 cursor-ns-resize outline-none focus-visible:ring-2 focus-visible:ring-[#EAE6DF] focus-visible:ring-offset-4 focus-visible:ring-offset-[#1C1C1A]"
+                className="relative h-[60vh] w-8 cursor-ns-resize outline-none focus-visible:ring-2 focus-visible:ring-alabaster focus-visible:ring-offset-4 focus-visible:ring-offset-obsidian"
               >
                 {/* faint full-height guide */}
                 <span
                   aria-hidden="true"
-                  className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-[#6E7275]/25"
+                  className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-line/40"
                 />
-                {/* the razor-thin focal line */}
+                {/* the razor-thin focal line — tracks scroll 1:1 (no chasing
+                    transition, so there is no latency); rAF keeps it smooth */}
                 <span
                   aria-hidden="true"
-                  className="absolute left-0 h-px w-full bg-[#EAE6DF] shadow-[0_0_12px_rgba(234,230,223,0.45)] transition-[top] duration-150 ease-out"
+                  className="absolute left-0 h-px w-full bg-alabaster shadow-[0_0_10px_rgb(var(--fg)/0.4)] will-change-[top]"
                   style={{ top: `${linePct}%` }}
                 />
               </div>

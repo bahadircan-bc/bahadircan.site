@@ -36,24 +36,22 @@ export default function StratumRow({
       aria-current={!staticMode && focused ? "true" : undefined}
       className={[
         "relative w-full select-none",
-        "transition-all duration-700 ease-out motion-reduce:transition-none",
-        // Out-of-focus strata recede: lower opacity, slightly pushed back.
-        revealed
-          ? "opacity-100"
-          : "opacity-30 blur-[0.5px] motion-reduce:opacity-100 motion-reduce:blur-0",
+        "transition-opacity duration-500 ease-out motion-reduce:transition-none",
+        // Out-of-focus strata recede: lower opacity (no blur — reads cleaner).
+        revealed ? "opacity-100" : "opacity-40 motion-reduce:opacity-100",
       ].join(" ")}
     >
       <div className="flex items-baseline gap-4">
         <span
           aria-hidden="true"
-          className="font-mono text-xs text-[#6E7275] tabular-nums"
+          className="font-mono text-xs text-muted tabular-nums"
         >
           {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
         </span>
-        <h3 className="font-sans text-2xl font-medium tracking-tight text-[#EAE6DF] lg:text-3xl">
+        <h3 className="font-sans text-2xl font-medium tracking-tight text-alabaster lg:text-3xl">
           {stratum.name}
         </h3>
-        <span className="font-mono text-xs text-[#8A8882] hidden sm:inline">
+        <span className="font-mono text-xs text-ash hidden sm:inline">
           {stratum.caption}
         </span>
       </div>
@@ -62,7 +60,7 @@ export default function StratumRow({
       <ul
         className={[
           "mt-3 flex flex-wrap gap-x-5 gap-y-1.5 overflow-hidden",
-          "transition-all duration-700 ease-out motion-reduce:transition-none",
+          "transition-all duration-500 ease-out motion-reduce:transition-none",
           revealed
             ? "max-h-40 opacity-100 translate-y-0"
             : "max-h-0 opacity-0 -translate-y-1 motion-reduce:max-h-40 motion-reduce:opacity-100 motion-reduce:translate-y-0",
@@ -73,7 +71,7 @@ export default function StratumRow({
         {stratum.fields.map((field) => (
           <li
             key={field}
-            className="font-sans text-sm text-[#8A8882] lg:text-base"
+            className="font-sans text-sm text-ash lg:text-base"
           >
             {field}
           </li>

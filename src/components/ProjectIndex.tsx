@@ -34,7 +34,7 @@ export default function ProjectIndex() {
         </h2>
 
         {/* Hairline top border */}
-        <div className="border-t border-muted border-opacity-30" />
+        <div className="border-t border-line border-opacity-60" />
 
         <ul role="list">
           {sorted.map((project) => {
@@ -45,7 +45,7 @@ export default function ProjectIndex() {
               <li
                 key={project.slug}
                 className={[
-                  "group border-b border-muted border-opacity-30",
+                  "group border-b border-line border-opacity-60",
                   "transition-opacity",
                   // Respect prefers-reduced-motion: transition is short (150ms) and opacity-only,
                   // so it qualifies as "mild" per the spec — but we also apply motion-reduce

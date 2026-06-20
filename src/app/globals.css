@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Theme tokens (RGB triplets for Tailwind alpha support).
+   Default = warm-dark. `.light` on <html> flips to the gallery-light theme.
+   Contrast was raised vs. the first pass so secondary/faint text stays legible. */
+:root {
+  --bg: 28 28 26; /* #1C1C1A */
+  --fg: 242 239 233; /* #F2EFE9 */
+  --fg-muted: 178 173 163; /* readable secondary */
+  --fg-faint: 140 142 142; /* faint labels */
+  --line: 110 114 117; /* hairlines / focal guide */
+  color-scheme: dark;
+}
+
+:root.light {
+  --bg: 243 241 236; /* warm paper (not cream-yellow, not pure white) */
+  --fg: 26 25 23; /* near-black ink */
+  --fg-muted: 74 72 66; /* readable secondary */
+  --fg-faint: 116 113 105; /* faint labels */
+  --line: 198 194 185; /* light hairlines */
+  color-scheme: light;
+}
+
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
@@ -14,22 +35,27 @@
     /* Guard against incidental horizontal overflow on narrow screens.
        `clip` (not `hidden`) keeps the sticky Focal Plane working. */
     overflow-x: clip;
+    /* Smooth the theme switch. */
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   ::selection {
-    background: #6e7275;
-    color: #1c1c1a;
+    background: rgb(var(--fg));
+    color: rgb(var(--bg));
   }
 
   /* Quiet, legible focus ring (quality floor). */
   :focus-visible {
-    outline: 1px solid #eae6df;
+    outline: 1px solid rgb(var(--fg));
     outline-offset: 3px;
   }
 
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
+    }
+    body {
+      transition: none;
     }
   }
 }
