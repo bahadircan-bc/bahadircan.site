@@ -11,6 +11,9 @@
 
   body {
     @apply bg-obsidian text-alabaster font-sans antialiased;
+    /* Guard against incidental horizontal overflow on narrow screens.
+       `clip` (not `hidden`) keeps the sticky Focal Plane working. */
+    overflow-x: clip;
   }
 
   ::selection {
