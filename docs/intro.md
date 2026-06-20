@@ -73,6 +73,13 @@ The repo is indexed by **CodeGraph** (`.codegraph/` at the repo root, git-ignore
 
 ## Status Log (newest first)
 
+### 2026-06-20 — CV rebuilt as version-controlled source
+- The CV is now repo-sourced: `cv/cv.html` (Helvetica, centered grayscale headings, one page,
+  targeted at Robotics & Computer Vision) → `public/cv_bahadircan.pdf` via `bash cv/build-cv.sh`
+  (headless Chrome `--print-to-pdf`). Content updated: graduation, Çözüm Makina two phases
+  (AI cameras → robotics), skills reordered CV/robotics-first. Replaces the old EnhanCV export.
+  The site header "cv ↗" links to this PDF.
+
 ### 2026-06-20 — Hero tagline typewriter effect
 - "From electrons to interface." now types out on load via a custom hook
   `src/hooks/useTypewriter.ts` (no dependency) + a caret that blinks then fades

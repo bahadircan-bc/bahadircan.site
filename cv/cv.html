@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Bahadır Can — CV</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 11mm 14mm;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --ink: #1a1a1a;
+        --soft: #444;
+        --faint: #6b6b6b;
+        --rule: #d2d2d2;
+        --accent: #333; /* grayscale — no color */
+      }
+
+      html {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body {
+        font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
+        color: var(--ink);
+        font-size: 9.5pt;
+        line-height: 1.36;
+      }
+
+      /* ---------- Header ---------- */
+      header {
+        text-align: center;
+        padding-bottom: 8px;
+        border-bottom: 1.5px solid var(--ink);
+      }
+      .name {
+        font-size: 23pt;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .title {
+        margin-top: 3px;
+        font-size: 10.5pt;
+        color: var(--accent);
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+      .contact {
+        margin-top: 6px;
+        font-size: 8.2pt;
+        color: var(--soft);
+      }
+      .contact a {
+        color: var(--soft);
+        text-decoration: none;
+      }
+      .sep {
+        color: var(--rule);
+        padding: 0 4px;
+      }
+
+      /* ---------- Sections ---------- */
+      section {
+        margin-top: 9px;
+      }
+      h2 {
+        font-size: 9pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--ink);
+        text-align: center;
+        border-bottom: 1px solid var(--rule);
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+      }
+
+      .summary {
+        color: var(--soft);
+        text-align: justify;
+      }
+
+      /* ---------- Skills ---------- */
+      .skills div {
+        margin-bottom: 3px;
+      }
+      .skills .k {
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .skills .v {
+        color: var(--soft);
+      }
+
+      /* ---------- Experience ---------- */
+      .entry {
+        margin-bottom: 7px;
+      }
+      .entry:last-child {
+        margin-bottom: 0;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+      .org {
+        font-weight: 700;
+        font-size: 10.5pt;
+      }
+      .role {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .meta {
+        color: var(--faint);
+        font-size: 8.7pt;
+        white-space: nowrap;
+        padding-left: 10px;
+      }
+      ul {
+        margin-top: 3px;
+        padding-left: 15px;
+      }
+      li {
+        margin-bottom: 2.5px;
+        color: var(--soft);
+      }
+
+      /* ---------- Two-column (accomplishments / languages) ---------- */
+      .grid {
+        display: flex;
+        gap: 26px;
+      }
+      .grid > div {
+        flex: 1;
+      }
+      /* Give the projects column the room; keep languages compact. */
+      .grid > div:last-child {
+        flex: 0 0 150px;
+      }
+      .accs li {
+        margin-bottom: 4px;
+      }
+      .accs .a-title {
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .lang span {
+        color: var(--soft);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="name">Bahadır Can</div>
+      <div class="title">Robotics &amp; Computer Vision Engineer</div>
+      <div class="contact">
+        +90 542 214 0597 <span class="sep">|</span>
+        <a href="mailto:bahadircan.bc@gmail.com">bahadircan.bc@gmail.com</a>
+        <span class="sep">|</span>
+        <a href="https://www.bahadircan.site">bahadircan.site</a>
+        <span class="sep">|</span>
+        <a href="https://github.com/bahadircan-bc">github.com/bahadircan-bc</a>
+        <span class="sep">|</span>
+        <a href="https://www.linkedin.com/in/bahadır-can/">linkedin.com/in/bahadır-can</a>
+        <span class="sep">|</span> Istanbul
+      </div>
+    </header>
+
+    <section>
+      <h2>Summary</h2>
+      <p class="summary">
+        Robotics and computer vision engineer with production experience taking
+        perception and autonomy from prototype to deployment. I build real-time,
+        on-device vision for embedded AI cameras and work across the robotics
+        stack — SLAM, sensor fusion, and ROS 1/2. Former full-stack web
+        developer; I move quickly through unfamiliar codebases and ship with a
+        deploy-first, perfect-later mindset.
+      </p>
+    </section>
+
+    <section class="skills">
+      <h2>Skills</h2>
+      <div>
+        <span class="k">Computer Vision:</span>
+        <span class="v">object detection &amp; instance segmentation, on-device / edge inference (RKNN), model optimization, OpenCV, classical CV</span>
+      </div>
+      <div>
+        <span class="k">Robotics:</span>
+        <span class="v">SLAM, sensor fusion, autonomous navigation &amp; mapping, ROS 1 (Noetic), ROS 2 (Humble / Jazzy), simulation environments</span>
+      </div>
+      <div>
+        <span class="k">ML / AI:</span>
+        <span class="v">deep learning methods, real-time inference, edge-device optimization</span>
+      </div>
+      <div>
+        <span class="k">Languages &amp; Tools:</span>
+        <span class="v">Python, C / C++, Git, Docker, Linux</span>
+      </div>
+      <div>
+        <span class="k">Web (prior):</span>
+        <span class="v">Next.js, MERN stack, Web3 / Solidity, REST APIs</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+
+      <div class="entry">
+        <div class="row">
+          <span class="org">Çözüm Makina</span>
+          <span class="meta">Istanbul, Turkey</span>
+        </div>
+        <div class="row">
+          <span class="role">Robotics &amp; Computer Vision Engineer</span>
+          <span class="meta">03/2024 – Present</span>
+        </div>
+        <ul>
+          <li>Built real-time object detection and instance segmentation for an embedded AI camera (RKNN chipset), optimizing models for on-device / edge inference.</li>
+          <li>Developed occupational health &amp; safety (OHS) monitoring applications using AI cameras in industrial environments.</li>
+          <li>Designed and implemented a real-time location system (RTLS) for trucks and vehicles in a harbor using existing CCTV — no new hardware.</li>
+          <li>Moved into robotics: autonomous navigation for a biped robot using SLAM and sensor fusion across ROS 1 (Noetic) / ROS 2 (Humble · Jazzy) and simulation environments.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="row">
+          <span class="org">Freelance (Self-employed)</span>
+          <span class="meta">Istanbul, Turkey</span>
+        </div>
+        <div class="row">
+          <span class="role">Full-Stack Web Developer</span>
+          <span class="meta">06/2023 – 02/2024</span>
+        </div>
+        <ul>
+          <li>Delivered Web and Web3 projects end-to-end with a focus on UI/UX and the MERN stack.</li>
+          <li>Migrated builds to Next.js for SEO performance (versions 14 and 15).</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="row">
+          <span class="org">Broad</span>
+          <span class="meta">Istanbul, Turkey</span>
+        </div>
+        <div class="row">
+          <span class="role">Lead Software Engineer</span>
+          <span class="meta">03/2023 – 05/2023</span>
+        </div>
+        <ul>
+          <li>Built software modules for a hitchhiking and car-sharing mobile app.</li>
+          <li>Integrated mapping and location services including Google Geolocation and Places APIs.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="row">
+          <span class="org">ARGETÜRK</span>
+          <span class="meta">Istanbul, Turkey</span>
+        </div>
+        <div class="row">
+          <span class="role">Software Developer Intern</span>
+          <span class="meta">06/2021 – 09/2021</span>
+        </div>
+        <ul>
+          <li>Built a defect and anomaly detection pipeline for PCBs on a conveyor belt using classical computer vision.</li>
+          <li>Designed transform and template-matching algorithms; developed a tool to render GERBER files into image formats.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <div class="row">
+        <span class="org">Yıldız Teknik Üniversitesi</span>
+        <span class="meta">Istanbul, Turkey</span>
+      </div>
+      <div class="row">
+        <span class="role">B.Sc. Mechatronics Engineering</span>
+        <span class="meta">2018 – 2025</span>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid">
+        <div>
+          <h2>Key Projects &amp; Achievements</h2>
+          <ul class="accs">
+            <li>
+              <span class="a-title">Search-and-Rescue Quadcopter</span> —
+              TÜBİTAK-sponsored indoor UAV (onboard perception &amp; autonomy).
+            </li>
+            <li>
+              <span class="a-title">ETHGlobal Istanbul</span> — shipped a dApp at the hackathon.
+            </li>
+            <li>
+              <span class="a-title">C Programming</span> — Necati Ergin's course
+              (C ve Sistem Programcıları Derneği).
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h2>Languages</h2>
+          <div class="lang">
+            <span>Turkish — Native</span><br />
+            <span>English — Native</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
