@@ -9,27 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@svgr/webpack": "^8.1.0",
-    "framer-motion": "^10.16.16",
-    "mongodb": "^7.0.0",
     "next": "14.2.35",
     "react": "^18",
     "react-dom": "^18",
-    "react-lines-ellipsis": "^0.15.4",
-    "react-remark": "^2.1.0",
-    "react-responsive-carousel": "^3.2.23",
-    "react-tabs": "^6.0.2",
-    "rehype-highlight": "^7.0.0",
-    "remark-gfm": "^4.0.0",
-    "server-only": "^0.0.1",
     "sharp": "0.33.1"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@types/react-lines-ellipsis": "^0.15.5",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
