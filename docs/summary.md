@@ -65,10 +65,13 @@ API Development · Quick Code Comprehension · Software Optimization · Clean Co
 
 ---
 
-## The existing site (what we are replacing)
+## The previous site (REPLACED 2026-06-20)
 
-A personal CV / portfolio site. **We are starting over** on the design — this section
-documents the old build so nothing is lost.
+> The site was rebuilt as the single-page "Spatial Stack" (see [`design.md`](./design.md), now
+> live on Vercel). This section is kept as a historical record of the **old** build so nothing
+> is lost — it no longer describes what's deployed.
+
+A personal CV / portfolio site (the pre-rebuild version):
 
 ### Tech stack
 - **Next.js 14.2.35** (App Router) + **React 18** + **TypeScript**

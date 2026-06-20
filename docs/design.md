@@ -98,17 +98,36 @@ The whole site behaves like a **beautifully typeset index**, not an image-card g
 
 ---
 
-## Tech stack (keep / build on existing repo)
+## Tech stack (as built)
 
-- **Next.js 14 App Router + TypeScript** (existing).
-- **Tailwind CSS** + **Framer Motion** (existing) for restrained layout motion only.
-- No Three.js / R3F — the Focal Plane is CSS + light JS.
-- Keep the MongoDB data layer for projects/blog if we retain those sections (TBD during build).
+- **Next.js 14 App Router + TypeScript**.
+- **Tailwind CSS** via the standard PostCSS pipeline; colors are CSS-variable theme tokens.
+- The Focal Plane is **CSS + light JS** (rAF scroll listener) — no Three.js / R3F.
+- **No Framer Motion, no MongoDB, no @svgr** — all dropped (see deviations below).
 
 ---
 
-## Open / to decide during build
-- Which sections survive from the old site (about, projects, blog, contact) and how they fit
-  the index aesthetic.
-- Exact copy for the hero statement and each stratum.
-- Whether to keep MongoDB or move project/blog content to local files.
+## As built (decisions resolved + deviations from the original plan)
+
+Shipped to production 2026-06-20. See `intro.md` Status Log for the build narrative.
+
+- **Single page** (`src/app/page.tsx`) — no separate about/projects/blog/contact routes.
+- **Content is local**, not MongoDB: `src/content/projects.ts` (authored from the CV) and
+  `src/content/strata.ts`. The blog was dropped entirely; the whole `src/db` layer removed.
+- **Components:** `SiteHeader`, `Hero` (+ `hero/FocalPlane`, `hero/StratumRow`), `ProjectIndex`,
+  `SiteFooter`. Types in `src/lib/types.ts`.
+- **Dark + light theme** (added beyond the original spec): CSS-variable tokens in `globals.css`
+  (`--bg/--fg/--fg-muted/--fg-faint/--line`) → Tailwind colors `obsidian/alabaster/ash/muted/
+  line`; toggle in `SiteHeader` (persists in localStorage, respects system, no-flash inline
+  script in `layout.tsx`). Contrast was raised vs. the first pass.
+- **Focal Plane tuning:** line tracks scroll 1:1 (no chasing transition), focus snaps to the
+  nearest of 3 strata aligned to the row.
+- **Dropped deps/assets:** Framer Motion, @svgr/webpack (footer icons are inline SVG), mongodb,
+  react-remark/gfm, rehype-highlight, react-tabs/-responsive-carousel/-lines-ellipsis,
+  `src/assets/*`, `netlify.toml`.
+- Hero copy = "From electrons to interface."; strata captions = "how machines see / decide /
+  how people connect."
+
+### Possible follow-ups (not yet done)
+- Copy tweaks (`src/content/projects.ts`, hero line); light-bg warmth / faint-label contrast;
+  default-theme choice (currently follows system).
