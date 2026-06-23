@@ -78,15 +78,11 @@ export default function SiteHeader() {
       ].join(" ")}
     >
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
-        <Link
-          href="/"
-          aria-label="Bahadır Can — home"
-          className="font-sans text-[0.9375rem] font-medium tracking-tight text-alabaster"
-        >
-          Bahadır Can
+        <Link href="/" aria-label="Home" className="sr-only">
+          Home
         </Link>
 
-        <nav aria-label="Site navigation">
+        <nav aria-label="Site navigation" className="ml-auto">
           <ul className="flex items-center gap-5 font-mono text-xs tracking-wide sm:gap-6">
             <li className="hidden sm:block">
               <a
