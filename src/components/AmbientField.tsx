@@ -18,6 +18,7 @@ import { createTimer, animate, stagger } from "animejs";
 
 const RAILS = 5;
 const DOTS_PER_RAIL = 6;
+const CYCLE_MS = 9000;
 
 export default function AmbientField() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -39,10 +40,13 @@ export default function AmbientField() {
     // evenly spread and never looks synchronized — and the offsets persist
     // across loops, unlike a per-target start delay.
     const clock = createTimer({
-      duration: 9000,
+      duration: CYCLE_MS,
       loop: true,
       onUpdate: (self) => {
-        const t = self.progress; // 0..1
+        // NOTE: with an infinite loop the timer's `progress` is measured against
+        // an infinite total duration and stays ~0, so derive the 0..1 cycle
+        // position from elapsed time instead.
+        const t = (self.currentTime % CYCLE_MS) / CYCLE_MS; // 0..1
         for (let i = 0; i < dots.length; i++) {
           const rail = Math.floor(i / DOTS_PER_RAIL);
           const col = i % DOTS_PER_RAIL;
