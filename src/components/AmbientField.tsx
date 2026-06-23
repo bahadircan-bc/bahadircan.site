@@ -25,6 +25,7 @@ const SCROLL_TURNS = 1.5; // spin per viewport of scroll travel
 const F = 340; // perspective focal length (relative to 200-unit viewBox)
 const ELECTRON_R = 4.2; // base electron radius (scaled by depth)
 const SAMPLES = 72; // points sampled per orbit path
+const NUC_R = 7; // base nucleon radius (scaled by depth)
 
 // Each orbit's electron: revolution period (ms, distinct so they desync) + phase.
 const ORBITS = [
@@ -34,6 +35,15 @@ const ORBITS = [
 ];
 
 type V3 = { x: number; y: number; z: number };
+
+// Three nucleons in 3D (atom-space). Big relative to their spacing (so they jam
+// into one solid clump) and with distinct z (so the core is genuinely 3D and
+// never collapses edge-on as the atom tips).
+const NUCLEONS: V3[] = [
+  { x: 0, y: -5.5, z: 3 },
+  { x: -4.8, y: 2.75, z: -3 },
+  { x: 4.8, y: 2.75, z: 3 },
+];
 
 // ---- pure 3D helpers (shared by SSR render + the animation loop) ------------
 function rotX(p: V3, a: number): V3 {
@@ -90,19 +100,24 @@ function depthOpacity(s: number): number {
   const t = (s - 0.82) / (1.28 - 0.82);
   return 0.35 + Math.max(0, Math.min(1, t)) * 0.65;
 }
+function nucleonProj(i: number, spin: number) {
+  return project(world(NUCLEONS[i], spin));
+}
 
 export default function AmbientField() {
   const sectionRef = useRef<HTMLElement>(null);
   const atomRef = useRef<SVGGElement>(null);
   const coreRef = useRef<SVGGElement>(null);
   const nucleusRef = useRef<SVGGElement>(null);
+  const nucleonsRef = useRef<SVGGElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     const atom = atomRef.current;
     const core = coreRef.current;
     const nucleus = nucleusRef.current;
-    if (!section || !atom || !core || !nucleus) return;
+    const nucleonGroup = nucleonsRef.current;
+    if (!section || !atom || !core || !nucleus || !nucleonGroup) return;
 
     // Respect prefers-reduced-motion — leave the atom still at its base tilt.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -110,6 +125,9 @@ export default function AmbientField() {
     const orbits = Array.from(atom.querySelectorAll<SVGPathElement>(".orbit"));
     const electrons = Array.from(
       core.querySelectorAll<SVGCircleElement>(".electron")
+    );
+    const nucleons = Array.from(
+      nucleonGroup.querySelectorAll<SVGCircleElement>(".nucleon")
     );
 
     let spin = 0;
@@ -134,6 +152,19 @@ export default function AmbientField() {
         if (pr.z >= 0) core.appendChild(el);
         else core.insertBefore(el, nucleus);
       }
+      // Nucleus: project each nucleon, depth-scale its radius, then z-sort so
+      // nearer spheres overlap farther ones — the core tips as a solid 3D clump.
+      const order: { el: SVGCircleElement; z: number }[] = [];
+      for (let i = 0; i < nucleons.length; i++) {
+        const pr = nucleonProj(i, spin);
+        const el = nucleons[i];
+        el.setAttribute("cx", pr.X.toFixed(2));
+        el.setAttribute("cy", pr.Y.toFixed(2));
+        el.setAttribute("r", (NUC_R * pr.s).toFixed(2));
+        order.push({ el, z: pr.z });
+      }
+      order.sort((a, b) => a.z - b.z); // far first
+      for (const { el } of order) nucleonGroup.appendChild(el);
     };
 
     // --- continuous revolution: a monotonic clock (the timer's looping
@@ -200,6 +231,22 @@ export default function AmbientField() {
             role="img"
             aria-label="A three-dimensional atom with electrons orbiting its nucleus"
           >
+            <defs>
+              {/* sphere shading: bright centre (offset highlight) → mid-grey rim,
+                  fully opaque so overlapping nucleons fuse into one solid clump */}
+              <radialGradient
+                id="nucleonGradient"
+                cx="0.5"
+                cy="0.5"
+                r="0.62"
+                fx="0.35"
+                fy="0.32"
+              >
+                <stop offset="0%" stopColor="rgb(var(--fg))" />
+                <stop offset="100%" stopColor="rgb(var(--line))" />
+              </radialGradient>
+            </defs>
+
             {/* Root group — holds the whole projected atom. */}
             <g ref={atomRef}>
               {/* orbit rings (behind the core) */}
@@ -234,36 +281,30 @@ export default function AmbientField() {
                 })}
 
                 <g ref={nucleusRef}>
-                  {/* faint glow halo */}
-                  <circle r={17} className="fill-alabaster/10" />
-                  {/* three big nucleons jammed together (overlapping); thin dark
-                      outlines keep the boundaries legible. Stays viewer-facing. */}
+                  {/* Three shaded nucleons (no outlines) projected in 3D and
+                      z-sorted each frame — they fuse into one solid clump that
+                      tips with the atom. */}
                   <g
+                    ref={nucleonsRef}
                     style={{
                       filter: "drop-shadow(0 0 6px rgb(var(--fg) / 0.45))",
                     }}
                   >
-                    <circle
-                      cx={0}
-                      cy={-6.5}
-                      r={7}
-                      className="fill-alabaster stroke-obsidian/40"
-                      strokeWidth={1}
-                    />
-                    <circle
-                      cx={-5.6}
-                      cy={3.2}
-                      r={7}
-                      className="fill-alabaster stroke-obsidian/40"
-                      strokeWidth={1}
-                    />
-                    <circle
-                      cx={5.6}
-                      cy={3.2}
-                      r={7}
-                      className="fill-alabaster stroke-obsidian/40"
-                      strokeWidth={1}
-                    />
+                    {NUCLEONS.map((_, i) => i)
+                      .sort((a, b) => nucleonProj(a, 0).z - nucleonProj(b, 0).z)
+                      .map((i) => {
+                        const pr = nucleonProj(i, 0);
+                        return (
+                          <circle
+                            key={i}
+                            className="nucleon"
+                            fill="url(#nucleonGradient)"
+                            cx={pr.X.toFixed(2)}
+                            cy={pr.Y.toFixed(2)}
+                            r={(NUC_R * pr.s).toFixed(2)}
+                          />
+                        );
+                      })}
                   </g>
                 </g>
               </g>
