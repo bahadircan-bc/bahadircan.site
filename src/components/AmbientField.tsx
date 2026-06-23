@@ -24,33 +24,32 @@ const BASE_TILT = 0.42; // constant X-tilt so it reads 3D even at rest (rad)
 const SCROLL_TURNS = 0.3; // turns per viewport of scroll travel (subtle)
 const SQUASH = 0.6; // vertical scale (<1) on orbits/electrons → more horizontal than vertical
 const F = 340; // perspective focal length (relative to 200-unit viewBox)
-const ELECTRON_R = 4.2; // base electron radius (scaled by depth)
-const SAMPLES = 72; // points sampled per orbit path
-const NUC_R = 7; // base nucleon radius (scaled by depth)
-const RINGS = 6; // number of orbit rings (evenly fanned)
+const ELECTRON_R = 2.6; // base electron radius (scaled by depth)
+const NUC_R = 7.7; // base nucleon radius (scaled by depth)
+const RINGS = 12; // number of orbit rings (evenly fanned)
 const TRAIL_DOTS = 8; // fading dots trailing each electron
 const TRAIL_SPAN = 0.08; // fraction of the orbit the trail covers
 
 // One electron per ring. `dur` = revolution period (ms, distinct per ring so
-// they desync); `phase` staggers their starting positions.
-const ELECTRONS = [
-  { orbit: 0, dur: 4200, phase: 0 },
-  { orbit: 1, dur: 5200, phase: 0.17 },
-  { orbit: 2, dur: 4600, phase: 0.34 },
-  { orbit: 3, dur: 5800, phase: 0.5 },
-  { orbit: 4, dur: 5000, phase: 0.67 },
-  { orbit: 5, dur: 4400, phase: 0.84 },
-];
+// they desync); `phase` (golden-ratio spread) staggers their starting positions.
+const ELECTRONS = Array.from({ length: RINGS }, (_, i) => ({
+  orbit: i,
+  dur: 4200 + i * 150,
+  phase: (i * 0.61803) % 1,
+}));
 
 type V3 = { x: number; y: number; z: number };
 
-// Three nucleons in 3D (atom-space). Big relative to their spacing (so they jam
+// Six nucleons in 3D (atom-space). Big relative to their spacing (so they jam
 // into one solid clump) and with distinct z (so the core is genuinely 3D and
 // never collapses edge-on as the atom tips).
 const NUCLEONS: V3[] = [
-  { x: 0, y: -5.5, z: 3 },
-  { x: -4.8, y: 2.75, z: -3 },
-  { x: 4.8, y: 2.75, z: 3 },
+  { x: 0, y: -6, z: 2 },
+  { x: -5.5, y: 2.5, z: -3 },
+  { x: 5.5, y: 2.5, z: 3 },
+  { x: 0, y: 5.5, z: -2 },
+  { x: -4, y: -2, z: 4 },
+  { x: 4, y: -1, z: -4 },
 ];
 
 // ---- pure 3D helpers (shared by SSR render + the animation loop) ------------
@@ -96,14 +95,6 @@ function electronOnOrbit(i: number, phase: number): V3 {
 function electronProj(i: number, phase: number, spin: number) {
   return project(world(electronOnOrbit(i, phase), spin));
 }
-function orbitPath(i: number, spin: number): string {
-  let d = "";
-  for (let k = 0; k <= SAMPLES; k++) {
-    const pr = project(world(electronOnOrbit(i, k / SAMPLES), spin));
-    d += `${k === 0 ? "M" : "L"}${pr.X.toFixed(2)} ${(pr.Y * SQUASH).toFixed(2)}`;
-  }
-  return `${d}Z`;
-}
 // depth → opacity (s spans ~0.82..1.28 for z in ±R); nearer is brighter
 function depthOpacity(s: number): number {
   const t = (s - 0.82) / (1.28 - 0.82);
@@ -134,7 +125,6 @@ export default function AmbientField() {
     // Respect prefers-reduced-motion — leave the atom still at its base tilt.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const orbits = Array.from(atom.querySelectorAll<SVGPathElement>(".orbit"));
     const electrons = Array.from(
       core.querySelectorAll<SVGCircleElement>(".electron")
     );
@@ -151,9 +141,6 @@ export default function AmbientField() {
     // Single draw used by both the revolution tick and the scroll handler —
     // scroll changes the projected shape, so both must redraw.
     const render = () => {
-      for (let i = 0; i < orbits.length; i++) {
-        orbits[i].setAttribute("d", orbitPath(i, spin));
-      }
       for (let i = 0; i < electrons.length; i++) {
         const e = ELECTRONS[i];
         const head = timeMs / e.dur + e.phase;
@@ -266,18 +253,6 @@ export default function AmbientField() {
           >
             {/* Root group — holds the whole projected atom. */}
             <g ref={atomRef}>
-              {/* orbit rings (behind the core) */}
-              <g>
-                {Array.from({ length: RINGS }).map((_, i) => (
-                  <path
-                    key={i}
-                    className="orbit fill-none stroke-line/40"
-                    strokeWidth={0.8}
-                    d={orbitPath(i, 0)}
-                  />
-                ))}
-              </g>
-
               {/* electron trails (behind the core); positioned by JS. */}
               <g ref={trailsRef}>
                 {Array.from({ length: ELECTRONS.length * TRAIL_DOTS }).map(
