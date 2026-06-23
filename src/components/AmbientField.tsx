@@ -26,12 +26,17 @@ const F = 340; // perspective focal length (relative to 200-unit viewBox)
 const ELECTRON_R = 4.2; // base electron radius (scaled by depth)
 const SAMPLES = 72; // points sampled per orbit path
 const NUC_R = 7; // base nucleon radius (scaled by depth)
+const RINGS = 3; // number of orbit rings (fanned around the axis)
 
-// Each orbit's electron: revolution period (ms, distinct so they desync) + phase.
-const ORBITS = [
-  { dur: 4200, phase: 0 },
-  { dur: 5400, phase: 0.4 },
-  { dur: 4800, phase: 0.75 },
+// Electrons live on the rings (decoupled from ring count). Two may share a ring;
+// when they do they use the same `dur` with phases offset by 0.5 so they stay
+// antipodal. `dur` = revolution period (ms, distinct per ring so they desync).
+const ELECTRONS = [
+  { orbit: 0, dur: 4200, phase: 0 },
+  { orbit: 0, dur: 4200, phase: 0.5 },
+  { orbit: 1, dur: 5400, phase: 0.4 },
+  { orbit: 1, dur: 5400, phase: 0.9 },
+  { orbit: 2, dur: 4800, phase: 0.75 },
 ];
 
 type V3 = { x: number; y: number; z: number };
@@ -64,7 +69,7 @@ function rotZ(p: V3, a: number): V3 {
 
 // orbit-local circle point -> atom space (incline, then fan around the axis)
 function orient(i: number, base: V3): V3 {
-  return rotZ(rotX(base, INCL), (i * 2 * Math.PI) / 3);
+  return rotZ(rotX(base, INCL), (i * 2 * Math.PI) / RINGS);
 }
 // atom space -> world: scroll tips the whole atom around the X axis (so it reads
 // as one rigid body — scroll down tilts the bottom toward the viewer). BASE_TILT
@@ -140,8 +145,8 @@ export default function AmbientField() {
         orbits[i].setAttribute("d", orbitPath(i, spin));
       }
       for (let i = 0; i < electrons.length; i++) {
-        const o = ORBITS[i];
-        const pr = electronProj(i, timeMs / o.dur + o.phase, spin);
+        const e = ELECTRONS[i];
+        const pr = electronProj(e.orbit, timeMs / e.dur + e.phase, spin);
         const el = electrons[i];
         el.setAttribute("cx", pr.X.toFixed(2));
         el.setAttribute("cy", pr.Y.toFixed(2));
@@ -251,7 +256,7 @@ export default function AmbientField() {
             <g ref={atomRef}>
               {/* orbit rings (behind the core) */}
               <g>
-                {ORBITS.map((_, i) => (
+                {Array.from({ length: RINGS }).map((_, i) => (
                   <path
                     key={i}
                     className="orbit fill-none stroke-line/40"
@@ -263,8 +268,8 @@ export default function AmbientField() {
 
               {/* electrons + nucleus — reordered each frame for occlusion */}
               <g ref={coreRef}>
-                {ORBITS.map((o, i) => {
-                  const pr = electronProj(i, o.phase, 0);
+                {ELECTRONS.map((e, i) => {
+                  const pr = electronProj(e.orbit, e.phase, 0);
                   return (
                     <circle
                       key={i}
@@ -281,15 +286,10 @@ export default function AmbientField() {
                 })}
 
                 <g ref={nucleusRef}>
-                  {/* Three shaded nucleons (no outlines) projected in 3D and
-                      z-sorted each frame — they fuse into one solid clump that
-                      tips with the atom. */}
-                  <g
-                    ref={nucleonsRef}
-                    style={{
-                      filter: "drop-shadow(0 0 6px rgb(var(--fg) / 0.45))",
-                    }}
-                  >
+                  {/* Three shaded nucleons (no outlines, no glow) projected in 3D
+                      and z-sorted each frame — they fuse into one solid clump
+                      that tips with the atom. */}
+                  <g ref={nucleonsRef}>
                     {NUCLEONS.map((_, i) => i)
                       .sort((a, b) => nucleonProj(a, 0).z - nucleonProj(b, 0).z)
                       .map((i) => {
