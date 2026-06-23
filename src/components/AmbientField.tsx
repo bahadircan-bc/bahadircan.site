@@ -18,10 +18,10 @@ import { createTimer } from "animejs";
  */
 
 // ---- geometry / look knobs -------------------------------------------------
-const R = 74; // orbit radius (viewBox units)
+const RADII = [84, 68, 78, 64, 74]; // distinct orbit radius per ring (subtly varied)
 const INCL = 1.2566; // 72° — inclination that fans the orbit rings into an atom
 const BASE_TILT = 0.42; // constant X-tilt so it reads 3D even at rest (rad)
-const SCROLL_TURNS = 1.5; // spin per viewport of scroll travel
+const SCROLL_TURNS = 0.3; // turns per viewport of scroll travel (subtle)
 const F = 340; // perspective focal length (relative to 200-unit viewBox)
 const ELECTRON_R = 4.2; // base electron radius (scaled by depth)
 const SAMPLES = 72; // points sampled per orbit path
@@ -86,7 +86,8 @@ function project(p: V3) {
 
 function electronOnOrbit(i: number, phase: number): V3 {
   const a = phase * 2 * Math.PI;
-  return orient(i, { x: R * Math.cos(a), y: R * Math.sin(a), z: 0 });
+  const r = RADII[i];
+  return orient(i, { x: r * Math.cos(a), y: r * Math.sin(a), z: 0 });
 }
 function electronProj(i: number, phase: number, spin: number) {
   return project(world(electronOnOrbit(i, phase), spin));
