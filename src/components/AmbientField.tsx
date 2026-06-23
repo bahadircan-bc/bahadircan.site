@@ -20,6 +20,7 @@ import { createTimer } from "animejs";
 // ---- geometry / look knobs -------------------------------------------------
 const R = 76; // orbit radius — equal for every ring (equidistant)
 const INCL = 1.2566; // 72° — inclination that fans the orbit rings into an atom
+const MAX_TILT = (25 * Math.PI) / 180; // cap each orbit's in-plane tilt to ±25° of horizontal
 const BASE_TILT = 0.42; // constant X-tilt so it reads 3D even at rest (rad)
 const SCROLL_TURNS = 0.3; // turns per viewport of scroll travel (subtle)
 const SQUASH = 0.6; // vertical scale (<1) on orbits/electrons → more horizontal than vertical
@@ -67,9 +68,11 @@ function rotZ(p: V3, a: number): V3 {
   return { x: p.x * c - p.y * s, y: p.x * s + p.y * c, z: p.z };
 }
 
-// orbit-local circle point -> atom space (incline, then fan around the axis)
+// orbit-local circle point -> atom space (incline, then fan within ±MAX_TILT of
+// horizontal so no orbit leans more than 25° — equidistant across that range).
 function orient(i: number, base: V3): V3 {
-  return rotZ(rotX(base, INCL), (i * 2 * Math.PI) / RINGS);
+  const fan = (i / (RINGS - 1) - 0.5) * 2 * MAX_TILT;
+  return rotZ(rotX(base, INCL), fan);
 }
 // atom space -> world: scroll tips the whole atom around the X axis (so it reads
 // as one rigid body — scroll down tilts the bottom toward the viewer). BASE_TILT
