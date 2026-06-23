@@ -20,7 +20,6 @@ import { createTimer } from "animejs";
 // ---- geometry / look knobs -------------------------------------------------
 const R = 76; // orbit radius — equal for every ring (equidistant)
 const INCL = 1.2566; // 72° — inclination that fans the orbit rings into an atom
-const MAX_TILT = (35 * Math.PI) / 180; // cap each orbit's in-plane tilt to ±35° of horizontal
 const BASE_TILT = 0.42; // constant X-tilt so it reads 3D even at rest (rad)
 const SCROLL_TURNS = 0.3; // turns per viewport of scroll travel (subtle)
 const SQUASH = 0.6; // vertical scale (<1) on orbits/electrons → more horizontal than vertical
@@ -28,16 +27,19 @@ const F = 340; // perspective focal length (relative to 200-unit viewBox)
 const ELECTRON_R = 4.2; // base electron radius (scaled by depth)
 const SAMPLES = 72; // points sampled per orbit path
 const NUC_R = 7; // base nucleon radius (scaled by depth)
-const RINGS = 5; // number of orbit rings (fanned around the axis)
+const RINGS = 6; // number of orbit rings (evenly fanned)
+const TRAIL_DOTS = 8; // fading dots trailing each electron
+const TRAIL_SPAN = 0.08; // fraction of the orbit the trail covers
 
 // One electron per ring. `dur` = revolution period (ms, distinct per ring so
 // they desync); `phase` staggers their starting positions.
 const ELECTRONS = [
   { orbit: 0, dur: 4200, phase: 0 },
-  { orbit: 1, dur: 5200, phase: 0.2 },
-  { orbit: 2, dur: 4600, phase: 0.45 },
-  { orbit: 3, dur: 5800, phase: 0.65 },
-  { orbit: 4, dur: 5000, phase: 0.85 },
+  { orbit: 1, dur: 5200, phase: 0.17 },
+  { orbit: 2, dur: 4600, phase: 0.34 },
+  { orbit: 3, dur: 5800, phase: 0.5 },
+  { orbit: 4, dur: 5000, phase: 0.67 },
+  { orbit: 5, dur: 4400, phase: 0.84 },
 ];
 
 type V3 = { x: number; y: number; z: number };
@@ -68,11 +70,10 @@ function rotZ(p: V3, a: number): V3 {
   return { x: p.x * c - p.y * s, y: p.x * s + p.y * c, z: p.z };
 }
 
-// orbit-local circle point -> atom space (incline, then fan within ±MAX_TILT of
-// horizontal so no orbit leans more than 25° — equidistant across that range).
+// orbit-local circle point -> atom space (incline, then fan evenly over 180° so
+// all rings are distinct orientations).
 function orient(i: number, base: V3): V3 {
-  const fan = (i / (RINGS - 1) - 0.5) * 2 * MAX_TILT;
-  return rotZ(rotX(base, INCL), fan);
+  return rotZ(rotX(base, INCL), (i * Math.PI) / RINGS);
 }
 // atom space -> world: scroll tips the whole atom around the X axis (so it reads
 // as one rigid body — scroll down tilts the bottom toward the viewer). BASE_TILT
@@ -115,6 +116,7 @@ function nucleonProj(i: number, spin: number) {
 export default function AmbientField() {
   const sectionRef = useRef<HTMLElement>(null);
   const atomRef = useRef<SVGGElement>(null);
+  const trailsRef = useRef<SVGGElement>(null);
   const coreRef = useRef<SVGGElement>(null);
   const nucleusRef = useRef<SVGGElement>(null);
   const nucleonsRef = useRef<SVGGElement>(null);
@@ -125,7 +127,9 @@ export default function AmbientField() {
     const core = coreRef.current;
     const nucleus = nucleusRef.current;
     const nucleonGroup = nucleonsRef.current;
-    if (!section || !atom || !core || !nucleus || !nucleonGroup) return;
+    const trailGroup = trailsRef.current;
+    if (!section || !atom || !core || !nucleus || !nucleonGroup || !trailGroup)
+      return;
 
     // Respect prefers-reduced-motion — leave the atom still at its base tilt.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -136,6 +140,9 @@ export default function AmbientField() {
     );
     const nucleons = Array.from(
       nucleonGroup.querySelectorAll<SVGCircleElement>(".nucleon")
+    );
+    const trails = Array.from(
+      trailGroup.querySelectorAll<SVGCircleElement>(".trail")
     );
 
     let spin = 0;
@@ -149,7 +156,8 @@ export default function AmbientField() {
       }
       for (let i = 0; i < electrons.length; i++) {
         const e = ELECTRONS[i];
-        const pr = electronProj(e.orbit, timeMs / e.dur + e.phase, spin);
+        const head = timeMs / e.dur + e.phase;
+        const pr = electronProj(e.orbit, head, spin);
         const el = electrons[i];
         el.setAttribute("cx", pr.X.toFixed(2));
         el.setAttribute("cy", (pr.Y * SQUASH).toFixed(2));
@@ -159,6 +167,23 @@ export default function AmbientField() {
         // it before it. +z faces the viewer.
         if (pr.z >= 0) core.appendChild(el);
         else core.insertBefore(el, nucleus);
+        // Comet trail: fading, shrinking dots behind the electron along its orbit.
+        for (let k = 1; k <= TRAIL_DOTS; k++) {
+          const t = k / TRAIL_DOTS; // 0 (head) .. 1 (tail)
+          const tp = electronProj(
+            e.orbit,
+            head - (k * TRAIL_SPAN) / TRAIL_DOTS,
+            spin
+          );
+          const td = trails[i * TRAIL_DOTS + (k - 1)];
+          td.setAttribute("cx", tp.X.toFixed(2));
+          td.setAttribute("cy", (tp.Y * SQUASH).toFixed(2));
+          td.setAttribute("r", (ELECTRON_R * tp.s * (1 - 0.6 * t)).toFixed(2));
+          td.setAttribute(
+            "opacity",
+            (depthOpacity(tp.s) * (1 - t) * 0.7).toFixed(3)
+          );
+        }
       }
       // Nucleus: project each nucleon, depth-scale its radius, then z-sort so
       // nearer spheres overlap farther ones — the core tips as a solid 3D clump.
@@ -251,6 +276,20 @@ export default function AmbientField() {
                     d={orbitPath(i, 0)}
                   />
                 ))}
+              </g>
+
+              {/* electron trails (behind the core); positioned by JS. */}
+              <g ref={trailsRef}>
+                {Array.from({ length: ELECTRONS.length * TRAIL_DOTS }).map(
+                  (_, i) => (
+                    <circle
+                      key={i}
+                      className="trail fill-alabaster"
+                      r={0}
+                      opacity={0}
+                    />
+                  )
+                )}
               </g>
 
               {/* electrons + nucleus — reordered each frame for occlusion */}
