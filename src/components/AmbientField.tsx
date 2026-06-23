@@ -20,7 +20,7 @@ import { createTimer } from "animejs";
 // ---- geometry / look knobs -------------------------------------------------
 const R = 76; // orbit radius — equal for every ring (equidistant)
 const INCL = 1.2566; // 72° — inclination that fans the orbit rings into an atom
-const MAX_TILT = (25 * Math.PI) / 180; // cap each orbit's in-plane tilt to ±25° of horizontal
+const MAX_TILT = (35 * Math.PI) / 180; // cap each orbit's in-plane tilt to ±35° of horizontal
 const BASE_TILT = 0.42; // constant X-tilt so it reads 3D even at rest (rad)
 const SCROLL_TURNS = 0.3; // turns per viewport of scroll travel (subtle)
 const SQUASH = 0.6; // vertical scale (<1) on orbits/electrons → more horizontal than vertical
