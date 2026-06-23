@@ -56,9 +56,13 @@ function rotZ(p: V3, a: number): V3 {
 function orient(i: number, base: V3): V3 {
   return rotZ(rotX(base, INCL), (i * 2 * Math.PI) / 3);
 }
-// atom space -> world: scroll spins around Y, then a constant downward tilt
+// atom space -> world: scroll tips the whole atom around the X axis (so it reads
+// as one rigid body — scroll down tilts the bottom toward the viewer). BASE_TILT
+// is folded in as the resting angle; CONST_Y is a fixed (non-animated) tilt knob
+// for a touch more dimensionality at rest without reintroducing an off-axis spin.
+const CONST_Y = 0;
 function world(p: V3, spin: number): V3 {
-  return rotX(rotY(p, spin), BASE_TILT);
+  return rotY(rotX(p, BASE_TILT + spin), CONST_Y);
 }
 // perspective projection: +z is toward the viewer (nearer = larger)
 function project(p: V3) {
