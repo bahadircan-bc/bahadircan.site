@@ -19,24 +19,23 @@ import { createTimer } from "animejs";
 
 // ---- geometry / look knobs -------------------------------------------------
 const R = 74; // orbit radius (viewBox units)
-const INCL = 1.2566; // 72° — inclination that fans the 3 orbits into an atom
+const INCL = 1.2566; // 72° — inclination that fans the orbit rings into an atom
 const BASE_TILT = 0.42; // constant X-tilt so it reads 3D even at rest (rad)
 const SCROLL_TURNS = 1.5; // spin per viewport of scroll travel
 const F = 340; // perspective focal length (relative to 200-unit viewBox)
 const ELECTRON_R = 4.2; // base electron radius (scaled by depth)
 const SAMPLES = 72; // points sampled per orbit path
 const NUC_R = 7; // base nucleon radius (scaled by depth)
-const RINGS = 3; // number of orbit rings (fanned around the axis)
+const RINGS = 5; // number of orbit rings (fanned around the axis)
 
-// Electrons live on the rings (decoupled from ring count). Two may share a ring;
-// when they do they use the same `dur` with phases offset by 0.5 so they stay
-// antipodal. `dur` = revolution period (ms, distinct per ring so they desync).
+// One electron per ring. `dur` = revolution period (ms, distinct per ring so
+// they desync); `phase` staggers their starting positions.
 const ELECTRONS = [
   { orbit: 0, dur: 4200, phase: 0 },
-  { orbit: 0, dur: 4200, phase: 0.5 },
-  { orbit: 1, dur: 5400, phase: 0.4 },
-  { orbit: 1, dur: 5400, phase: 0.9 },
-  { orbit: 2, dur: 4800, phase: 0.75 },
+  { orbit: 1, dur: 5200, phase: 0.2 },
+  { orbit: 2, dur: 4600, phase: 0.45 },
+  { orbit: 3, dur: 5800, phase: 0.65 },
+  { orbit: 4, dur: 5000, phase: 0.85 },
 ];
 
 type V3 = { x: number; y: number; z: number };
@@ -236,22 +235,6 @@ export default function AmbientField() {
             role="img"
             aria-label="A three-dimensional atom with electrons orbiting its nucleus"
           >
-            <defs>
-              {/* sphere shading: bright centre (offset highlight) → mid-grey rim,
-                  fully opaque so overlapping nucleons fuse into one solid clump */}
-              <radialGradient
-                id="nucleonGradient"
-                cx="0.5"
-                cy="0.5"
-                r="0.62"
-                fx="0.35"
-                fy="0.32"
-              >
-                <stop offset="0%" stopColor="rgb(var(--fg))" />
-                <stop offset="100%" stopColor="rgb(var(--line))" />
-              </radialGradient>
-            </defs>
-
             {/* Root group — holds the whole projected atom. */}
             <g ref={atomRef}>
               {/* orbit rings (behind the core) */}
@@ -286,25 +269,22 @@ export default function AmbientField() {
                 })}
 
                 <g ref={nucleusRef}>
-                  {/* Three shaded nucleons (no outlines, no glow) projected in 3D
-                      and z-sorted each frame — they fuse into one solid clump
+                  {/* Three flat nucleons (no outlines, no glow, no shading)
+                      projected in 3D — they fuse into one uniform solid clump
                       that tips with the atom. */}
                   <g ref={nucleonsRef}>
-                    {NUCLEONS.map((_, i) => i)
-                      .sort((a, b) => nucleonProj(a, 0).z - nucleonProj(b, 0).z)
-                      .map((i) => {
-                        const pr = nucleonProj(i, 0);
-                        return (
-                          <circle
-                            key={i}
-                            className="nucleon"
-                            fill="url(#nucleonGradient)"
-                            cx={pr.X.toFixed(2)}
-                            cy={pr.Y.toFixed(2)}
-                            r={(NUC_R * pr.s).toFixed(2)}
-                          />
-                        );
-                      })}
+                    {NUCLEONS.map((_, i) => {
+                      const pr = nucleonProj(i, 0);
+                      return (
+                        <circle
+                          key={i}
+                          className="nucleon fill-alabaster"
+                          cx={pr.X.toFixed(2)}
+                          cy={pr.Y.toFixed(2)}
+                          r={(NUC_R * pr.s).toFixed(2)}
+                        />
+                      );
+                    })}
                   </g>
                 </g>
               </g>
