@@ -1,145 +1,164 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { createTimer, animate, stagger } from "animejs";
+import { createTimer } from "animejs";
 
 /**
- * AMBIENT FIELD — "Electron Field".
+ * ATOM — scroll-tracking signature.
  *
- * A quiet, always-on band sitting above the work index. Small electron dots
- * drift continuously left→right along faint horizontal rails, echoing two
- * existing motifs: the razor-thin Focal Plane line and the hero statement
- * "From electrons to interface."
+ * A monochrome SVG atom sitting above the work index. Electrons revolve
+ * continuously along their (tilted elliptical) orbits at all times, and the
+ * whole atom rotates around its own centre as the page scrolls — a scrubbed,
+ * two-directional rotation. Echoes the hero statement "From electrons to
+ * interface."
  *
- * Strictly monochrome (design tokens only). SSR-safe: the rails + dots render
- * statically at rest, so it is legible without JS and respects
- * prefers-reduced-motion by simply never starting the loops.
+ * SSR-safe: nucleus, orbits and electrons render statically at their start
+ * positions, so it is legible without JS. Respects prefers-reduced-motion by
+ * leaving the atom completely still.
  */
 
-const RAILS = 5;
-const DOTS_PER_RAIL = 6;
-const CYCLE_MS = 9000;
+// Each orbit: tilt (deg) of the ellipse, its radii, the electron's revolution
+// period (ms, distinct so they desync) and a starting phase (0..1).
+const ORBITS = [
+  { tilt: 0, rx: 84, ry: 30, dur: 4200, phase: 0 },
+  { tilt: 60, rx: 84, ry: 30, dur: 5400, phase: 0.4 },
+  { tilt: 120, rx: 84, ry: 30, dur: 4800, phase: 0.75 },
+];
+
+// How many full turns the atom makes across one viewport of scroll travel.
+const SCROLL_TURNS = 2;
+
+// Electron position on its (untilted) ellipse at cycle position p (0..1).
+function electronXY(rx: number, ry: number, p: number) {
+  const a = p * Math.PI * 2;
+  return { x: rx * Math.cos(a), y: ry * Math.sin(a) };
+}
 
 export default function AmbientField() {
-  const rootRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const atomRef = useRef<SVGGElement>(null);
 
   useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
+    const section = sectionRef.current;
+    const atom = atomRef.current;
+    if (!section || !atom) return;
 
-    // Respect prefers-reduced-motion — leave the field at rest, no loops.
+    // Respect prefers-reduced-motion — leave the atom completely still.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const dots = Array.from(
-      root.querySelectorAll<HTMLElement>(".electron")
+    const electrons = Array.from(
+      atom.querySelectorAll<SVGCircleElement>(".electron")
     );
-    if (!dots.length) return;
 
-    // One continuous clock drives every dot. Each dot has a fixed phase offset
-    // (its column within the rail, plus a per-rail nudge) so the field stays
-    // evenly spread and never looks synchronized — and the offsets persist
-    // across loops, unlike a per-target start delay.
+    // --- continuous revolution: electrons follow their orbit at all times -----
     const clock = createTimer({
-      duration: CYCLE_MS,
+      duration: 1000,
       loop: true,
       onUpdate: (self) => {
-        // NOTE: with an infinite loop the timer's `progress` is measured against
-        // an infinite total duration and stays ~0, so derive the 0..1 cycle
-        // position from elapsed time instead.
-        const t = (self.currentTime % CYCLE_MS) / CYCLE_MS; // 0..1
-        for (let i = 0; i < dots.length; i++) {
-          const rail = Math.floor(i / DOTS_PER_RAIL);
-          const col = i % DOTS_PER_RAIL;
-          const offset = col / DOTS_PER_RAIL + rail * 0.13;
-          const p = (t + offset) % 1; // position along the rail, wrapped
-          const dot = dots[i];
-          // cqw = % of the rail's own width (container-type: inline-size).
-          // -50% Y keeps the dot vertically centred on its rail.
-          dot.style.transform = `translate(${p * 100}cqw, -50%)`;
-          // Fade in/out near the rail edges so the wrap-around reads as flow.
-          const edge = Math.min(p, 1 - p);
-          dot.style.opacity = String(0.12 + Math.min(edge * 8, 1) * 0.75);
-        }
+        const ms = self.currentTime;
+        electrons.forEach((el, i) => {
+          const o = ORBITS[i];
+          // ms/dur advances the phase; distinct periods keep them desynced.
+          const p = (ms / o.dur + o.phase) % 1;
+          const { x, y } = electronXY(o.rx, o.ry, p);
+          el.setAttribute("transform", `translate(${x} ${y})`);
+        });
       },
     });
 
-    // Subtle independent opacity shimmer on the rails themselves.
-    const shimmer = animate(
-      Array.from(root.querySelectorAll<HTMLElement>(".rail-glow")),
-      {
-      opacity: [0.25, 0.5],
-      ease: "inOutSine",
-      duration: 4000,
-      loop: true,
-      alternate: true,
-      delay: stagger(700),
-    });
+    // --- scroll-tracking self-rotation (scrubbed, both directions) ------------
+    let raf = 0;
+    const applyRotation = () => {
+      const rect = section.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      // 0 when the section centre sits at the viewport centre; swings negative/
+      // positive as it scrolls through, so rotation reverses on scroll-up.
+      const sectionCenter = rect.top + rect.height / 2;
+      const progress = (vh / 2 - sectionCenter) / vh;
+      const deg = progress * 360 * SCROLL_TURNS;
+      // viewBox is centred on (0,0), so rotate() spins about the atom's centre.
+      atom.setAttribute("transform", `rotate(${deg.toFixed(2)})`);
+    };
+    const onScrollOrResize = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(applyRotation);
+    };
+    applyRotation();
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", onScrollOrResize);
 
-    // Pause loops while off-screen (battery/CPU friendliness for always-on motion).
+    // --- pause the revolution while off-screen (battery/CPU) ------------------
     const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          clock.resume();
-          shimmer.resume();
-        } else {
-          clock.pause();
-          shimmer.pause();
-        }
-      },
+      ([entry]) => (entry.isIntersecting ? clock.resume() : clock.pause()),
       { threshold: 0 }
     );
-    io.observe(root);
+    io.observe(section);
 
     return () => {
       io.disconnect();
       clock.pause();
-      shimmer.pause();
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
     };
   }, []);
 
   return (
-    <section aria-hidden="true" className="w-full bg-obsidian text-alabaster">
+    <section
+      ref={sectionRef}
+      aria-hidden="true"
+      className="w-full bg-obsidian text-alabaster"
+    >
       <div className="mx-auto w-full max-w-5xl px-6 py-24 lg:px-10">
         <p className="mb-10 font-mono text-xs uppercase tracking-[0.2em] text-muted">
-          in motion
+          in orbit
         </p>
 
-        <div
-          ref={rootRef}
-          // container-query width unit (cqw) lets dots travel the rail width
-          // regardless of viewport; [container-type:inline-size] enables it.
-          className="relative flex flex-col gap-10 [container-type:inline-size]"
-        >
-          {Array.from({ length: RAILS }).map((_, rail) => (
-            <div key={rail} className="relative h-3 w-full">
-              {/* faint full-width rail */}
-              <span
-                aria-hidden="true"
-                className="absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-line/30"
-              />
-              {/* shimmer overlay (animated opacity) */}
-              <span
-                aria-hidden="true"
-                className="rail-glow absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-line/40 opacity-30"
-              />
-              {/* electron dots — staggered starting positions (static fallback) */}
-              {Array.from({ length: DOTS_PER_RAIL }).map((_, dot) => {
-                const start = dot / DOTS_PER_RAIL + rail * 0.13;
-                const p = start % 1;
+        <div className="mx-auto w-full max-w-sm">
+          <svg
+            viewBox="-100 -100 200 200"
+            className="h-auto w-full"
+            role="img"
+            aria-label="An atom with electrons orbiting its nucleus"
+          >
+            {/* Root group — scroll rotates this around the centred origin. */}
+            <g ref={atomRef}>
+              {/* orbits + electrons */}
+              {ORBITS.map((o, i) => {
+                const start = electronXY(o.rx, o.ry, o.phase);
                 return (
-                  <span
-                    key={dot}
-                    aria-hidden="true"
-                    className="electron absolute top-1/2 h-1 w-1 rounded-full bg-alabaster shadow-[0_0_8px_rgb(var(--fg)/0.5)]"
-                    style={{
-                      transform: `translate(${p * 100}cqw, -50%)`,
-                      opacity: 0.5,
-                    }}
-                  />
+                  <g key={i} transform={`rotate(${o.tilt})`}>
+                    <ellipse
+                      cx={0}
+                      cy={0}
+                      rx={o.rx}
+                      ry={o.ry}
+                      className="fill-none stroke-line/40"
+                      strokeWidth={0.8}
+                    />
+                    <circle
+                      r={3.4}
+                      className="electron fill-alabaster"
+                      transform={`translate(${start.x} ${start.y})`}
+                      style={{
+                        filter: "drop-shadow(0 0 4px rgb(var(--fg) / 0.6))",
+                      }}
+                    />
+                  </g>
                 );
               })}
-            </div>
-          ))}
+
+              {/* nucleus */}
+              <circle r={16} className="fill-alabaster/10" />
+              <circle
+                r={7.5}
+                className="fill-alabaster"
+                style={{ filter: "drop-shadow(0 0 6px rgb(var(--fg) / 0.5))" }}
+              />
+              <circle cx={-2.5} cy={-1.5} r={2.4} className="fill-obsidian/30" />
+              <circle cx={2.6} cy={2} r={2} className="fill-obsidian/30" />
+            </g>
+          </svg>
         </div>
       </div>
     </section>
