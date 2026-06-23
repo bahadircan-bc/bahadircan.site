@@ -234,21 +234,37 @@ export default function AmbientField() {
                 })}
 
                 <g ref={nucleusRef}>
-                  <circle r={16} className="fill-alabaster/10" />
-                  <circle
-                    r={7.5}
-                    className="fill-alabaster"
+                  {/* faint glow halo */}
+                  <circle r={17} className="fill-alabaster/10" />
+                  {/* three big nucleons jammed together (overlapping); thin dark
+                      outlines keep the boundaries legible. Stays viewer-facing. */}
+                  <g
                     style={{
-                      filter: "drop-shadow(0 0 6px rgb(var(--fg) / 0.5))",
+                      filter: "drop-shadow(0 0 6px rgb(var(--fg) / 0.45))",
                     }}
-                  />
-                  <circle
-                    cx={-2.5}
-                    cy={-1.5}
-                    r={2.4}
-                    className="fill-obsidian/30"
-                  />
-                  <circle cx={2.6} cy={2} r={2} className="fill-obsidian/30" />
+                  >
+                    <circle
+                      cx={0}
+                      cy={-6.5}
+                      r={7}
+                      className="fill-alabaster stroke-obsidian/40"
+                      strokeWidth={1}
+                    />
+                    <circle
+                      cx={-5.6}
+                      cy={3.2}
+                      r={7}
+                      className="fill-alabaster stroke-obsidian/40"
+                      strokeWidth={1}
+                    />
+                    <circle
+                      cx={5.6}
+                      cy={3.2}
+                      r={7}
+                      className="fill-alabaster stroke-obsidian/40"
+                      strokeWidth={1}
+                    />
+                  </g>
                 </g>
               </g>
             </g>
