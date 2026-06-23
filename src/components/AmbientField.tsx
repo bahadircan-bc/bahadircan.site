@@ -18,10 +18,11 @@ import { createTimer } from "animejs";
  */
 
 // ---- geometry / look knobs -------------------------------------------------
-const RADII = [84, 68, 78, 64, 74]; // distinct orbit radius per ring (subtly varied)
+const R = 76; // orbit radius — equal for every ring (equidistant)
 const INCL = 1.2566; // 72° — inclination that fans the orbit rings into an atom
 const BASE_TILT = 0.42; // constant X-tilt so it reads 3D even at rest (rad)
 const SCROLL_TURNS = 0.3; // turns per viewport of scroll travel (subtle)
+const SQUASH = 0.6; // vertical scale (<1) on orbits/electrons → more horizontal than vertical
 const F = 340; // perspective focal length (relative to 200-unit viewBox)
 const ELECTRON_R = 4.2; // base electron radius (scaled by depth)
 const SAMPLES = 72; // points sampled per orbit path
@@ -86,8 +87,7 @@ function project(p: V3) {
 
 function electronOnOrbit(i: number, phase: number): V3 {
   const a = phase * 2 * Math.PI;
-  const r = RADII[i];
-  return orient(i, { x: r * Math.cos(a), y: r * Math.sin(a), z: 0 });
+  return orient(i, { x: R * Math.cos(a), y: R * Math.sin(a), z: 0 });
 }
 function electronProj(i: number, phase: number, spin: number) {
   return project(world(electronOnOrbit(i, phase), spin));
@@ -96,7 +96,7 @@ function orbitPath(i: number, spin: number): string {
   let d = "";
   for (let k = 0; k <= SAMPLES; k++) {
     const pr = project(world(electronOnOrbit(i, k / SAMPLES), spin));
-    d += `${k === 0 ? "M" : "L"}${pr.X.toFixed(2)} ${pr.Y.toFixed(2)}`;
+    d += `${k === 0 ? "M" : "L"}${pr.X.toFixed(2)} ${(pr.Y * SQUASH).toFixed(2)}`;
   }
   return `${d}Z`;
 }
@@ -149,7 +149,7 @@ export default function AmbientField() {
         const pr = electronProj(e.orbit, timeMs / e.dur + e.phase, spin);
         const el = electrons[i];
         el.setAttribute("cx", pr.X.toFixed(2));
-        el.setAttribute("cy", pr.Y.toFixed(2));
+        el.setAttribute("cy", (pr.Y * SQUASH).toFixed(2));
         el.setAttribute("r", (ELECTRON_R * pr.s).toFixed(2));
         el.setAttribute("opacity", depthOpacity(pr.s).toFixed(3));
         // Occlusion: draw electrons in front of the nucleus after it, behind
@@ -259,7 +259,7 @@ export default function AmbientField() {
                       key={i}
                       className="electron fill-alabaster"
                       cx={pr.X.toFixed(2)}
-                      cy={pr.Y.toFixed(2)}
+                      cy={(pr.Y * SQUASH).toFixed(2)}
                       r={(ELECTRON_R * pr.s).toFixed(2)}
                       opacity={depthOpacity(pr.s).toFixed(3)}
                       style={{
