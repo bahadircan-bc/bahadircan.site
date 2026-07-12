@@ -15,11 +15,39 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const OG_DESCRIPTION =
+  "R&D engineer building robotics & autonomy — LiDAR-inertial SLAM, sensor fusion, and AI vision, from electrons to interface.";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.bahadircan.site"),
   title: "Bahadır Can — R&D Engineer",
   description:
     "Bahadır Can — R&D engineer. From electrons to interface: robotics, AI cameras & computer vision, web & web3.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    url: "https://www.bahadircan.site",
+    siteName: "Bahadır Can",
+    title: "Bahadır Can — R&D Engineer",
+    description: OG_DESCRIPTION,
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Bahadır Can — R&D Engineer. From electrons to interface.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bahadır Can — R&D Engineer",
+    description: OG_DESCRIPTION,
+    creator: "@BahadirCaan",
+    images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({
