@@ -1,6 +1,6 @@
 import SiteHeader from "@/components/SiteHeader";
 import Hero from "@/components/Hero";
-import AmbientField from "@/components/AmbientField";
+import SlamScan from "@/components/SlamScan";
 import ProjectIndex from "@/components/ProjectIndex";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -10,7 +10,7 @@ export default function Page() {
       <SiteHeader />
       <main>
         <Hero />
-        <AmbientField />
+        <SlamScan />
         <ProjectIndex />
       </main>
       <SiteFooter />
