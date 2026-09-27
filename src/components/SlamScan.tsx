@@ -5,10 +5,11 @@ import { useEffect, useRef } from "react";
 /**
  * SLAM SCAN — "in motion".
  *
- * A quiet, live map-building view: a small robot drives through an unseen
- * floor plan while a rotating LiDAR beam sweeps around it. Every beam hit is
- * dropped into an occupancy grid, so the walls of the space slowly appear out
- * of the dark — a literal picture of the biped navigation work.
+ * A quiet, live map-building view: a small robot drives a steady lap around
+ * an unseen room while a rotating LiDAR beam sweeps around it. Every beam hit
+ * is dropped into an occupancy grid, so the walls slowly appear out of the
+ * dark — and the obstacles in the middle turn out to spell a word. After each
+ * lap the robot parks and keeps scanning while the map fades, then goes again.
  *
  * Monochrome (theme tokens only), 1px hairlines, plain 2D canvas — no library.
  * prefers-reduced-motion renders the finished map statically; the loop pauses
@@ -20,63 +21,129 @@ import { useEffect, useRef } from "react";
 const W = 20;
 const H = 8;
 
+/** The word the robot's map spells out. Any of A–Z and spaces. */
+const TEXT = "HELLO";
+
 type Seg = [number, number, number, number];
 
-function box(x0: number, y0: number, x1: number, y1: number): Seg[] {
-  return [
-    [x0, y0, x1, y0],
-    [x1, y0, x1, y1],
-    [x1, y1, x0, y1],
-    [x0, y1, x0, y0],
-  ];
+// 5×7 block font — each "#" becomes a solid pillar the LiDAR can trace.
+const FONT: Record<string, string[]> = {
+  A: [".###.", "#...#", "#...#", "#####", "#...#", "#...#", "#...#"],
+  B: ["####.", "#...#", "#...#", "####.", "#...#", "#...#", "####."],
+  C: [".###.", "#...#", "#....", "#....", "#....", "#...#", ".###."],
+  D: ["####.", "#...#", "#...#", "#...#", "#...#", "#...#", "####."],
+  E: ["#####", "#....", "#....", "####.", "#....", "#....", "#####"],
+  F: ["#####", "#....", "#....", "####.", "#....", "#....", "#...."],
+  G: [".###.", "#...#", "#....", "#.###", "#...#", "#...#", ".###."],
+  H: ["#...#", "#...#", "#...#", "#####", "#...#", "#...#", "#...#"],
+  I: ["#####", "..#..", "..#..", "..#..", "..#..", "..#..", "#####"],
+  J: ["..###", "...#.", "...#.", "...#.", "#..#.", "#..#.", ".##.."],
+  K: ["#...#", "#..#.", "#.#..", "##...", "#.#..", "#..#.", "#...#"],
+  L: ["#....", "#....", "#....", "#....", "#....", "#....", "#####"],
+  M: ["#...#", "##.##", "#.#.#", "#.#.#", "#...#", "#...#", "#...#"],
+  N: ["#...#", "##..#", "#.#.#", "#..##", "#...#", "#...#", "#...#"],
+  O: [".###.", "#...#", "#...#", "#...#", "#...#", "#...#", ".###."],
+  P: ["####.", "#...#", "#...#", "####.", "#....", "#....", "#...."],
+  Q: [".###.", "#...#", "#...#", "#...#", "#.#.#", "#..#.", ".##.#"],
+  R: ["####.", "#...#", "#...#", "####.", "#.#..", "#..#.", "#...#"],
+  S: [".####", "#....", "#....", ".###.", "....#", "....#", "####."],
+  T: ["#####", "..#..", "..#..", "..#..", "..#..", "..#..", "..#.."],
+  U: ["#...#", "#...#", "#...#", "#...#", "#...#", "#...#", ".###."],
+  V: ["#...#", "#...#", "#...#", "#...#", "#...#", ".#.#.", "..#.."],
+  W: ["#...#", "#...#", "#...#", "#.#.#", "#.#.#", "##.##", "#...#"],
+  X: ["#...#", "#...#", ".#.#.", "..#..", ".#.#.", "#...#", "#...#"],
+  Y: ["#...#", "#...#", ".#.#.", "..#..", "..#..", "..#..", "..#.."],
+  Z: ["#####", "....#", "...#.", "..#..", ".#...", "#....", "#####"],
+  " ": [".....", ".....", ".....", ".....", ".....", ".....", "....."],
+};
+
+/**
+ * Lay the word out as a pixel grid centred in the room and return only the
+ * outline edges of the filled pixels (inner edges can never be seen).
+ */
+function textWalls(text: string): Seg[] {
+  const rows = 7;
+  const glyphs = text.toUpperCase().split("").map((ch) => FONT[ch] ?? FONT[" "]);
+  // 5 columns + a 2-column gap per glyph, wide enough for the beam to see
+  // down between letters.
+  const cols = glyphs.length * 7 - 2;
+  const filled = (c: number, r: number) => {
+    if (r < 0 || r >= rows || c < 0 || c >= cols) return false;
+    const g = Math.floor(c / 7);
+    const gc = c % 7;
+    return gc < 5 && glyphs[g][r][gc] === "#";
+  };
+
+  // Pixel size: fill the room but keep a corridor free for the robot's lap.
+  const px = Math.min((W - 5.2) / cols, (H - 4.4) / rows);
+  const ox = (W - cols * px) / 2;
+  const oy = (H - rows * px) / 2;
+
+  const segs: Seg[] = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (!filled(c, r)) continue;
+      const x0 = ox + c * px;
+      const y0 = oy + r * px;
+      const x1 = x0 + px;
+      const y1 = y0 + px;
+      if (!filled(c, r - 1)) segs.push([x0, y0, x1, y0]);
+      if (!filled(c + 1, r)) segs.push([x1, y0, x1, y1]);
+      if (!filled(c, r + 1)) segs.push([x1, y1, x0, y1]);
+      if (!filled(c - 1, r)) segs.push([x0, y1, x0, y0]);
+    }
+  }
+  return segs;
 }
 
-// The floor plan the robot discovers: three rooms joined by doorways, a
-// partial wall and a few obstacles.
 const WALLS: Seg[] = [
-  ...box(0, 0, W, H),
-  // left | middle wall, doorway at y 3–5
-  [6, 0, 6, 3],
-  [6, 5, 6, H],
-  // middle | right wall, doorway at y 5–6.5
-  [13, 0, 13, 5],
-  [13, 6.5, 13, H],
-  // partial wall in the left room
-  [0, 4, 3, 4],
-  // pillars in the middle room
-  ...box(9, 1.5, 10, 2.5),
-  ...box(9, 5.5, 10, 6.5),
-  // crate + half wall in the right room
-  ...box(16, 2, 17.5, 3),
-  [15.5, 4.5, 18, 4.5],
+  // the room
+  [0, 0, W, 0],
+  [W, 0, W, H],
+  [W, H, 0, H],
+  [0, H, 0, 0],
+  ...textWalls(TEXT),
 ];
 
-// Exploration route through the rooms.
-const ROUTE: [number, number][] = [
-  [1.5, 6.2],
-  [4.5, 4.6],
-  [2, 2],
-  [4.5, 2.5],
-  [6, 4],
-  [8, 4],
-  [11, 3.8],
-  [11.5, 1.2],
-  [12, 5.75],
-  [14, 5.75],
-  [15, 7],
-  [18.8, 6.6],
-  [19, 3.5],
-  [18.6, 1.2],
-  [14.5, 1],
-];
+/**
+ * The route: one steady, clockwise lap around the word — a rounded
+ * rectangle inset from the walls. It starts and ends at the same spot, so
+ * the robot can park there between runs and carry straight on.
+ */
+function lapRoute(): [number, number][] {
+  const m = 1.1; // inset from the walls
+  const rad = 0.9; // corner radius
+  const x0 = m + rad;
+  const x1 = W - m - rad;
+  const y0 = m + rad;
+  const y1 = H - m - rad;
+  // Corner centres, clockwise from top-right (canvas y points down).
+  const corners: [number, number, number][] = [
+    [x1, y0, -Math.PI / 2],
+    [x1, y1, 0],
+    [x0, y1, Math.PI / 2],
+    [x0, y0, Math.PI],
+  ];
+  const pts: [number, number][] = [[(x0 + x1) / 2 - 3, m]];
+  for (const [cx, cy, a0] of corners) {
+    for (let i = 0; i <= 8; i++) {
+      const a = a0 + (i / 8) * (Math.PI / 2);
+      pts.push([cx + Math.cos(a) * rad, cy + Math.sin(a) * rad]);
+    }
+  }
+  pts.push(pts[0]);
+  return pts;
+}
 
-const SPEED = 1.15; // m/s
+const ROUTE = lapRoute();
+
+const SPEED = 1.25; // m/s
 const SCAN_HZ = 1.1; // beam revolutions per second
 const RAY_STEP = (1.25 * Math.PI) / 180; // angular resolution
 const RANGE = 6.5; // m
 const CELL = 0.09; // occupancy cell size, m
-const HOLD = 3.5; // s to admire the finished map
-const FADE = 1.6; // s fade-out before the next run
+const HOLD = 4; // s parked, admiring the finished map
+const FADE = 1.6; // s the map fades before the next lap
 const FRESH = 0.55; // s a new hit stays bright
 const TAIL = 0.14; // s of beam afterglow
 
@@ -91,7 +158,8 @@ const ROUTE_LEN = CUM[CUM.length - 1];
 const DRIVE = ROUTE_LEN / SPEED;
 
 function pointAt(d: number): { x: number; y: number } {
-  const dist = Math.max(0, Math.min(ROUTE_LEN, d));
+  // The route is a closed loop, so wrap rather than clamp.
+  const dist = ((d % ROUTE_LEN) + ROUTE_LEN) % ROUTE_LEN;
   let i = 1;
   while (i < CUM.length - 1 && CUM[i] < dist) i++;
   const [ax, ay] = ROUTE[i - 1];
@@ -137,15 +205,20 @@ interface Sim {
   scans: number;
 }
 
-function newSim(): Sim {
-  return { cells: new Map(), fresh: new Map(), rays: [], trail: [], beam: 0, time: 0, scans: 0 };
+function newSim(beam = 0): Sim {
+  return { cells: new Map(), fresh: new Map(), rays: [], trail: [], beam, time: 0, scans: 0 };
+}
+
+/** Where the robot is at a point in the run: driving the lap, then parked. */
+function robotAt(time: number) {
+  return poseAt(Math.min(time, DRIVE) * SPEED);
 }
 
 function step(sim: Sim, dt: number) {
-  const prevT = sim.time;
   sim.time += dt;
-  const driving = Math.min(sim.time, DRIVE);
-  const pose = poseAt(driving * SPEED);
+  const pose = robotAt(sim.time);
+  // Keep mapping while driving and parked; stop once the map starts fading.
+  const mapping = sim.time < DRIVE + HOLD;
 
   // Breadcrumb trail every ~0.3 m.
   const last = sim.trail[sim.trail.length - 1];
@@ -153,8 +226,9 @@ function step(sim: Sim, dt: number) {
     sim.trail.push([pose.x, pose.y]);
   }
 
-  // Sweep the beam and cast every ray it passed over this tick.
-  if (prevT < DRIVE) {
+  // Sweep the beam and cast every ray it passed over this tick. The beam
+  // never stops — the robot keeps scanning while parked.
+  {
     const sweep = 2 * Math.PI * SCAN_HZ * dt;
     const from = sim.beam;
     const to = from + sweep;
@@ -163,14 +237,16 @@ function step(sim: Sim, dt: number) {
       const hx = pose.x + Math.cos(a) * (r ?? RANGE);
       const hy = pose.y + Math.sin(a) * (r ?? RANGE);
       sim.rays.push({ x: hx, y: hy, t: sim.time });
-      if (r === null) continue;
+      if (r === null || !mapping) continue;
       const cx = Math.floor(hx / CELL);
       const cy = Math.floor(hy / CELL);
       const key = cy * 10000 + cx;
       if (!sim.cells.has(key)) sim.cells.set(key, [(cx + 0.5) * CELL, (cy + 0.5) * CELL]);
       sim.fresh.set(key, sim.time);
     }
-    if (Math.floor(to / (2 * Math.PI)) > Math.floor(from / (2 * Math.PI))) sim.scans++;
+    if (mapping && Math.floor(to / (2 * Math.PI)) > Math.floor(from / (2 * Math.PI))) {
+      sim.scans++;
+    }
     sim.beam = to % (2 * Math.PI * 1000);
   }
 
@@ -238,34 +314,11 @@ function draw(
   ctx.fillStyle = fg(0.28);
   for (const [x, y] of sim.trail) ctx.fillRect(x * k - 0.5, y * k - 0.5, 1, 1);
 
-  if (moving && sim.time < DRIVE) {
-    const p = poseAt(sim.time * SPEED);
-    const px = p.x * k;
-    const py = p.y * k;
+  const p = robotAt(sim.time);
+  const px = p.x * k;
+  const py = p.y * k;
 
-    // Beam afterglow: the area the last few rays actually saw, so it
-    // stops at walls instead of bleeding through them.
-    if (sim.rays.length > 1) {
-      ctx.fillStyle = fg(0.045);
-      ctx.beginPath();
-      ctx.moveTo(px, py);
-      for (const r of sim.rays) ctx.lineTo(r.x * k, r.y * k);
-      ctx.closePath();
-      ctx.fill();
-
-      // Leading edge of the beam, ending where it lands.
-      const lead = sim.rays[sim.rays.length - 1];
-      const grad = ctx.createLinearGradient(px, py, lead.x * k, lead.y * k);
-      grad.addColorStop(0, fg(0.5));
-      grad.addColorStop(1, fg(0.1));
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(px, py);
-      ctx.lineTo(lead.x * k, lead.y * k);
-      ctx.stroke();
-    }
-
+  if (moving) {
     // Fresh hits glow, then settle into the map.
     sim.fresh.forEach((t, key) => {
       const cell = sim.cells.get(key);
@@ -275,20 +328,44 @@ function draw(
       const s = dot + life;
       ctx.fillRect(cell[0] * k - s / 2, cell[1] * k - s / 2, s, s);
     });
+  }
 
-    // Robot: ring + heading tick.
-    ctx.strokeStyle = fg(1);
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(px, py, 4, 0, Math.PI * 2);
-    ctx.stroke();
+  // Only the map fades between laps — the robot and its beam stay put.
+  ctx.globalAlpha = 1;
+
+  if (moving && sim.rays.length > 1) {
+    // Beam afterglow: the area the last few rays actually saw, so it
+    // stops at walls instead of bleeding through them.
+    ctx.fillStyle = fg(0.045);
     ctx.beginPath();
     ctx.moveTo(px, py);
-    ctx.lineTo(px + Math.cos(p.h) * 9, py + Math.sin(p.h) * 9);
+    for (const r of sim.rays) ctx.lineTo(r.x * k, r.y * k);
+    ctx.closePath();
+    ctx.fill();
+
+    // Leading edge of the beam, ending where it lands.
+    const lead = sim.rays[sim.rays.length - 1];
+    const grad = ctx.createLinearGradient(px, py, lead.x * k, lead.y * k);
+    grad.addColorStop(0, fg(0.5));
+    grad.addColorStop(1, fg(0.1));
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(px, py);
+    ctx.lineTo(lead.x * k, lead.y * k);
     ctx.stroke();
   }
 
-  ctx.globalAlpha = 1;
+  // Robot: ring + heading tick. Always drawn, even between laps.
+  ctx.strokeStyle = fg(1);
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(px, py, 4, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(px, py);
+  ctx.lineTo(px + Math.cos(p.h) * 9, py + Math.sin(p.h) * 9);
+  ctx.stroke();
 
   // Viewfinder corners.
   const c = 10;
@@ -357,7 +434,8 @@ export default function SlamScan() {
       const dt = last ? Math.min((now - last) / 1000, 1 / 20) : 1 / 60;
       last = now;
       step(sim, dt);
-      if (sim.time > DRIVE + HOLD + FADE) sim = newSim();
+      // Next lap: fresh map, same robot, beam carries on where it was.
+      if (sim.time > DRIVE + HOLD + FADE) sim = newSim(sim.beam);
       render();
       if (Math.floor(now / 200) !== lastReadout) {
         lastReadout = Math.floor(now / 200);
@@ -419,7 +497,7 @@ export default function SlamScan() {
             <canvas
               ref={canvasRef}
               role="img"
-              aria-label="A robot drives through an unmapped floor plan while its rotating LiDAR beam builds a map of the walls, point by point."
+              aria-label={`A robot drives laps around an unmapped room while its rotating LiDAR beam builds a map, point by point, of obstacles that spell "${TEXT}".`}
               className="block w-full"
               style={{ aspectRatio: `${W} / ${H}` }}
             />
