@@ -5,11 +5,12 @@ import { useEffect, useRef } from "react";
 /**
  * SLAM SCAN — "in motion".
  *
- * A quiet, live map-building view: a small robot drives a steady lap around
- * an unseen room while a rotating LiDAR beam sweeps around it. Every beam hit
+ * A quiet, live map-building view: a small robot drives through a chain of
+ * unseen rooms while a rotating LiDAR beam sweeps around it. Every beam hit
  * is dropped into an occupancy grid, so the walls slowly appear out of the
- * dark — and the obstacles in the middle turn out to spell a word. After each
- * lap the robot parks and keeps scanning while the map fades, then goes again.
+ * dark — and each room turns out to be shaped like a letter, spelling a
+ * word. At the end the robot parks and keeps scanning while the map fades,
+ * then drives the route back the other way.
  *
  * Monochrome (theme tokens only), 1px hairlines, plain 2D canvas — no library.
  * prefers-reduced-motion renders the finished map statically; the loop pauses
@@ -19,131 +20,98 @@ import { useEffect, useRef } from "react";
 // ---- World (metres) --------------------------------------------------------
 
 const W = 20;
-const H = 8;
+const H = 6;
 
-/** The word the robot's map spells out. Any of A–Z and spaces. */
+/** The word the rooms spell. The route below is written for this word. */
 const TEXT = "HELLO";
 
 type Seg = [number, number, number, number];
 
-// 5×7 block font — each "#" becomes a solid pillar the LiDAR can trace.
-const FONT: Record<string, string[]> = {
-  A: [".###.", "#...#", "#...#", "#####", "#...#", "#...#", "#...#"],
-  B: ["####.", "#...#", "#...#", "####.", "#...#", "#...#", "####."],
-  C: [".###.", "#...#", "#....", "#....", "#....", "#...#", ".###."],
-  D: ["####.", "#...#", "#...#", "#...#", "#...#", "#...#", "####."],
-  E: ["#####", "#....", "#....", "####.", "#....", "#....", "#####"],
-  F: ["#####", "#....", "#....", "####.", "#....", "#....", "#...."],
-  G: [".###.", "#...#", "#....", "#.###", "#...#", "#...#", ".###."],
-  H: ["#...#", "#...#", "#...#", "#####", "#...#", "#...#", "#...#"],
-  I: ["#####", "..#..", "..#..", "..#..", "..#..", "..#..", "#####"],
-  J: ["..###", "...#.", "...#.", "...#.", "#..#.", "#..#.", ".##.."],
-  K: ["#...#", "#..#.", "#.#..", "##...", "#.#..", "#..#.", "#...#"],
-  L: ["#....", "#....", "#....", "#....", "#....", "#....", "#####"],
-  M: ["#...#", "##.##", "#.#.#", "#.#.#", "#...#", "#...#", "#...#"],
-  N: ["#...#", "##..#", "#.#.#", "#..##", "#...#", "#...#", "#...#"],
-  O: [".###.", "#...#", "#...#", "#...#", "#...#", "#...#", ".###."],
-  P: ["####.", "#...#", "#...#", "####.", "#....", "#....", "#...."],
-  Q: [".###.", "#...#", "#...#", "#...#", "#.#.#", "#..#.", ".##.#"],
-  R: ["####.", "#...#", "#...#", "####.", "#.#..", "#..#.", "#...#"],
-  S: [".####", "#....", "#....", ".###.", "....#", "....#", "####."],
-  T: ["#####", "..#..", "..#..", "..#..", "..#..", "..#..", "..#.."],
-  U: ["#...#", "#...#", "#...#", "#...#", "#...#", "#...#", ".###."],
-  V: ["#...#", "#...#", "#...#", "#...#", "#...#", ".#.#.", "..#.."],
-  W: ["#...#", "#...#", "#...#", "#.#.#", "#.#.#", "##.##", "#...#"],
-  X: ["#...#", "#...#", ".#.#.", "..#..", ".#.#.", "#...#", "#...#"],
-  Y: ["#...#", "#...#", ".#.#.", "..#..", "..#..", "..#..", "..#.."],
-  Z: ["#####", "....#", "...#.", "..#..", ".#...", "#....", "#####"],
-  " ": [".....", ".....", ".....", ".....", ".....", ".....", "....."],
+// Each letter is a room: "#" is open floor, "." is solid wall, so the floor
+// itself has the letter's shape. 7×7 cells per letter.
+const ROOMS: Record<string, string[]> = {
+  H: ["##...##", "##...##", "##...##", "#######", "##...##", "##...##", "##...##"],
+  E: ["#######", "##.....", "##.....", "#######", "##.....", "##.....", "#######"],
+  L: ["##.....", "##.....", "##.....", "##.....", "##.....", "#######", "#######"],
+  O: ["#######", "#######", "##...##", "##...##", "##...##", "#######", "#######"],
 };
 
-/**
- * Lay the word out as a pixel grid centred in the room and return only the
- * outline edges of the filled pixels (inner edges can never be seen).
- */
-function textWalls(text: string): Seg[] {
-  const rows = 7;
-  const glyphs = text.toUpperCase().split("").map((ch) => FONT[ch] ?? FONT[" "]);
-  // 5 columns + a 2-column gap per glyph, wide enough for the beam to see
-  // down between letters.
-  const cols = glyphs.length * 7 - 2;
-  const filled = (c: number, r: number) => {
-    if (r < 0 || r >= rows || c < 0 || c >= cols) return false;
-    const g = Math.floor(c / 7);
-    const gc = c % 7;
-    return gc < 5 && glyphs[g][r][gc] === "#";
-  };
+// Doorway row in the 1-cell wall between each pair of rooms. They alternate
+// bottom/top so the robot has to travel the full length of each letter
+// (L only reaches its right wall along its foot, so L→L and L→O stay low).
+const DOORS = [6, 0, 6, 6];
 
-  // Pixel size: fill the room but keep a corridor free for the robot's lap.
-  const px = Math.min((W - 5.2) / cols, (H - 4.4) / rows);
-  const ox = (W - cols * px) / 2;
-  const oy = (H - rows * px) / 2;
+const ROWS = 7;
+const COLS = TEXT.length * 8 - 1;
+const MARGIN = 0.5; // m of empty canvas around the plan
+const CW = (W - 2 * MARGIN) / COLS; // cell width, m
+const CH = (H - 2 * MARGIN) / ROWS; // cell height, m
 
+/** Open floor cells of the whole plan: rooms + dividing walls with doors. */
+const FLOOR: boolean[][] = Array.from({ length: ROWS }, (_, r) => {
+  const row: boolean[] = [];
+  TEXT.split("").forEach((ch, i) => {
+    if (i) row.push(r === DOORS[i - 1]);
+    for (const c of ROOMS[ch][r]) row.push(c === "#");
+  });
+  return row;
+});
+
+const isFloor = (c: number, r: number) =>
+  r >= 0 && r < ROWS && c >= 0 && c < COLS && FLOOR[r][c];
+
+/** Plan cell coordinates (fractional) → world metres. */
+const wx = (u: number) => MARGIN + u * CW;
+const wy = (v: number) => MARGIN + v * CH;
+
+/** Walls: every cell edge with floor on exactly one side. */
+function planWalls(): Seg[] {
   const segs: Seg[] = [];
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      if (!filled(c, r)) continue;
-      const x0 = ox + c * px;
-      const y0 = oy + r * px;
-      const x1 = x0 + px;
-      const y1 = y0 + px;
-      if (!filled(c, r - 1)) segs.push([x0, y0, x1, y0]);
-      if (!filled(c + 1, r)) segs.push([x1, y0, x1, y1]);
-      if (!filled(c, r + 1)) segs.push([x1, y1, x0, y1]);
-      if (!filled(c - 1, r)) segs.push([x0, y1, x0, y0]);
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      if (!isFloor(c, r)) continue;
+      const x0 = wx(c);
+      const y0 = wy(r);
+      const x1 = wx(c + 1);
+      const y1 = wy(r + 1);
+      if (!isFloor(c, r - 1)) segs.push([x0, y0, x1, y0]);
+      if (!isFloor(c + 1, r)) segs.push([x1, y0, x1, y1]);
+      if (!isFloor(c, r + 1)) segs.push([x1, y1, x0, y1]);
+      if (!isFloor(c - 1, r)) segs.push([x0, y1, x0, y0]);
     }
   }
   return segs;
 }
 
-const WALLS: Seg[] = [
-  // the room
-  [0, 0, W, 0],
-  [W, 0, W, H],
-  [W, H, 0, H],
-  [0, H, 0, 0],
-  ...textWalls(TEXT),
-];
+const WALLS = planWalls();
 
 /**
- * The route: one steady, clockwise lap around the word — a rounded
- * rectangle inset from the walls. It starts and ends at the same spot, so
- * the robot can park there between runs and carry straight on.
+ * The route, in plan cell units (u = columns, v = rows). It walks every leg
+ * and arm of every letter, dead ends included. Letters start at columns
+ * 0, 8, 16, 24, 32; the doorways sit at columns 7, 15, 23, 31.
  */
-function lapRoute(): [number, number][] {
-  const m = 1.1; // inset from the walls
-  const rad = 0.9; // corner radius
-  const x0 = m + rad;
-  const x1 = W - m - rad;
-  const y0 = m + rad;
-  const y1 = H - m - rad;
-  // Corner centres, clockwise from top-right (canvas y points down).
-  const corners: [number, number, number][] = [
-    [x1, y0, -Math.PI / 2],
-    [x1, y1, 0],
-    [x0, y1, Math.PI / 2],
-    [x0, y0, Math.PI],
-  ];
-  const pts: [number, number][] = [[(x0 + x1) / 2 - 3, m]];
-  for (const [cx, cy, a0] of corners) {
-    for (let i = 0; i <= 8; i++) {
-      const a = a0 + (i / 8) * (Math.PI / 2);
-      pts.push([cx + Math.cos(a) * rad, cy + Math.sin(a) * rad]);
-    }
-  }
-  pts.push(pts[0]);
-  return pts;
-}
+const PATH: [number, number][] = [
+  // H — left leg top→bottom, back to the crossbar, across, right leg up and down
+  [1, 0.5], [1, 6.5], [1, 3.5], [6, 3.5], [6, 0.5], [6, 6.5],
+  // bottom doorway → E: bottom arm, middle arm, then out along the top arm
+  [9, 6.5], [14.5, 6.5], [9, 6.5], [9, 3.5], [14.5, 3.5], [9, 3.5], [9, 0.5],
+  // top doorway → first L: down the spine, along the foot
+  [17, 0.5], [17, 6.5],
+  // bottom doorway → second L: up the spine and back, along the foot
+  [25, 6.5], [25, 0.5], [25, 6.5],
+  // bottom doorway → O: once round the ring
+  [33, 6.5], [33, 6], [38, 6], [38, 1], [33, 1], [33, 6],
+];
 
-const ROUTE = lapRoute();
+const ROUTE: [number, number][] = PATH.map(([u, v]) => [wx(u), wy(v)]);
 
-const SPEED = 1.25; // m/s
-const SCAN_HZ = 1.1; // beam revolutions per second
+const SPEED = 1.6; // m/s
+const SCAN_HZ = 1.3; // beam revolutions per second
 const RAY_STEP = (1.25 * Math.PI) / 180; // angular resolution
 const RANGE = 6.5; // m
-const CELL = 0.09; // occupancy cell size, m
+const CELL = 0.07; // occupancy cell size, m
 const HOLD = 4; // s parked, admiring the finished map
-const FADE = 1.6; // s the map fades before the next lap
+const FADE = 1.6; // s the map fades before the next run
 const FRESH = 0.55; // s a new hit stays bright
 const TAIL = 0.14; // s of beam afterglow
 
@@ -158,8 +126,7 @@ const ROUTE_LEN = CUM[CUM.length - 1];
 const DRIVE = ROUTE_LEN / SPEED;
 
 function pointAt(d: number): { x: number; y: number } {
-  // The route is a closed loop, so wrap rather than clamp.
-  const dist = ((d % ROUTE_LEN) + ROUTE_LEN) % ROUTE_LEN;
+  const dist = Math.max(0, Math.min(ROUTE_LEN, d));
   let i = 1;
   while (i < CUM.length - 1 && CUM[i] < dist) i++;
   const [ax, ay] = ROUTE[i - 1];
@@ -168,11 +135,15 @@ function pointAt(d: number): { x: number; y: number } {
   return { x: ax + (bx - ax) * t, y: ay + (by - ay) * t };
 }
 
-/** Position plus a heading smoothed across corners. */
-function poseAt(d: number): { x: number; y: number; h: number } {
-  const p = pointAt(d);
-  const a = pointAt(d - 0.4);
-  const b = pointAt(d + 0.4);
+/**
+ * Position plus a heading smoothed across corners. `reverse` drives the
+ * route backwards, so each run starts where the last one parked.
+ */
+function poseAt(d: number, reverse: boolean): { x: number; y: number; h: number } {
+  const at = (x: number) => pointAt(reverse ? ROUTE_LEN - x : x);
+  const p = at(d);
+  const a = at(d - 0.25);
+  const b = at(d + 0.25);
   return { ...p, h: Math.atan2(b.y - a.y, b.x - a.x) };
 }
 
@@ -202,21 +173,31 @@ interface Sim {
   trail: [number, number][];
   beam: number; // current beam angle
   time: number; // seconds into the current run
+  reverse: boolean; // driving the route backwards this run
   scans: number;
 }
 
-function newSim(beam = 0): Sim {
-  return { cells: new Map(), fresh: new Map(), rays: [], trail: [], beam, time: 0, scans: 0 };
+function newSim(beam = 0, reverse = false): Sim {
+  return {
+    cells: new Map(),
+    fresh: new Map(),
+    rays: [],
+    trail: [],
+    beam,
+    time: 0,
+    reverse,
+    scans: 0,
+  };
 }
 
-/** Where the robot is at a point in the run: driving the lap, then parked. */
-function robotAt(time: number) {
-  return poseAt(Math.min(time, DRIVE) * SPEED);
+/** Where the robot is at a point in the run: driving the route, then parked. */
+function robotAt(sim: Sim) {
+  return poseAt(Math.min(sim.time, DRIVE) * SPEED, sim.reverse);
 }
 
 function step(sim: Sim, dt: number) {
   sim.time += dt;
-  const pose = robotAt(sim.time);
+  const pose = robotAt(sim);
   // Keep mapping while driving and parked; stop once the map starts fading.
   const mapping = sim.time < DRIVE + HOLD;
 
@@ -314,7 +295,7 @@ function draw(
   ctx.fillStyle = fg(0.28);
   for (const [x, y] of sim.trail) ctx.fillRect(x * k - 0.5, y * k - 0.5, 1, 1);
 
-  const p = robotAt(sim.time);
+  const p = robotAt(sim);
   const px = p.x * k;
   const py = p.y * k;
 
@@ -434,8 +415,9 @@ export default function SlamScan() {
       const dt = last ? Math.min((now - last) / 1000, 1 / 20) : 1 / 60;
       last = now;
       step(sim, dt);
-      // Next lap: fresh map, same robot, beam carries on where it was.
-      if (sim.time > DRIVE + HOLD + FADE) sim = newSim(sim.beam);
+      // Next run: fresh map, and the robot drives back the way it came, so
+      // it never jumps. The beam carries on where it was.
+      if (sim.time > DRIVE + HOLD + FADE) sim = newSim(sim.beam, !sim.reverse);
       render();
       if (Math.floor(now / 200) !== lastReadout) {
         lastReadout = Math.floor(now / 200);
@@ -497,7 +479,7 @@ export default function SlamScan() {
             <canvas
               ref={canvasRef}
               role="img"
-              aria-label={`A robot drives laps around an unmapped room while its rotating LiDAR beam builds a map, point by point, of obstacles that spell "${TEXT}".`}
+              aria-label={`A robot drives through unmapped rooms while its rotating LiDAR beam builds a map, point by point, revealing that the rooms are shaped like the letters "${TEXT}".`}
               className="block w-full"
               style={{ aspectRatio: `${W} / ${H}` }}
             />
