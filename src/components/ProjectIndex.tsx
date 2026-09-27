@@ -44,6 +44,7 @@ export default function ProjectIndex() {
             return (
               <li
                 key={project.slug}
+                id={project.slug}
                 className={[
                   "group border-b border-line border-opacity-60",
                   "transition-opacity",

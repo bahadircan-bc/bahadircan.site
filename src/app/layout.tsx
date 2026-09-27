@@ -20,9 +20,10 @@ const OG_DESCRIPTION =
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.bahadircan.site"),
-  title: "Bahadır Can — R&D Engineer",
+  title: "Bahadır Can — R&D Engineer · Robotics & Computer Vision",
   description:
-    "Bahadır Can — R&D engineer. From electrons to interface: robotics, AI cameras & computer vision, web & web3.",
+    "Bahadır Can (Bahadir Can) — Istanbul-based R&D engineer. Robotics & autonomy, SLAM, sensor fusion, AI cameras & computer vision, web & web3.",
+  authors: [{ name: "Bahadır Can", url: "https://www.bahadircan.site" }],
   alternates: {
     canonical: "/",
   },
@@ -50,6 +51,36 @@ export const metadata: Metadata = {
   },
 };
 
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Bahadır Can",
+  alternateName: "Bahadir Can",
+  url: "https://www.bahadircan.site",
+  image: "https://www.bahadircan.site/og.png",
+  jobTitle: "R&D Engineer",
+  description: OG_DESCRIPTION,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Istanbul",
+    addressCountry: "TR",
+  },
+  knowsAbout: [
+    "Robotics",
+    "SLAM",
+    "Sensor fusion",
+    "Computer vision",
+    "ROS 2",
+    "Embedded AI",
+    "Web development",
+  ],
+  sameAs: [
+    "https://github.com/bahadircan-bc",
+    "https://www.linkedin.com/in/bahad%C4%B1r-can/",
+    "https://twitter.com/BahadirCaan",
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -75,7 +106,13 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

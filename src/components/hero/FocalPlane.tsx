@@ -189,6 +189,7 @@ export default function FocalPlane() {
         ].join(" ")}
       >
         <div className="mx-auto w-full max-w-5xl px-6 lg:px-10">
+          <h2 className="sr-only">Areas of work</h2>
           <p className="mb-10 font-mono text-xs uppercase tracking-[0.2em] text-muted">
             {staticMode ? "the stack" : "scroll to focus"}
           </p>
